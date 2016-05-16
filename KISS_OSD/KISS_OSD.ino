@@ -1,13 +1,20 @@
 /*
-KISS FC OSD v2.2.2
+KISS FC OSD v3
 By Felix Niessen (felix.niessen@googlemail.com)
 and Samuel Daurat (sdaurat@outlook.de)
 
+GITHUB: https://github.com/SAMUD/KISS-OSD
+
 Changelog:
-*added "armed"
-*prepared for adding "timer"
-*some tweaking to stock settings
-*some design changes
+*code optimizing
+*added timer
+*added middle-info "failsafe" ATTENTION: it is not working correctly. This means that after the first not failsafe-state, if there is a new failsafe it wont be shown. This seems to be a bug in the FC-firmware.
+
+
+TODO:
+*adding stats at the end of flight
+*optimizing code
+*adding comments to code
 
 Anyone is free to copy, modify, publish, use, compile, sell, or
 distribute this software, either in source code form or as a compiled
@@ -92,6 +99,7 @@ const char Pilotname[]="samuel";
 //#define DISPLAY_ESC_CURRENT
 //#define DISPLAY_ESC_TEMPERATURE
 #define DISPLAY_PILOTNAME
+#define DISPLAY_TIMER
 
 // displayed datas in reduced mode 1 (if you turn off "DISPLAY_LIPO_VOLTAGE" or "DISPLAY_MA_CONSUMPTION" you don't see the alarms)
 //das gleiche hier, nur für den reduzierten Modus
@@ -104,6 +112,7 @@ const char Pilotname[]="samuel";
 //#define RED_DISPLAY_ESC_CURRENT
 //#define RED_DISPLAY_ESC_TEMPERATURE
 //#define RED_DISPLAY_PILOTNAME
+//#define DISPLAY_TIMER
 
 // displayed datas in reduced mode 2 (if you turn off "DISPLAY_LIPO_VOLTAGE" or "DISPLAY_MA_CONSUMPTION" you don't see the alarms)
 //das gleiche hier, nur für den reduzierten Modus 2
@@ -116,6 +125,7 @@ const char Pilotname[]="samuel";
 #define RED2_DISPLAY_ESC_CURRENT
 #define RED2_DISPLAY_ESC_TEMPERATURE
 #define RED2_DISPLAY_PILOTNAME
+#define DISPLAY_TIMER
 
 
 
@@ -155,7 +165,7 @@ const char fourSBatteryDetected[]=" 4s bat - crit@ 14V ";
 //Warning for used mah
 //Warnung für KApazität in mah
 //============================
-//TODO: WARNING: this feature is not tested (I am still waiting for the 24A ESCs), but normally it should work
+//TODO: WARNING: this feature is not tested (I don't have the money for the 24A ESCs right now), but normally it should work
 const uint16_t CapacityThreshold=1150;
 
 
@@ -196,6 +206,12 @@ static uint8_t  reducedMode = 0;
 static uint8_t  reducedMode2 = 0;
 static uint8_t  reducedModeDisplay = 0;
 static uint8_t armed=0;
+static uint8_t armedOld=0;
+static uint8_t failsafe=0;
+
+static unsigned long start_time = 0;
+static unsigned long time = 0;
+static unsigned long total_time = 0;
 
 static uint8_t percent=0;
 static uint8_t firstarmed=0;
@@ -300,6 +316,43 @@ uint32_t ESC_filter(uint32_t oldVal, uint32_t newVal){
 // END OF ESC-Filter
 //==================
 
+//========================
+//Convert time in a string
+void print_time(unsigned long time, char *time_str) {
+    uint16_t seconds = time / 1000;
+    uint8_t mills = time % 1000;
+    uint8_t minutes = 0;
+    if (seconds >= 60)
+    {
+      minutes = seconds/60;
+    }
+    else
+    {
+      minutes = 0;
+    }
+    seconds = seconds % 60; // reste
+    static char time_sec[6];
+    static char time_mil[6];
+    uint8_t i = 0;
+    uint8_t time_pos = print_int16(minutes, time_str,0,1);
+    time_str[time_pos++] = 'm';
+
+    uint8_t sec_pos = print_int16(seconds, time_sec,0,1);
+    for (i=0; i<sec_pos; i++)
+    {
+      time_str[time_pos++] = time_sec[i];
+    }
+    //time_str[time_pos++] = '.';
+
+    //uint8_t mil_pos = print_int16(mills, time_mil,0,1);
+    //time_str[time_pos++] = time_mil[0];
+    for (i=time_pos; i<9; i++)
+    {
+      time_str[time_pos++] = ' ';
+    }
+}
+//================
+
 
 // Main-Loop
 //==========
@@ -336,6 +389,8 @@ void loop(){
   static uint8_t minBytes = 0;
   static uint8_t recBytes = 0;
 
+  static char Time[10];
+
   static uint32_t LastLoopTime = 0;
 
   //big if with all code
@@ -368,6 +423,14 @@ void loop(){
            throttle = ((serialBuf[STARTCOUNT]<<8) | serialBuf[1+STARTCOUNT])/10;
            armed =   ((serialBuf[15+STARTCOUNT]<<8) | serialBuf[16+STARTCOUNT]);
            LipoVoltage =   ((serialBuf[17+STARTCOUNT]<<8) | serialBuf[18+STARTCOUNT]);
+           if (serialBuf[41+STARTCOUNT] > 0)
+           {
+               failsafe++;
+           }
+           else
+           {
+               failsafe=0;
+           }
 
            uint32_t tmpVoltage = 0;
            uint32_t voltDev = 0;
@@ -487,6 +550,25 @@ void loop(){
       firstarmed==1;
     }
 
+    //calculating for time-display
+    // switch disarmed => armed
+   if (armedOld == 0 && armed > 0)
+   {
+     start_time = millis();
+   }
+   // switch armed => disarmed
+   else if (armedOld > 0 && armed == 0)
+   {
+     total_time = total_time + (millis() - start_time);
+     start_time = 0;
+   }
+   else if (armed > 0)
+   {
+     time = millis() - start_time+ total_time;
+   }
+   armedOld = armed;
+
+
     //strange for-loop
     for(i=0;i<10;i++)
     {
@@ -582,6 +664,7 @@ void loop(){
     uint8_t displayKRPM        = 0;
     uint8_t displayCurrent     = 0;
     uint8_t displayTemperature = 0;
+    uint8_t displayTime        = 0;
     uint8_t displayPilot       = 0;
 
 
@@ -636,6 +719,9 @@ void loop(){
       #if defined(DISPLAY_PILOTNAME)
       displayPilot = 1;
       #endif
+      #if defined(DISPLAY_TIMER)
+      displayTime = 1;
+      #endif
     }
     else if(reducedModeDisplay==1)
     {
@@ -662,6 +748,9 @@ void loop(){
       #endif
       #if defined(RED_DISPLAY_PILOTNAME)
       displayPilot = 1;
+      #endif
+      #if defined(DISPLAY_TIMER)
+      displayTime = 1;
       #endif
     }
     else if(reducedModeDisplay==2)
@@ -690,6 +779,9 @@ void loop(){
       #if defined(RED2_DISPLAY_PILOTNAME)
       displayPilot = 1;
       #endif
+      #if defined(DISPLAY_TIMER)
+      displayTime = 1;
+      #endif
     }
 
     if(displayRCthrottle)
@@ -699,7 +791,6 @@ void loop(){
       OSD.print( Throttle );
       ESCmarginTop = 1;
     }
-
     if(displayCombCurrent)
     {
       OSD.setCursor( -CurrentPos, 0 );
@@ -729,6 +820,14 @@ void loop(){
       }
 
       ESCmarginBot = 1;
+    }
+
+    if(displayTime)
+    {
+      OSD.setCursor( marginLastRow+8, -1 );
+      print_time(time, Time);
+      OSD.print(" ");
+      OSD.print(Time);
     }
 
     if(displayConsumption)
@@ -814,7 +913,6 @@ void loop(){
     }
 
     //show armed | dissarmed
-    // TODO: display armed for 2sec
     if(armed==0)
     {
       OSD.setCursor(4,MarginMiddleY);
@@ -833,6 +931,13 @@ void loop(){
     else
     {
       firstarmed==1;
+    }
+
+    if(failsafe>10)
+    {
+      OSD.setCursor(4,MarginMiddleY);
+      MarginMiddleY++;
+      OSD.print("  failsafe active   ");
     }
 
     //clearing middle screen below displayed datas
