@@ -1,5 +1,5 @@
 /*
-KISS FC OSD v3
+KISS FC OSD v3.1
 By Felix Niessen (felix.niessen@googlemail.com)
 and Samuel Daurat (sdaurat@outlook.de)
 
@@ -7,12 +7,13 @@ GITHUB: https://github.com/SAMUD/KISS-OSD
 
 Changelog:
 *code optimizing
-*added timer
-*added middle-info "failsafe" ATTENTION: it is not working correctly. This means that after the first not failsafe-state, if there is a new failsafe it wont be shown. This seems to be a bug in the FC-firmware.
-
+*added middle-info "calib gyro"
 
 TODO:
 *adding stats at the end of flight
+*adding virtual horizon
+*adding flight mode
+*talking to flyduino cause failsafe is only working once per PowerCycle of Kiss FC
 *optimizing code
 *adding comments to code
 
@@ -59,7 +60,7 @@ For more information, please refer to <http://unlicense.org>
 //Pilotenname (nur kleine Buchstaben erlaubt)
 //TODO: große Buchstaben in Schriftart hinzufügen
 //========================================================================
-const char Pilotname[]="samuel";
+const char Pilotname[]=" samu";
 
 // MAX7456 Charset (change if you get sensless signs)
 //MAX7456 Charset (ändern wenn man kryptische Zeichen bekommt)
@@ -208,6 +209,7 @@ static uint8_t  reducedModeDisplay = 0;
 static uint8_t armed=0;
 static uint8_t armedOld=0;
 static uint8_t failsafe=0;
+static uint16_t calibGyroDone=0;
 
 static unsigned long start_time = 0;
 static unsigned long time = 0;
@@ -423,14 +425,9 @@ void loop(){
            throttle = ((serialBuf[STARTCOUNT]<<8) | serialBuf[1+STARTCOUNT])/10;
            armed =   ((serialBuf[15+STARTCOUNT]<<8) | serialBuf[16+STARTCOUNT]);
            LipoVoltage =   ((serialBuf[17+STARTCOUNT]<<8) | serialBuf[18+STARTCOUNT]);
-           if (serialBuf[41+STARTCOUNT] > 0)
-           {
-               failsafe++;
-           }
-           else
-           {
-               failsafe=0;
-           }
+           failsafe = ((serialBuf[40+STARTCOUNT]<<8) | (serialBuf[41+STARTCOUNT]));
+           calibGyroDone = ((serialBuf[39+STARTCOUNT]<<8) | serialBuf[40+STARTCOUNT]);
+
 
            uint32_t tmpVoltage = 0;
            uint32_t voltDev = 0;
@@ -933,11 +930,17 @@ void loop(){
       firstarmed==1;
     }
 
-    if(failsafe>10)
+    if(failsafe>5)
     {
       OSD.setCursor(4,MarginMiddleY);
       MarginMiddleY++;
-      OSD.print("  failsafe active   ");
+      OSD.print("Failsafe / not ready");
+    }
+    if(calibGyroDone>100)
+    {
+      OSD.setCursor(4,MarginMiddleY);
+      MarginMiddleY++;
+      OSD.print("  calibrating Gyro  ");
     }
 
     //clearing middle screen below displayed datas
