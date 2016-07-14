@@ -1,19 +1,21 @@
 /*
-KISS FC OSD v3.1
+KISS FC OSD v4
 By Felix Niessen (felix.niessen@googlemail.com)
 and Samuel Daurat (sdaurat@outlook.de)
 
 GITHUB: https://github.com/SAMUD/KISS-OSD
 
 Changelog:
-*code optimizing
-*added middle-info "calib gyro"
+*added 2nd stage voltage alarm
+*first implementation of an angle indicator for pitch (easier landing)
+--> next version with some indicators on the left side. but this needs me to mess around with fonts and the code of the OSD.
+*some changes when the detected cell message is displayed
+*Failsafe message is working correctly
 
 TODO:
 *adding stats at the end of flight
-*adding virtual horizon
+*adding virtual horizon (Milestone1 achieved)
 *adding flight mode
-*talking to flyduino cause failsafe is only working once per PowerCycle of Kiss FC
 *optimizing code
 *adding comments to code
 
@@ -90,7 +92,7 @@ const char Pilotname[]=" samu";
 
 
 // displayed datas in normal mode (if you turn off "DISPLAY_LIPO_VOLTAGE" or "DISPLAY_MA_CONSUMPTION" you don't see the alarms)
-//angezeigte Daten im normalen Modus (wenn man "DISPLAY_LIPO_VOLTAGE" oder "DISPLAY_MA_CONSUMPTION" ausschaltet, bekommt man keine Warnungen)
+//angezeigte Daten im normalen Modus (wenn man "DISPLAY_LIPO_VOLTAGE" oder "DISPLAY_MA_CONSUMPTION" ausschaltet, bekommt man keine Warnungen!)
 //===========================================================================================================================================
 //#define DISPLAY_RC_THROTTLE
 //#define DISPLAY_COMB_CURRENT
@@ -101,6 +103,7 @@ const char Pilotname[]=" samu";
 //#define DISPLAY_ESC_TEMPERATURE
 #define DISPLAY_PILOTNAME
 #define DISPLAY_TIMER
+#define DISPLAY_ANGLE
 
 // displayed datas in reduced mode 1 (if you turn off "DISPLAY_LIPO_VOLTAGE" or "DISPLAY_MA_CONSUMPTION" you don't see the alarms)
 //das gleiche hier, nur für den reduzierten Modus
@@ -113,7 +116,8 @@ const char Pilotname[]=" samu";
 //#define RED_DISPLAY_ESC_CURRENT
 //#define RED_DISPLAY_ESC_TEMPERATURE
 //#define RED_DISPLAY_PILOTNAME
-//#define DISPLAY_TIMER
+//#define RED_DISPLAY_TIMER
+//#define RED_DISPLAY_ANGLE
 
 // displayed datas in reduced mode 2 (if you turn off "DISPLAY_LIPO_VOLTAGE" or "DISPLAY_MA_CONSUMPTION" you don't see the alarms)
 //das gleiche hier, nur für den reduzierten Modus 2
@@ -126,7 +130,8 @@ const char Pilotname[]=" samu";
 #define RED2_DISPLAY_ESC_CURRENT
 #define RED2_DISPLAY_ESC_TEMPERATURE
 #define RED2_DISPLAY_PILOTNAME
-#define DISPLAY_TIMER
+#define RED2_DISPLAY_TIMER
+#define RED2_DISPLAY_ANGLE
 
 
 
@@ -148,6 +153,9 @@ const uint16_t SeparationVoltage3s4s=1370; //13,7V
 //hysteresis for the voltage Alarm (Alarm will turn off if voltage goes higher than LowVoltage?s+hysteresis)
 //Hysteresis für die SPannungswarnung (Alarm wird ausgeschaltet wenn die Spannung höher wird als LowVoltage?s+hysteresis
 const uint16_t hysteresis=30;
+//2nd stage Voltage alarm - when it gets really critical (shows text message in center of screen)
+//2. Spannungsalarm-Stufe - wenn es wirklich kritisch wird (zeigt einen Text in der Mitte des Bildschirms)
+const uint16_t MinimalCellVoltage2nd=300;  //3,00V/cell
 
 //Voltage-offset (will change the displayed Voltage and the alarm)
 //Value can be anything between -127 and 127. Setting the Voltage works like above for the Voltage Alarm (127=1,27V)
@@ -194,6 +202,7 @@ static char clean[30];
 uint8_t firstloop=0;
 uint8_t BatteryCells=0; //stores the number of cells recognized in the first run
 boolean VoltageAlarm=false; //works with the const defined in the beginning | Filters Voltage drops to avoid erratic voltage alarms
+boolean VoltageAlarm2nd=false; //2nd stage of voltage alarms
 
 static int16_t  throttle = 0;
 static uint16_t current = 0;
@@ -210,6 +219,8 @@ static uint8_t armed=0;
 static uint8_t armedOld=0;
 static uint8_t failsafe=0;
 static uint16_t calibGyroDone=0;
+
+static int16_t angley=0;;
 
 static unsigned long start_time = 0;
 static unsigned long time = 0;
@@ -425,8 +436,18 @@ void loop(){
            throttle = ((serialBuf[STARTCOUNT]<<8) | serialBuf[1+STARTCOUNT])/10;
            armed =   ((serialBuf[15+STARTCOUNT]<<8) | serialBuf[16+STARTCOUNT]);
            LipoVoltage =   ((serialBuf[17+STARTCOUNT]<<8) | serialBuf[18+STARTCOUNT]);
-           failsafe = ((serialBuf[40+STARTCOUNT]<<8) | (serialBuf[41+STARTCOUNT]));
+           failsafe = ((serialBuf[40+STARTCOUNT]<<8) | (serialBuf[41+STARTCOUNT])); //42
            calibGyroDone = ((serialBuf[39+STARTCOUNT]<<8) | serialBuf[40+STARTCOUNT]);
+           angley= ((serialBuf[33+STARTCOUNT]<<8) | (serialBuf[34+STARTCOUNT]))/100; //35
+
+           if(angley>90)
+           {
+             angley=99;
+           }
+           if(angley<-90)
+           {
+             angley=-99;
+           }
 
 
            uint32_t tmpVoltage = 0;
@@ -527,16 +548,23 @@ void loop(){
       }
       firstloop=255;
     }
-    //Voltage Alarm
+    //Voltage Alarm 1 and 2
     if(BatteryCells==3 && LipoVoltage<LowVoltage3s && firstloop==255|| BatteryCells==4 && LipoVoltage<LowVoltage4s && firstloop==255)
     {
       VoltageAlarm=true;
+    }
+    if(VoltageAlarm= true && (LipoVoltage/BatteryCells)<MinimalCellVoltage2nd)
+    {
+      VoltageAlarm2nd=true;
     }
     //no Voltage Alarm
     if(BatteryCells==3 && LipoVoltage>(LowVoltage3s+hysteresis) && firstloop==255|| BatteryCells==4 && LipoVoltage>(LowVoltage4s+hysteresis) && firstloop==255)
     {
       VoltageAlarm=false;
+      VoltageAlarm2nd=false;
     }
+
+
 
     //wait if OSD is not in sync
     while (!OSD.notInVSync());
@@ -663,6 +691,7 @@ void loop(){
     uint8_t displayTemperature = 0;
     uint8_t displayTime        = 0;
     uint8_t displayPilot       = 0;
+    uint8_t displayAngle       = 0;
 
 
     //from here we will start the code for displaying the datas
@@ -719,6 +748,9 @@ void loop(){
       #if defined(DISPLAY_TIMER)
       displayTime = 1;
       #endif
+      #if defined(DISPLAY_ANGLE)
+      displayAngle = 1;
+      #endif
     }
     else if(reducedModeDisplay==1)
     {
@@ -746,8 +778,11 @@ void loop(){
       #if defined(RED_DISPLAY_PILOTNAME)
       displayPilot = 1;
       #endif
-      #if defined(DISPLAY_TIMER)
+      #if defined(RED_DISPLAY_TIMER)
       displayTime = 1;
+      #endif
+      #if defined(RED_DISPLAY_ANGLE)
+      displayAngle = 1;
       #endif
     }
     else if(reducedModeDisplay==2)
@@ -776,8 +811,11 @@ void loop(){
       #if defined(RED2_DISPLAY_PILOTNAME)
       displayPilot = 1;
       #endif
-      #if defined(DISPLAY_TIMER)
+      #if defined(RED2_DISPLAY_TIMER)
       displayTime = 1;
+      #endif
+      #if defined(RED2_DISPLAY_ANGLE)
+      displayAngle = 1;
       #endif
     }
 
@@ -804,11 +842,17 @@ void loop(){
     if(displayLipoVoltage)
     {
       OSD.setCursor( marginLastRow, -1 );
-      //OSD.print( "bat:" );
       if(VoltageAlarm==true)
       {
         OSD.blink();
         OSD.print( LipoVoltC );
+        //2nd stage voltage alarm
+        if(VoltageAlarm2nd == true)
+        {
+          OSD.setCursor(4,MarginMiddleY);
+          MarginMiddleY++;
+          OSD.print("    lipo voltage    ");
+        }
         OSD.noBlink();
       }
       else
@@ -885,8 +929,22 @@ void loop(){
       OSD.print( ESC4Temp );
     }
 
+    if(displayAngle)
+    {
+      OSD.setCursor(0,6);
+      OSD.print(angley);
+      if(angley>-10)
+      {
+        OSD.print(" ");
+      }
+      if(angley<10 && angley>-1)
+      {
+        OSD.print(" ");
+      }
+    }
+
     //show the detected cell count upon the first arming
-    if(current==0 && BatteryCells!=0 && armed==0 && firstarmed==0 && firstloop==255)
+    if(current==0 && BatteryCells!=0 && armed==0 && firstarmed==0 && firstloop==255 && time<30000)
     {
       OSD.setCursor(4,MarginMiddleY);
       MarginMiddleY++;
@@ -934,13 +992,13 @@ void loop(){
     {
       OSD.setCursor(4,MarginMiddleY);
       MarginMiddleY++;
-      OSD.print("Failsafe / not ready");
+      OSD.print("      failsafe      ");
     }
     if(calibGyroDone>100)
     {
       OSD.setCursor(4,MarginMiddleY);
       MarginMiddleY++;
-      OSD.print("  calibrating Gyro  ");
+      OSD.print("  calibrating gyro  ");
     }
 
     //clearing middle screen below displayed datas
