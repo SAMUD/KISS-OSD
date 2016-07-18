@@ -281,8 +281,8 @@ void setup(){
 
 uint8_t print_int16(int16_t p_int, char *str, uint8_t dec, uint8_t AlignLeft)
   {
-  	uint16_t useVal = p_int;
-  	uint8_t pre = ' ';
+  	uint16_t useVal  = p_int;
+  	uint8_t pre      = ' ';
   	if(p_int < 0)
     {
   		useVal = p_int*-1;
@@ -306,7 +306,8 @@ uint8_t print_int16(int16_t p_int, char *str, uint8_t dec, uint8_t AlignLeft)
   			result[i] = pre;
   			signdone = 1;
   		}
-      else if(signdone) result[i] = aciidig[digits[i-1]];
+      else if(signdone)
+        result[i] = aciidig[digits[i-1]];
   	}
           uint8_t CharPos = 0;
           for(i = 0; i < 6;i++)
@@ -375,9 +376,9 @@ void print_time(unsigned long time, char *time_str)
 //==========
 
 void loop(){
-  uint16_t i = 0;
+  uint16_t i                      = 0;
   uint8_t KRPMPoses[4];
-  static uint8_t lastMode = 0;
+  static uint8_t lastMode         = 0;
 
   static char Motor1KERPM[30];
   static char Motor2KERPM[30];
@@ -403,21 +404,23 @@ void loop(){
   static char Current[30];
 
   static uint8_t serialBuf[255];
-  static uint8_t minBytes = 0;
-  static uint8_t recBytes = 0;
+  static uint8_t minBytes         = 0;
+  static uint8_t recBytes         = 0;
 
   static char Time[10];
 
-  static uint32_t LastLoopTime = 0;
+  static uint32_t LastLoopTime    = 0;
 
   //big if with all code
-  if(micros()-LastLoopTime > 10000){
+  if(micros()-LastLoopTime > 10000)
+  {
     LastLoopTime = micros();
 
     Serial.write(0x20); // request telemetrie
 
     minBytes = 100;
     recBytes = 0;
+
     //aquire serial data and write it to normal variables
     while(recBytes < minBytes && micros()-LastLoopTime < 20000)
     {
@@ -442,20 +445,18 @@ void loop(){
            LipoVoltage =   ((serialBuf[17+STARTCOUNT]<<8) | serialBuf[18+STARTCOUNT]);
            failsafe = ((serialBuf[40+STARTCOUNT]<<8) | (serialBuf[41+STARTCOUNT])); //42
            calibGyroDone = ((serialBuf[39+STARTCOUNT]<<8) | serialBuf[40+STARTCOUNT]);
-           angley= ((serialBuf[33+STARTCOUNT]<<8) | (serialBuf[34+STARTCOUNT]))/100; //35
 
+           //angle y for displaying in the horizon bar
+           angley= ((serialBuf[33+STARTCOUNT]<<8) | (serialBuf[34+STARTCOUNT]))/100; //35
            if(angley>90)
            {
              angley=99;
            }
-           if(angley<-90)
+           else if(angley<-90)
            {
              angley=-99;
            }
 
-
-           uint32_t tmpVoltage = 0;
-           uint32_t voltDev = 0;
            if(((serialBuf[85+STARTCOUNT]<<8) | serialBuf[86+STARTCOUNT]) > 5) // the ESC's read the voltage better then the FC
            {
              tmpVoltage += ((serialBuf[85+STARTCOUNT]<<8) | serialBuf[86+STARTCOUNT]);
@@ -567,8 +568,6 @@ void loop(){
       VoltageAlarm=false;
       VoltageAlarm2nd=false;
     }
-
-
 
     //wait if OSD is not in sync
     while (!OSD.notInVSync());
@@ -717,12 +716,14 @@ void loop(){
     if(reducedModeDisplay != lastMode)
     {
       lastMode = reducedModeDisplay;
-      for(i=0;i<20;i++){
+      for(i=0;i<20;i++)
+      {
           OSD.setCursor( 0, i );
           OSD.print( clean );
       }
       while (!OSD.notInVSync());
     }
+
 
     if(reducedModeDisplay == 0){
       #if defined(DISPLAY_RC_THROTTLE)
@@ -947,7 +948,7 @@ void loop(){
       }
     }
 
-    //show the detected cell count upon the first arming
+    //show the detected cell count upon the first 30 sec if not armed
     if(current==0 && BatteryCells!=0 && armed==0 && firstarmed==0 && firstloop==255 && time<30000)
     {
       OSD.setCursor(4,MarginMiddleY);
@@ -966,7 +967,7 @@ void loop(){
       OSD.setCursor(4,MarginMiddleY);
       MarginMiddleY++;
       OSD.blink();
-      OSD.print("Wait - don't arm: ");
+      OSD.print("wait - don't arm: ");
       OSD.print(percent);
       OSD.noBlink();
     }
