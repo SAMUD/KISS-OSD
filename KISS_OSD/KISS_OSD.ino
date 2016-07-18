@@ -1,44 +1,42 @@
-/*
-KISS FC OSD v4
+/* 1. Information
+//=========================================================================================================================
+
+
+KISS FC OSD v4.2
 By Felix Niessen (felix.niessen@googlemail.com)
 and Samuel Daurat (sdaurat@outlook.de)
+
+*****************************************************************************************************
+If you like my work and want to support me, I would love to get some support:  paypal.me/SamuelDaurat
+If you donate I would use the money to buy me some Kiss24A ESC to speed up my quad
+and to improve all the telemetry features in the OSD.
+
+Wenn Ihr meine Arbeit mögt, würde ich mich über etwas Support freuen: paypal.me/SamuelDaurat
+Ich würde das Geld dann benutzen um mir endlich 4x Kiss 24A ESCs leisten zu können und damit
+dann endlich auch mal die Telemetrie-Funktionen im OSD verbessern zu können.
+*****************************************************************************************************
 
 GITHUB: https://github.com/SAMUD/KISS-OSD
 
 Changelog:
-*added 2nd stage voltage alarm
-*first implementation of an angle indicator for pitch (easier landing)
---> next version with some indicators on the left side. but this needs me to mess around with fonts and the code of the OSD.
-*some changes when the detected cell message is displayed
-*Failsafe message is working correctly
+*some code styling
 
 TODO:
 *adding stats at the end of flight
 *adding virtual horizon (Milestone1 achieved)
 *adding flight mode
-*optimizing code
-*adding comments to code
 
-Anyone is free to copy, modify, publish, use, compile, sell, or
-distribute this software, either in source code form or as a compiled
-binary, for any purpose, commercial or non-commercial, and by any
-means.
+Anyone is free to copy, modify, publish, use, compile, sell, or distribute this software, either in source code form or as a compiled
+binary, for any purpose, commercial or non-commercial, and by any means.
 
 In jurisdictions that recognize copyright laws, the author or authors
-of this software dedicate any and all copyright interest in the
-software to the public domain. We make this dedication for the benefit
-of the public at large and to the detriment of our heirs and
-successors. We intend this dedication to be an overt act of
-relinquishment in perpetuity of all present and future rights to this
-software under copyright law.
+of this software dedicate any and all copyright interest in the software to the public domain. We make this dedication for the benefit
+of the public at large and to the detriment of our heirs and successors. We intend this dedication to be an overt act of
+relinquishment in perpetuity of all present and future rights to this software under copyright law.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES ORnOTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 For more information, please refer to <http://unlicense.org>
 */
@@ -46,20 +44,20 @@ For more information, please refer to <http://unlicense.org>
 
 
 
-// CONFIGURATION
+// 2. CONFIGURATION
 //=========================================================================================================================
 
 //uncomment the line | remove the "//" in front of the line to activate it.
 //um eine Linie zu aktivieren bitte das "//" entfernen
 
-// video system (only one uncommented)
+//video system (only one uncommented)
 //Videosystem (in Europa meistens PAL | bitte nur eine Auswahl aktivieren)
 //========================================================================
 #define PAL
 //#define NTSC
 
-// Pilot-name to be displayed (only small letters are allowed)
-//Pilotenname (nur kleine Buchstaben erlaubt)
+// Pilot-name to be displayed (for now only small letters are allowed)
+//Pilotenname (im Moment nur kleine Buchstaben erlaubt)
 //TODO: große Buchstaben in Schriftart hinzufügen
 //========================================================================
 const char Pilotname[]=" samu";
@@ -85,9 +83,9 @@ const char Pilotname[]=" samu";
 //=======================================================
 #define RED_MODE_AUX_CHAN 4 // 0-4, 0 = none
 //HINWEIS:
-//selected channel / Kanal > 500 --> reduced mode 2
+//selected channel / Kanal                > 500 --> reduced mode 2
 //selected channel / Kanal between -500 and 500 --> normal mode
-//selected channel / Kanal < -500 --> reduced mode 1
+//selected channel / Kanal       < -500         --> reduced mode 1
 
 
 
@@ -150,8 +148,8 @@ const uint16_t LowVoltage4s=1400; //14,0V
 //Separation between 3s and 4s
 //Spannung mit welcher am Anfang 3s oder 4s erkannt wird
 const uint16_t SeparationVoltage3s4s=1370; //13,7V
-//hysteresis for the voltage Alarm (Alarm will turn off if voltage goes higher than LowVoltage?s+hysteresis)
-//Hysteresis für die SPannungswarnung (Alarm wird ausgeschaltet wenn die Spannung höher wird als LowVoltage?s+hysteresis
+//hysteresis for the voltage Alarm (Alarm will turn off if voltage goes higher than LowVoltage+hysteresis)
+//Hysteresis für die Spannungswarnung (Alarm wird ausgeschaltet wenn die Spannung höher wird als LowVoltage+hysteresis
 const uint16_t hysteresis=30;
 //2nd stage Voltage alarm - when it gets really critical (shows text message in center of screen)
 //2. Spannungsalarm-Stufe - wenn es wirklich kritisch wird (zeigt einen Text in der Mitte des Bildschirms)
@@ -174,7 +172,7 @@ const char fourSBatteryDetected[]=" 4s bat - crit@ 14V ";
 //Warning for used mah
 //Warnung für KApazität in mah
 //============================
-//TODO: WARNING: this feature is not tested (I don't have the money for the 24A ESCs right now), but normally it should work
+//TODO: WARNING: this feature is not tested (I don't have the money for the 24A ESCs right now - see first chapter), but normally it should work
 const uint16_t CapacityThreshold=1150;
 
 
@@ -188,48 +186,47 @@ const uint16_t CapacityThreshold=1150;
 #include <SPI.h>
 #include <MAX7456.h>
 
-const byte osdChipSelect             =            6;
-const byte masterOutSlaveIn          =            MOSI;
-const byte masterInSlaveOut          =            MISO;
-const byte slaveClock                =            SCK;
-const byte osdReset                  =            2;
+const byte osdChipSelect              =             6;
+const byte masterOutSlaveIn           =             MOSI;
+const byte masterInSlaveOut           =             MISO;
+const byte slaveClock                 =             SCK;
+const byte osdReset                   =             2;
 
 MAX7456 OSD( osdChipSelect );
 
-
 static char clean[30];
 
-uint8_t firstloop=0;
-uint8_t BatteryCells=0; //stores the number of cells recognized in the first run
-boolean VoltageAlarm=false; //works with the const defined in the beginning | Filters Voltage drops to avoid erratic voltage alarms
-boolean VoltageAlarm2nd=false; //2nd stage of voltage alarms
+uint8_t firstloop                     =             0;
+uint8_t BatteryCells                  =             0; //stores the number of cells recognized in the first run
+boolean VoltageAlarm                  =             false; //works with the const defined in the beginning | Filters Voltage drops to avoid erratic voltage alarms
+boolean VoltageAlarm2nd               =             false; //2nd stage of voltage alarms
 
-static int16_t  throttle = 0;
-static uint16_t current = 0;
-static int16_t LipoVoltage = 0;
-static uint16_t LipoMAH = 0;
-static uint16_t motorKERPM[4] = {0,0,0,0};
-static uint16_t motorCurrent[4] = {0,0,0,0};
-static uint16_t ESCTemps[4] = {0,0,0,0};
-static int16_t  AuxChanVals[4] = {0,0,0,0};
-static uint8_t  reducedMode = 0;
-static uint8_t  reducedMode2 = 0;
-static uint8_t  reducedModeDisplay = 0;
-static uint8_t armed=0;
-static uint8_t armedOld=0;
-static uint8_t failsafe=0;
-static uint16_t calibGyroDone=0;
+static int16_t  throttle              =             0;
+static uint16_t current               =             0;
+static int16_t LipoVoltage            =             0;
+static uint16_t LipoMAH               =             0;
+static uint16_t motorKERPM[4]         =             {0,0,0,0};
+static uint16_t motorCurrent[4]       =             {0,0,0,0};
+static uint16_t ESCTemps[4]           =             {0,0,0,0};
+static int16_t  AuxChanVals[4]        =             {0,0,0,0};
+static uint8_t  reducedMode           =             0;
+static uint8_t  reducedMode2          =             0;
+static uint8_t  reducedModeDisplay    =             0;
+static uint8_t armed                  =             0;
+static uint8_t armedOld               =             0;
+static uint8_t failsafe               =             0;
+static uint16_t calibGyroDone         =             0;
 
-static int16_t angley=0;;
+static int16_t angley                 =             0;
 
-static unsigned long start_time = 0;
-static unsigned long time = 0;
-static unsigned long total_time = 0;
+static unsigned long start_time       =             0;
+static unsigned long time             =             0;
+static unsigned long total_time       =             0;
 
-static uint8_t percent=0;
-static uint8_t firstarmed=0;
+static uint8_t percent                =             0;
+static uint8_t firstarmed             =             0;
 
-static unsigned long armedstarted=0;
+static unsigned long armedstarted     =             0;
 
 
 
@@ -240,7 +237,6 @@ void setup(){
   uint8_t i = 0;
   SPI.begin();
   SPI.setClockDivider( SPI_CLOCK_DIV2 );
-  //OSD.begin();
   #if defined(PAL)
     OSD.begin(28,15,0);
     OSD.setTextOffset(-1,-6);
@@ -262,7 +258,8 @@ void setup(){
   //clean used area
   for(i=0;i<30;i++) clean[i] = ' ';
   while (!OSD.notInVSync());
-  for(i=0;i<20;i++){
+  for(i=0;i<20;i++)
+  {
       OSD.setCursor( 0, i );
       OSD.print( clean );
   }
@@ -282,38 +279,43 @@ void setup(){
 //=====================
 // fonction print_int16
 
-uint8_t print_int16(int16_t p_int, char *str, uint8_t dec, uint8_t AlignLeft){
-	uint16_t useVal = p_int;
-	uint8_t pre = ' ';
-	if(p_int < 0){
-		useVal = p_int*-1;
-		pre = '-';
-	}
-	uint8_t aciidig[10] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
-	uint8_t i = 0;
-        uint8_t digits[6] = {0,0,0,0,0,0};
-	while(useVal >= 10000){digits[0]++; useVal-=10000;}
-	while(useVal >= 1000){digits[1]++; useVal-=1000;}
-	while(useVal >= 100){digits[2]++; useVal-=100;}
-	while(useVal >= 10){digits[3]++; useVal-=10;}
-	digits[4] = useVal;
-        char result[6] = {' ',' ',' ',' ',' ','0'};
-	uint8_t signdone = 0;
-	for(i = 0; i < 6;i++){
-		if(i == 5 && signdone == 0) continue;
-		else if(aciidig[digits[i]] != '0' && signdone == 0){
-			result[i] = pre;
-			signdone = 1;
-		}else if(signdone) result[i] = aciidig[digits[i-1]];
-	}
-        uint8_t CharPos = 0;
-        for(i = 0; i < 6;i++){
-          if(result[i] != ' ' || (AlignLeft == 0 || (i > 5-dec))) str[CharPos++] = result[i];
-          if(dec != 0 && i == 5-dec) str[CharPos++] = '.';
-          if(dec != 0 && i > 5-dec && str[CharPos-1] == ' ') str[CharPos-1] = '0';
-        }
-
-        return CharPos;
+uint8_t print_int16(int16_t p_int, char *str, uint8_t dec, uint8_t AlignLeft)
+  {
+  	uint16_t useVal = p_int;
+  	uint8_t pre = ' ';
+  	if(p_int < 0)
+    {
+  		useVal = p_int*-1;
+  		pre = '-';
+  	}
+  	uint8_t aciidig[10] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+  	uint8_t i = 0;
+    uint8_t digits[6] = {0,0,0,0,0,0};
+  	while(useVal >= 10000){digits[0]++; useVal-=10000;}
+  	while(useVal >= 1000){digits[1]++; useVal-=1000;}
+  	while(useVal >= 100){digits[2]++; useVal-=100;}
+  	while(useVal >= 10){digits[3]++; useVal-=10;}
+  	digits[4] = useVal;
+    char result[6] = {' ',' ',' ',' ',' ','0'};
+  	uint8_t signdone = 0;
+  	for(i = 0; i < 6;i++)
+    {
+  		if(i == 5 && signdone == 0) continue;
+  		else if(aciidig[digits[i]] != '0' && signdone == 0)
+      {
+  			result[i] = pre;
+  			signdone = 1;
+  		}
+      else if(signdone) result[i] = aciidig[digits[i-1]];
+  	}
+          uint8_t CharPos = 0;
+          for(i = 0; i < 6;i++)
+          {
+            if(result[i] != ' ' || (AlignLeft == 0 || (i > 5-dec))) str[CharPos++] = result[i];
+            if(dec != 0 && i == 5-dec) str[CharPos++] = '.';
+            if(dec != 0 && i > 5-dec && str[CharPos-1] == ' ') str[CharPos-1] = '0';
+          }
+          return CharPos;
 }
 
 // END OF print_int16 fonction
@@ -323,7 +325,8 @@ uint8_t print_int16(int16_t p_int, char *str, uint8_t dec, uint8_t AlignLeft){
 //===========
 // ESC-Filter
 
-uint32_t ESC_filter(uint32_t oldVal, uint32_t newVal){
+uint32_t ESC_filter(uint32_t oldVal, uint32_t newVal)
+{
   return (uint32_t)((uint32_t)((uint32_t)((uint32_t)oldVal*ESC_FILTER)+(uint32_t)newVal))/(ESC_FILTER+1);
 }
 // END OF ESC-Filter
@@ -331,7 +334,8 @@ uint32_t ESC_filter(uint32_t oldVal, uint32_t newVal){
 
 //========================
 //Convert time in a string
-void print_time(unsigned long time, char *time_str) {
+void print_time(unsigned long time, char *time_str)
+{
     uint16_t seconds = time / 1000;
     uint8_t mills = time % 1000;
     uint8_t minutes = 0;
