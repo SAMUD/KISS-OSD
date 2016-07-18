@@ -2,7 +2,7 @@
 //=========================================================================================================================
 
 
-KISS FC OSD v4.2
+KISS FC OSD v4.3
 By Felix Niessen (felix.niessen@googlemail.com)
 and Samuel Daurat (sdaurat@outlook.de)
 
