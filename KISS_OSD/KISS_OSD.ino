@@ -457,6 +457,8 @@ void loop(){
              angley=-99;
            }
 
+           uint32_t tmpVoltage  = 0;
+           uint32_t voltDev     = 0;
            if(((serialBuf[85+STARTCOUNT]<<8) | serialBuf[86+STARTCOUNT]) > 5) // the ESC's read the voltage better then the FC
            {
              tmpVoltage += ((serialBuf[85+STARTCOUNT]<<8) | serialBuf[86+STARTCOUNT]);
