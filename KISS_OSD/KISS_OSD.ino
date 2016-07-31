@@ -2,7 +2,7 @@
 //=========================================================================================================================
 
 
-KISS FC OSD v4.3.1
+KISS FC OSD v4.3.2
 By Felix Niessen (felix.niessen@googlemail.com)
 and Samuel Daurat (sdaurat@outlook.de)
 
@@ -19,7 +19,8 @@ dann endlich auch mal die Telemetrie-Funktionen im OSD verbessern zu können.
 GITHUB: https://github.com/SAMUD/KISS-OSD
 
 Changelog:
-*some code styling
+*resolved bug in voltage alarm
+--> wrote = instead of == so the first stage only worked when the 2nd stage was active.
 
 TODO:
 *adding stats at the end of flight
@@ -153,7 +154,7 @@ const uint16_t SeparationVoltage3s4s=1370; //13,7V
 const uint16_t hysteresis=30;
 //2nd stage Voltage alarm - when it gets really critical (shows text message in center of screen)
 //2. Spannungsalarm-Stufe - wenn es wirklich kritisch wird (zeigt einen Text in der Mitte des Bildschirms)
-const uint16_t MinimalCellVoltage2nd=300;  //3,00V/cell
+const uint16_t MinimalCellVoltage2nd=320;  //3,00V/cell
 
 //Voltage-offset (will change the displayed Voltage and the alarm)
 //Value can be anything between -127 and 127. Setting the Voltage works like above for the Voltage Alarm (127=1,27V)
@@ -556,20 +557,27 @@ void loop(){
       firstloop=255;
     }
     //Voltage Alarm 1 and 2
-    if(BatteryCells==3 && LipoVoltage<LowVoltage3s && firstloop==255|| BatteryCells==4 && LipoVoltage<LowVoltage4s && firstloop==255)
+    if((BatteryCells==3 && LipoVoltage<LowVoltage3s && firstloop==255)|| (BatteryCells==4 && LipoVoltage<LowVoltage4s && firstloop==255))
     {
       VoltageAlarm=true;
     }
-    if(VoltageAlarm= true && (LipoVoltage/BatteryCells)<MinimalCellVoltage2nd)
+    if(VoltageAlarm== true && (LipoVoltage/BatteryCells)<MinimalCellVoltage2nd)
     {
       VoltageAlarm2nd=true;
     }
     //no Voltage Alarm
-    if(BatteryCells==3 && LipoVoltage>(LowVoltage3s+hysteresis) && firstloop==255|| BatteryCells==4 && LipoVoltage>(LowVoltage4s+hysteresis) && firstloop==255)
+    if((BatteryCells==3 && LipoVoltage>(LowVoltage3s+hysteresis) && firstloop==255)|| (BatteryCells==4 && LipoVoltage>(LowVoltage4s+hysteresis) && firstloop==255))
     {
       VoltageAlarm=false;
       VoltageAlarm2nd=false;
     }
+    
+    if(firstloop<255)
+    {
+      VoltageAlarm=false;
+      VoltageAlarm2nd=false;
+    }
+    
 
     //wait if OSD is not in sync
     while (!OSD.notInVSync());
@@ -853,7 +861,6 @@ void loop(){
       {
         OSD.blink();
         OSD.print( LipoVoltC );
-        //2nd stage voltage alarm
         if(VoltageAlarm2nd == true)
         {
           OSD.setCursor(4,MarginMiddleY);
@@ -866,6 +873,8 @@ void loop(){
       {
         OSD.print( LipoVoltC );
       }
+      
+      
 
       ESCmarginBot = 1;
     }
@@ -966,12 +975,18 @@ void loop(){
     }
     if(firstloop<255)
     {
+      
+      OSD.setCursor(4,MarginMiddleY);
+      MarginMiddleY++;
+      OSD.print("      v 4.3.2       ");
       OSD.setCursor(4,MarginMiddleY);
       MarginMiddleY++;
       OSD.blink();
       OSD.print("wait - don't arm: ");
-      OSD.print(percent);
       OSD.noBlink();
+      OSD.print(percent);
+      
+      
     }
 
     //show armed | dissarmed
