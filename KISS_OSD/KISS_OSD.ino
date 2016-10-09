@@ -8,8 +8,7 @@ and Samuel Daurat (sdaurat@outlook.de)
 
 *****************************************************************************************************
 If you like my work and want to support me, I would love to get some support:  paypal.me/SamuelDaurat
-If you donate I would use the money to buy me some Kiss24A ESC to speed up my quad
-and to improve all the telemetry features in the OSD.
+
 
 Wenn Ihr meine Arbeit mögt, würde ich mich über etwas Support freuen: https://paypal.me/SamuelDaurat
 *****************************************************************************************************
@@ -50,48 +49,27 @@ For more information, please refer to <http://unlicense.org>
 //uncomment the line | remove the "//" in front of the line to activate it.
 //um eine Linie zu aktivieren bitte das "//" entfernen
 
-//video system (only one uncommented)
-//Videosystem (in Europa meistens PAL | bitte nur eine Auswahl aktivieren)
-//========================================================================
+//video system
 #define PAL
 //#define NTSC
 
-// Pilot-name to be displayed (for now only small letters are allowed)
-//Pilotenname (im Moment nur kleine Buchstaben erlaubt)
-//TODO: große Buchstaben in Schriftart hinzufügen
-//========================================================================
+// Pilot-name
 const char Pilotname[]=" samu";
 
-// MAX7456 Charset (change if you get sensless signs)
-//MAX7456 Charset (ändern wenn man kryptische Zeichen bekommt)
-//============================================================
+// MAX7456 Charset
 #define USE_MAX7456_ASCII
 //#define USE_MAX7456_MAXIM
 
-// motors magnepole count (to display the right RPMs)
-//Anzahl der Motorpole um die richtige Drehzahl anzuzeigen
-//========================================================
+// motors magnepole count
 #define MAGNETPOLECOUNT 14 // 2 for ERPMs
 
-// Filter for ESC datas (higher value makes them less erratic) 0 = no filter, 20 = very strong filter
-//Filter für die ESC-Daten (20=starker Filter, 0=kein Filter)
-//===================================================================================================
+// Filter for ESC datas
 #define ESC_FILTER 10
 
-// reduced mode channel config | setting this to 0 forces always the normal mode
-//welcher Kanal von 1-4 für den OSD-Modus verwendet wird. | wenn 0 eingestellt wird, wird nur der normale modus angezeigt
-//=======================================================
+// reduced mode channel config
 #define RED_MODE_AUX_CHAN 4 // 0-4, 0 = none
-//HINWEIS:
-//selected channel / Kanal                > 500 --> reduced mode 2
-//selected channel / Kanal between -500 and 500 --> normal mode
-//selected channel / Kanal       < -500         --> reduced mode 1
 
-
-
-// displayed datas in normal mode (if you turn off "DISPLAY_LIPO_VOLTAGE" or "DISPLAY_MA_CONSUMPTION" you don't see the alarms)
-//angezeigte Daten im normalen Modus (wenn man "DISPLAY_LIPO_VOLTAGE" oder "DISPLAY_MA_CONSUMPTION" ausschaltet, bekommt man keine Warnungen!)
-//===========================================================================================================================================
+// displayed datas in normal mode
 //#define DISPLAY_RC_THROTTLE
 #define DISPLAY_COMB_CURRENT
 #define DISPLAY_LIPO_VOLTAGE
@@ -103,9 +81,7 @@ const char Pilotname[]=" samu";
 #define DISPLAY_TIMER
 #define DISPLAY_ANGLE
 
-// displayed datas in reduced mode 1 (if you turn off "DISPLAY_LIPO_VOLTAGE" or "DISPLAY_MA_CONSUMPTION" you don't see the alarms)
-//das gleiche hier, nur für den reduzierten Modus
-//==============================================================================================================================
+// displayed datas in reduced mode 1 
 //#define RED_DISPLAY_RC_THROTTLE
 //#define RED_DISPLAY_COMB_CURRENT
 #define RED_DISPLAY_LIPO_VOLTAGE
@@ -117,9 +93,7 @@ const char Pilotname[]=" samu";
 //#define RED_DISPLAY_TIMER
 //#define RED_DISPLAY_ANGLE
 
-// displayed datas in reduced mode 2 (if you turn off "DISPLAY_LIPO_VOLTAGE" or "DISPLAY_MA_CONSUMPTION" you don't see the alarms)
-//das gleiche hier, nur für den reduzierten Modus 2
-//==============================================================================================================================
+// displayed datas in reduced mode 2
 //#define RED2_DISPLAY_RC_THROTTLE
 #define RED2_DISPLAY_COMB_CURRENT
 #define RED2_DISPLAY_LIPO_VOLTAGE
@@ -131,47 +105,20 @@ const char Pilotname[]=" samu";
 #define RED2_DISPLAY_TIMER
 #define RED2_DISPLAY_ANGLE
 
-
-
-
-
-//margin left and right for the last line. Value can be something between 0 (no margin) and perhaps 10 as maximum (usefull if you can't read values in the corner of your FatShark)
-//Wenn man in den Ecken unten links und rechts schlecht Werte lesen kann, kann man so die Werte weiter in die Mitte schieben (0=am Rand)
-//=================================================================================================================================================================================
+//margin left and right for the last line.
 const uint8_t marginLastRow=3;
 
-//Low voltage for triggering an Battery-Alarm (12,82V equals to 1282 as a stored value)
-//Spannungen für den Batterie-Alarm (12,82V entspricht dabei 1282)
-//=====================================================================================
-const uint16_t LowVoltage3s=1050; //10,5V
-const uint16_t LowVoltage4s=1410; //14,0V
-//Separation between 3s and 4s
-//Spannung mit welcher am Anfang 3s oder 4s erkannt wird
-const uint16_t SeparationVoltage3s4s=1370; //13,7V
-//hysteresis for the voltage Alarm (Alarm will turn off if voltage goes higher than LowVoltage+hysteresis)
-//Hysteresis für die Spannungswarnung (Alarm wird ausgeschaltet wenn die Spannung höher wird als LowVoltage+hysteresis
+//Voltage Settings
+const uint16_t LowVoltage3s=1050;
+const uint16_t LowVoltage4s=1410;
+const uint16_t SeparationVoltage3s4s=1370;
 const uint16_t hysteresis=30;
-//2nd stage Voltage alarm - when it gets really critical (shows text message in center of screen)
-//2. Spannungsalarm-Stufe - wenn es wirklich kritisch wird (zeigt einen Text in der Mitte des Bildschirms)
-const uint16_t MinimalCellVoltage2nd=320;  //3,20V/cell
-
-//Voltage-offset (will change the displayed Voltage and the alarm)
-//Value can be anything between -127 and 127. Setting the Voltage works like above for the Voltage Alarm (127=1,27V)
-//Spannungsoffset (wird auf die angezeigte Spannung und den Alarm angewendet)
-//maximaler Wertebereich -127 bis 127 | Werte werden wie oben beim Batteriealarm eingestellt (127=1,27V)
-//===========================================================================
+const uint16_t MinimalCellVoltage2nd=320;
 const int8_t VoltageOffset=-10;
-
-//Information for battery detection beeing displayed(only small letters are allowed) (maximum 20 letters allowed)
-//angezeigte Informationen wenn Batterie erkannt wurde (nur kleine Buchstaben erlaubt) (maximal 20 Zeichen erlaubt)
-//TODO: große Buchstaben in Schriftart hinzufügen
-//========================================================================
 const char threeSBatteryDetected[]="3s bat - crit@ 10.5V";
 const char fourSBatteryDetected[]=" 4s bat - crit@ 14.1V ";
 
-//Warning for used mah
-//Warnung für KApazität in mah
-//============================
+//Capacity settings
 const uint16_t CapacityThreshold=1050;
 const uint16_t CapacityThreshold2ndStage=1200;
 
