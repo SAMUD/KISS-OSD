@@ -25,7 +25,7 @@
 
   #include <Print.h>
   #include <SPI.h>
-  #include "Max7456.h"
+  #include "MAX7456.h"
   
 
 
