@@ -17,7 +17,7 @@ GITHUB: https://github.com/SAMUD/KISS-OSD
 
 Changelog:
 *added a space between the clock and the current consumption to avoid having constellations like 1:251236mah
-*added 2ndstage mah alarm
+*added 2nd stage mah alarm
 
 TODO:
 *adding stats at the end of flight
@@ -48,6 +48,10 @@ For more information, please refer to <http://unlicense.org>
 
 //uncomment the line | remove the "//" in front of the line to activate it.
 //um eine Linie zu aktivieren bitte das "//" entfernen
+
+//Please refer to the github wiki page for explanations on the settings
+https://github.com/SAMUD/KISS-OSD/wiki/OSD-Settings-explained
+
 
 //video system
 #define PAL
