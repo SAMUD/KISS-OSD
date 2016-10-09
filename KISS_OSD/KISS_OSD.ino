@@ -2,7 +2,7 @@
 //=========================================================================================================================
 
 
-KISS FC OSD v4.3.2
+KISS FC OSD v4.3.3
 By Felix Niessen (felix.niessen@googlemail.com)
 and Samuel Daurat (sdaurat@outlook.de)
 
@@ -11,21 +11,20 @@ If you like my work and want to support me, I would love to get some support:  p
 If you donate I would use the money to buy me some Kiss24A ESC to speed up my quad
 and to improve all the telemetry features in the OSD.
 
-Wenn Ihr meine Arbeit mögt, würde ich mich über etwas Support freuen: paypal.me/SamuelDaurat
-Ich würde das Geld dann benutzen um mir endlich 4x Kiss 24A ESCs leisten zu können und damit
-dann endlich auch mal die Telemetrie-Funktionen im OSD verbessern zu können.
+Wenn Ihr meine Arbeit mögt, würde ich mich über etwas Support freuen: https://paypal.me/SamuelDaurat
 *****************************************************************************************************
 
 GITHUB: https://github.com/SAMUD/KISS-OSD
 
 Changelog:
-*resolved bug in voltage alarm
---> wrote = instead of == so the first stage only worked when the 2nd stage was active.
+*added a space between the clock and the current consumption to avoid having constellations like 1:251236mah
+*added 2ndstage mah alarm
 
 TODO:
 *adding stats at the end of flight
 *adding virtual horizon (Milestone1 achieved)
-*adding flight mode
+*adding flight mode indicator
+
 
 Anyone is free to copy, modify, publish, use, compile, sell, or distribute this software, either in source code form or as a compiled
 binary, for any purpose, commercial or non-commercial, and by any means.
@@ -94,9 +93,9 @@ const char Pilotname[]=" samu";
 //angezeigte Daten im normalen Modus (wenn man "DISPLAY_LIPO_VOLTAGE" oder "DISPLAY_MA_CONSUMPTION" ausschaltet, bekommt man keine Warnungen!)
 //===========================================================================================================================================
 //#define DISPLAY_RC_THROTTLE
-//#define DISPLAY_COMB_CURRENT
+#define DISPLAY_COMB_CURRENT
 #define DISPLAY_LIPO_VOLTAGE
-//#define DISPLAY_MA_CONSUMPTION
+#define DISPLAY_MA_CONSUMPTION
 //#define DISPLAY_ESC_KRPM
 //#define DISPLAY_ESC_CURRENT
 //#define DISPLAY_ESC_TEMPERATURE
@@ -110,7 +109,7 @@ const char Pilotname[]=" samu";
 //#define RED_DISPLAY_RC_THROTTLE
 //#define RED_DISPLAY_COMB_CURRENT
 #define RED_DISPLAY_LIPO_VOLTAGE
-//#define RED_DISPLAY_MA_CONSUMPTION
+#define RED_DISPLAY_MA_CONSUMPTION
 //#define RED_DISPLAY_ESC_KRPM
 //#define RED_DISPLAY_ESC_CURRENT
 //#define RED_DISPLAY_ESC_TEMPERATURE
@@ -145,7 +144,7 @@ const uint8_t marginLastRow=3;
 //Spannungen für den Batterie-Alarm (12,82V entspricht dabei 1282)
 //=====================================================================================
 const uint16_t LowVoltage3s=1050; //10,5V
-const uint16_t LowVoltage4s=1400; //14,0V
+const uint16_t LowVoltage4s=1410; //14,0V
 //Separation between 3s and 4s
 //Spannung mit welcher am Anfang 3s oder 4s erkannt wird
 const uint16_t SeparationVoltage3s4s=1370; //13,7V
@@ -154,7 +153,7 @@ const uint16_t SeparationVoltage3s4s=1370; //13,7V
 const uint16_t hysteresis=30;
 //2nd stage Voltage alarm - when it gets really critical (shows text message in center of screen)
 //2. Spannungsalarm-Stufe - wenn es wirklich kritisch wird (zeigt einen Text in der Mitte des Bildschirms)
-const uint16_t MinimalCellVoltage2nd=320;  //3,00V/cell
+const uint16_t MinimalCellVoltage2nd=320;  //3,20V/cell
 
 //Voltage-offset (will change the displayed Voltage and the alarm)
 //Value can be anything between -127 and 127. Setting the Voltage works like above for the Voltage Alarm (127=1,27V)
@@ -168,13 +167,13 @@ const int8_t VoltageOffset=-10;
 //TODO: große Buchstaben in Schriftart hinzufügen
 //========================================================================
 const char threeSBatteryDetected[]="3s bat - crit@ 10.5V";
-const char fourSBatteryDetected[]=" 4s bat - crit@ 14V ";
+const char fourSBatteryDetected[]=" 4s bat - crit@ 14.1V ";
 
 //Warning for used mah
 //Warnung für KApazität in mah
 //============================
-//TODO: WARNING: this feature is not tested (I don't have the money for the 24A ESCs right now - see first chapter), but normally it should work
-const uint16_t CapacityThreshold=1150;
+const uint16_t CapacityThreshold=1050;
+const uint16_t CapacityThreshold2ndStage=1200;
 
 
 
@@ -228,6 +227,8 @@ static uint8_t percent                =             0;
 static uint8_t firstarmed             =             0;
 
 static unsigned long armedstarted     =             0;
+
+static uint8_t extra_space_mah        =             0;
 
 
 
@@ -496,6 +497,12 @@ void loop(){
 
 
            LipoMAH =       ((serialBuf[148+STARTCOUNT]<<8) | serialBuf[149+STARTCOUNT]);
+           
+           //extra platz um immer ein leerzeichen zwichen der uhrzeit und den mah zu bekommen
+           if (LipoMAH>999)
+             extra_space_mah=1;
+           else
+             extra_space_mah=0;
 
            static uint32_t windedupfilterdatas[8];
 
@@ -889,7 +896,7 @@ void loop(){
 
     if(displayConsumption)
     {
-      OSD.setCursor( -(5+(lipoMAHPos+marginLastRow)), -1 );
+      OSD.setCursor( -(5+(lipoMAHPos+marginLastRow+extra_space_mah)), -1 );
       //OSD.print( "co:" );
       if(LipoMAH>CapacityThreshold)
       {
@@ -897,6 +904,12 @@ void loop(){
         OSD.print( LipoMAHC );
         OSD.print( "ma" );
         OSD.noBlink();
+        if(LipoMAH>CapacityThreshold2ndStage)
+        {
+          OSD.setCursor(4,MarginMiddleY);
+          MarginMiddleY++;
+          OSD.print("      capacity      ");
+        }
       }
       else
       {
@@ -978,7 +991,7 @@ void loop(){
       
       OSD.setCursor(4,MarginMiddleY);
       MarginMiddleY++;
-      OSD.print("      v 4.3.2       ");
+      OSD.print("      v 4.3.3       ");
       OSD.setCursor(4,MarginMiddleY);
       MarginMiddleY++;
       OSD.blink();
