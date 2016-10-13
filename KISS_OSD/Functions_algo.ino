@@ -9,7 +9,6 @@ Fonctions needed for various things in the OSD.
 
 //=====================
 // fonction print_int16
-
 uint8_t print_int16(int16_t p_int, char *str, uint8_t dec, uint8_t AlignLeft)
   {
   	uint16_t useVal  = p_int;
@@ -50,19 +49,13 @@ uint8_t print_int16(int16_t p_int, char *str, uint8_t dec, uint8_t AlignLeft)
           return CharPos;
 }
 
-// END OF print_int16 fonction
-//============================
-
 
 //===========
 // ESC-Filter
-
 uint32_t ESC_filter(uint32_t oldVal, uint32_t newVal)
 {
   return (uint32_t)((uint32_t)((uint32_t)((uint32_t)oldVal*ESC_FILTER)+(uint32_t)newVal))/(ESC_FILTER+1);
 }
-// END OF ESC-Filter
-//==================
 
 //========================
 //Convert time in a string
@@ -100,4 +93,3 @@ void print_time(unsigned long time, char *time_str)
       time_str[time_pos++] = ' ';
     }
 }
-//================
