@@ -54,7 +54,7 @@ uint8_t print_int16(int16_t p_int, char *str, uint8_t dec, uint8_t AlignLeft)
 // ESC-Filter
 uint32_t ESC_filter(uint32_t oldVal, uint32_t newVal)
 {
-  return (uint32_t)((uint32_t)((uint32_t)((uint32_t)oldVal*ESC_FILTER)+(uint32_t)newVal))/(ESC_FILTER+1);
+  return (uint32_t)((uint32_t)((uint32_t)((uint32_t)oldVal*Settings.ESC_FILTER)+(uint32_t)newVal))/(Settings.ESC_FILTER+1);
 }
 
 //========================
@@ -164,16 +164,16 @@ void getSerialData()
 					voltDev++;
 				}
 				if (voltDev != 0) LipoVoltage = tmpVoltage / voltDev;
-				LipoVoltage = LipoVoltage + VoltageOffset;
+				LipoVoltage = LipoVoltage + Settings.VoltageOffset;
 				//capacity
 				LipoMAH = ((serialBuf[148 + STARTCOUNT] << 8) | serialBuf[149 + STARTCOUNT]);
 				//read Motor Current and other ESC datas
 				static uint32_t windedupfilterdatas[8];
 				//RPM
-				windedupfilterdatas[0] = ESC_filter((uint32_t)windedupfilterdatas[0], (uint32_t)((serialBuf[91 + STARTCOUNT] << 8) | serialBuf[92 + STARTCOUNT]) / (MAGNETPOLECOUNT / 2) << 4);
-				windedupfilterdatas[1] = ESC_filter((uint32_t)windedupfilterdatas[1], (uint32_t)((serialBuf[101 + STARTCOUNT] << 8) | serialBuf[102 + STARTCOUNT]) / (MAGNETPOLECOUNT / 2) << 4);
-				windedupfilterdatas[2] = ESC_filter((uint32_t)windedupfilterdatas[2], (uint32_t)((serialBuf[111 + STARTCOUNT] << 8) | serialBuf[112 + STARTCOUNT]) / (MAGNETPOLECOUNT / 2) << 4);
-				windedupfilterdatas[3] = ESC_filter((uint32_t)windedupfilterdatas[3], (uint32_t)((serialBuf[121 + STARTCOUNT] << 8) | serialBuf[122 + STARTCOUNT]) / (MAGNETPOLECOUNT / 2) << 4);
+				windedupfilterdatas[0] = ESC_filter((uint32_t)windedupfilterdatas[0], (uint32_t)((serialBuf[91 + STARTCOUNT] << 8) | serialBuf[92 + STARTCOUNT]) / (Settings.MAGNETPOLECOUNT / 2) << 4);
+				windedupfilterdatas[1] = ESC_filter((uint32_t)windedupfilterdatas[1], (uint32_t)((serialBuf[101 + STARTCOUNT] << 8) | serialBuf[102 + STARTCOUNT]) / (Settings.MAGNETPOLECOUNT / 2) << 4);
+				windedupfilterdatas[2] = ESC_filter((uint32_t)windedupfilterdatas[2], (uint32_t)((serialBuf[111 + STARTCOUNT] << 8) | serialBuf[112 + STARTCOUNT]) / (Settings.MAGNETPOLECOUNT / 2) << 4);
+				windedupfilterdatas[3] = ESC_filter((uint32_t)windedupfilterdatas[3], (uint32_t)((serialBuf[121 + STARTCOUNT] << 8) | serialBuf[122 + STARTCOUNT]) / (Settings.MAGNETPOLECOUNT / 2) << 4);
 				motorKERPM[0] = windedupfilterdatas[0] >> 4;
 				motorKERPM[1] = windedupfilterdatas[1] >> 4;
 				motorKERPM[2] = windedupfilterdatas[2] >> 4;
@@ -364,7 +364,7 @@ void DisplayOSD()
 	if (displayRCthrottle)
 	{
 		OSD.setCursor(0, 0);
-		OSD.print("THROT:");
+		OSD.print(F("THROT:"));
 		OSD.print(Throttle);
 		ESCmarginTop = 1;
 	}
@@ -384,7 +384,7 @@ void DisplayOSD()
 
 	if (displayLipoVoltage)
 	{
-		OSD.setCursor(marginLastRow, -1);
+		OSD.setCursor(Settings.marginLastRow, -1);
 		if (VoltageAlarm == true)
 		{
 			OSD.blink();
@@ -394,7 +394,7 @@ void DisplayOSD()
 			{
 				OSD.setCursor(4, MarginMiddleY);
 				MarginMiddleY++;
-				OSD.print("    LIPO VOLTAGE    ");
+				OSD.print(F("    LIPO VOLTAGE    "));
 			}
 			OSD.noBlink();
 		}
@@ -408,7 +408,7 @@ void DisplayOSD()
 
 	if (displayTime)
 	{
-		OSD.setCursor(marginLastRow + 8, -1);
+		OSD.setCursor(Settings.marginLastRow + 8, -1);
 		print_time(time, Time);
 		OSD.write(SYM_FLY_M);
 		OSD.print(Time);
@@ -416,18 +416,18 @@ void DisplayOSD()
 
 	if (displayConsumption)
 	{
-		OSD.setCursor(-(5 + (lipoMAHPos + marginLastRow + extra_space_mah)), -1);
+		OSD.setCursor(-(5 + (lipoMAHPos + Settings.marginLastRow + extra_space_mah)), -1);
 		//OSD.print( "co:" );
-		if (LipoMAH>ValuePage1[0])
+		if (LipoMAH>Settings.CapacityThreshold)
 		{
 			OSD.blink();
 			OSD.write(SYM_MAH);
 			OSD.print(LipoMAHC);
-			if (LipoMAH>ValuePage1[1])
+			if (LipoMAH>Settings.CapacityThreshold2ndStage)
 			{
 				OSD.setCursor(4, MarginMiddleY);
 				MarginMiddleY++;
-				OSD.print("      CAPACITY      ");
+				OSD.print(F("      CAPACITY      "));
 			}
 			OSD.noBlink();
 		}
@@ -491,11 +491,11 @@ void DisplayOSD()
 		MarginMiddleY++;
 		if (BatteryCells == 3)
 		{
-			OSD.print(threeSBatteryDetected);
+			OSD.print(F("3S BATTERY CONNECTED"));
 		}
 		if (BatteryCells == 4)
 		{
-			OSD.print(fourSBatteryDetected);
+			OSD.print(F("4S BATTERY CONNECTED"));
 		}
 	}
 
@@ -507,7 +507,7 @@ void DisplayOSD()
 		OSD.setCursor(4, MarginMiddleY);
 		MarginMiddleY++;
 		OSD.blink();
-		OSD.print("WAIT - DON'T ARM: ");
+		OSD.print(F("WAIT - DON'T ARM: "));
 		OSD.noBlink();
 		OSD.print(percent);
 	}
@@ -517,7 +517,7 @@ void DisplayOSD()
 	{
 		OSD.setCursor(4, MarginMiddleY);
 		MarginMiddleY++;
-		OSD.print("     DISSARMED      ");
+		OSD.print(F("     DISSARMED      "));
 		armedstarted = millis();
 	}
 	else if (armedstarted + 2000>millis())
@@ -525,7 +525,7 @@ void DisplayOSD()
 		OSD.setCursor(4, MarginMiddleY);
 		MarginMiddleY++;
 		OSD.blink();
-		OSD.print("       ARMED        ");
+		OSD.print(F("       ARMED        "));
 		OSD.noBlink();
 	}
 	else if (firstarmed == 0)
@@ -537,14 +537,14 @@ void DisplayOSD()
 	{
 		OSD.setCursor(4, MarginMiddleY);
 		MarginMiddleY++;
-		OSD.print("      FAILSAFE      ");
+		OSD.print(F("      FAILSAFE      "));
 	}
 
 	if (calibGyroDone>100)
 	{
 		OSD.setCursor(4, MarginMiddleY);
 		MarginMiddleY++;
-		OSD.print("  CALIBRATING GYRO  ");
+		OSD.print(F("  CALIBRATING GYRO  "));
 	}
 
 	//clearing middle screen below displayed datas
@@ -552,7 +552,7 @@ void DisplayOSD()
 	while ((MarginMiddleY + iii) <= 10)
 	{
 		OSD.setCursor(4, MarginMiddleY + iii);
-		OSD.print("                    ");
+		OSD.print(F("                    "));
 		iii++;
 	}
 }
@@ -578,7 +578,7 @@ void CalculateOSD()
 	if (firstloop == 254 && LipoVoltage>200)
 	{
 		//check the battery cells to display the correct alarm later
-		if (LipoVoltage<SeparationVoltage3s4s)
+		if (LipoVoltage<Settings.SeparationVoltage3s4s)
 		{
 			BatteryCells = 3;
 		}
@@ -589,16 +589,16 @@ void CalculateOSD()
 		firstloop = 255;
 	}
 	//Voltage Alarm 1 and 2
-	if ((BatteryCells == 3 && LipoVoltage<ValuePage1[2] && firstloop == 255) || (BatteryCells == 4 && LipoVoltage<ValuePage1[3] && firstloop == 255))
+	if ((BatteryCells == 3 && LipoVoltage<Settings.LowVoltage3s && firstloop == 255) || (BatteryCells == 4 && LipoVoltage<Settings.LowVoltage4s && firstloop == 255))
 	{
 		VoltageAlarm = true;
 	}
-	if (VoltageAlarm == true && (LipoVoltage / BatteryCells)<ValuePage1[4])
+	if (VoltageAlarm == true && (LipoVoltage / BatteryCells)<Settings.MinimalCellVoltage2nd)
 	{
 		VoltageAlarm2nd = true;
 	}
 	//no Voltage Alarm
-	if ((BatteryCells == 3 && LipoVoltage>(ValuePage1[2] + hysteresis) && firstloop == 255) || (BatteryCells == 4 && LipoVoltage>(ValuePage1[3] + hysteresis) && firstloop == 255))
+	if ((BatteryCells == 3 && LipoVoltage>(Settings.LowVoltage3s + Settings.hysteresis) && firstloop == 255) || (BatteryCells == 4 && LipoVoltage>(Settings.LowVoltage4s + Settings.hysteresis) && firstloop == 255))
 	{
 		VoltageAlarm = false;
 		VoltageAlarm2nd = false;
@@ -724,4 +724,10 @@ void drawAngelIndicator(int8_t Value)
 		OSD.write(ANGEL_DOWN);
 	else
 		OSD.print(' ');
+}
+
+int freeRam() {
+	extern int __heap_start, *__brkval;
+	int v;
+	return (int)&v - (__brkval == 0 ? (int)&__heap_start : (int)__brkval);
 }

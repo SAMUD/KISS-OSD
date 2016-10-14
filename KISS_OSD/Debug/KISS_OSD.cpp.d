@@ -1,5 +1,5 @@
-D:\Temp\VMicroBuilds\KISS_OSD\mini328\KISS_OSD.cpp.o:  \
- D:\Temp\VMicroBuilds\KISS_OSD\mini328\KISS_OSD.cpp \
+D:\Temp\VMicroBuilds\KISS_OSD\nano328\KISS_OSD.cpp.o:  \
+ D:\Temp\VMicroBuilds\KISS_OSD\nano328\KISS_OSD.cpp \
   C:\Program\ Files\ (x86)\Arduino\hardware\arduino\cores\arduino/arduino.h \
   C:\Program\ Files\ (x86)\Arduino\hardware\arduino\cores\arduino/binary.h \
   C:\Program\ Files\ (x86)\Arduino\hardware\arduino\cores\arduino/WCharacter.h \
@@ -15,4 +15,6 @@ D:\Temp\VMicroBuilds\KISS_OSD\mini328\KISS_OSD.cpp.o:  \
   C:\Program\ Files\ (x86)\Arduino\hardware\arduino\cores\arduino/Arduino.h \
   C:\Program\ Files\ (x86)\Arduino\libraries\MAX7456/MAX7456.h \
   C:\Program\ Files\ (x86)\Arduino\hardware\arduino\cores\arduino/Print.h \
-  D:\Temp\VMicroBuilds\KISS_OSD\mini328\/symbols.h
+  D:\Temp\VMicroBuilds\KISS_OSD\nano328\/symbols.h \
+  C:\Program\ Files\ (x86)\Arduino\libraries\EEPROMEx/EEPROMex.h \
+  D:\Temp\VMicroBuilds\KISS_OSD\nano328\/GlobalVar.h

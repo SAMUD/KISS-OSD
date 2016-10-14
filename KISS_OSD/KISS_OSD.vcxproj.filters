@@ -18,6 +18,8 @@
     <None Include="KISS_OSD.ino" />
     <None Include="Functions_algo.ino" />
     <None Include="Menue.ino" />
+    <None Include="GlobalVar.h" />
+    <None Include="EEPROM_Handling.ino" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="__vm\.KISS_OSD.vsarduino.h">
