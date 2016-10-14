@@ -14,4 +14,5 @@ D:\Temp\VMicroBuilds\KISS_OSD\mini328\KISS_OSD.cpp.o:  \
   C:\Program\ Files\ (x86)\Arduino\libraries\SPI/SPI.h \
   C:\Program\ Files\ (x86)\Arduino\hardware\arduino\cores\arduino/Arduino.h \
   C:\Program\ Files\ (x86)\Arduino\libraries\MAX7456/MAX7456.h \
-  C:\Program\ Files\ (x86)\Arduino\hardware\arduino\cores\arduino/Print.h
+  C:\Program\ Files\ (x86)\Arduino\hardware\arduino\cores\arduino/Print.h \
+  D:\Temp\VMicroBuilds\KISS_OSD\mini328\/symbols.h

@@ -1,11 +1,12 @@
 /* 1. Information
 //=========================================================================================================================
 
-
-KISS FC OSD v4.0
+KISS FC OSD
 by Samuel Daurat (sdaurat@outlook.de)
 based on the code by Felix Niessen (felix.niessen@googlemail.com)
-
+*/
+const char OSDVersion[]="     V 4.5.1     ";
+/*
 *****************************************************************************************************
 If you like my work and want to support me, I would love to get some support:  paypal.me/SamuelDaurat
 
@@ -57,7 +58,7 @@ For more information, please refer to <http://unlicense.org>
 //#define NTSC
 
 // Pilot-name
-const char Pilotname[]=" samu";
+const char Pilotname[]=" SAMU";
 
 // MAX7456 Charset
 #define USE_MAX7456_ASCII
@@ -118,8 +119,8 @@ const uint16_t SeparationVoltage3s4s=1370;
 const uint16_t hysteresis=30;
 const uint16_t MinimalCellVoltage2nd=320;
 const int8_t VoltageOffset=-10;
-const char threeSBatteryDetected[]="3s bat - crit@ 10.5V";
-const char fourSBatteryDetected[]=" 4s bat - crit@ 14.1V ";
+const char threeSBatteryDetected[]="3S BAT - CRIT@ 10.5V";
+const char fourSBatteryDetected[]=" 4S BAT - CRIT@ 14.1V ";
 
 //Capacity settings
 const uint16_t CapacityThreshold=1050;
@@ -135,6 +136,7 @@ const uint16_t CapacityThreshold2ndStage=1200;
 
 #include <SPI.h>
 #include <MAX7456.h>
+#include "symbols.h"
 
 const byte osdChipSelect              =             6;
 const byte masterOutSlaveIn           =             MOSI;
@@ -207,10 +209,6 @@ static char LipoMAHC[30];
 static char Throttle[30];
 static char Current[30];
 
-static uint8_t serialBuf[255];
-static uint8_t minBytes = 0;
-static uint8_t recBytes = 0;
-
 static char Time[10];
 
 static uint32_t LastLoopTime;
@@ -218,17 +216,19 @@ static uint32_t LastLoopTime;
 uint32_t tmpVoltage					  =				0;
 uint32_t voltDev					  =				0;
 
+static uint8_t ThrottlePos;
+static uint8_t CurrentPos;
+
 //Var für Menu
 //breite max 18 char
-char* MenuPage1[] = { "Capacity first alar", "Capacity 80% bat", "Voltage alarm 3s", "Voltage alarm 4s", "Voltage critical /cell" , "Exit        ",
-"Placeholder3", "Placeholder4","Placeholder5", "Placeholder6","Placeholder7" };
+char* MenuPage1[] = { "CAPACITY FIRST ALARM", "CAPACITY 80% BAT", "VOLTAGE ALARM 3S", "VOLTAGE ALARM 4S", "VOLTAGE CRITICAL /CELL" , "EXIT        ",
+"PLACEHOLDER3", "PLACEHOLDER4","PLACEHOLDER5", "PLACEHOLDER6","PLACEHOLDER7" };
 int16_t ValuePage1[11] = { CapacityThreshold,CapacityThreshold2ndStage,LowVoltage3s,LowVoltage4s,MinimalCellVoltage2nd,0,3,4,5,6,7 };
 
 
 
 //==============
 //SETUP function
-
 void setup(){
   uint8_t i = 0;
   SPI.begin();
@@ -242,7 +242,7 @@ void setup(){
     OSD.begin(MAX7456_COLS_N1,MAX7456_ROWS_N0);
     OSD.setDefaultSystem(MAX7456_NTSC);
   #endif
-  OSD.setSwitchingTime( 5 );
+  OSD.setSwitchingTime( 4 );
   #if defined(USE_MAX7456_ASCII)
     OSD.setCharEncoding( MAX7456_ASCII );
   #endif
@@ -267,129 +267,19 @@ void setup(){
   Serial.begin(115200);
 }
 
-// END OF SETUP function
-//======================
 
 
 // Main-Loop
 //==========
-
-void loop(){
+void loop()
+{
   
-
   //big if with all code
   if(micros()-LastLoopTime > 10000) //limits the speed of the OSD to 100Hz
   {
     LastLoopTime = micros();
 
-    Serial.write(0x20); // request telemetrie
-
-    minBytes = 100;
-    recBytes = 0;
-
-    //aquire serial data and write it to normal variables
-    while(recBytes < minBytes && micros()-LastLoopTime < 20000)
-    {
-      #define STARTCOUNT 2
-      while(Serial.available()) serialBuf[recBytes++] = Serial.read();
-      if(recBytes == 1 && serialBuf[0] != 5)recBytes = 0; // check for start byte, reset if its wrong
-      if(recBytes == 2) minBytes = serialBuf[1]+STARTCOUNT+1; // got the transmission length
-      if(recBytes == minBytes)
-      {
-         uint32_t checksum = 0;
-         for(i=2;i<minBytes;i++)
-         {
-            checksum += serialBuf[i];
-         }
-         checksum = (uint32_t)checksum/(minBytes-3);
-
-         if(checksum == serialBuf[recBytes-1])
-         {
-           //armed
-		   armed =   ((serialBuf[15+STARTCOUNT]<<8) | serialBuf[16+STARTCOUNT]);
-           //Lipo Voltage from FC
-		   LipoVoltage =   ((serialBuf[17+STARTCOUNT]<<8) | serialBuf[18+STARTCOUNT]);
-           //failsafe
-		   failsafe = ((serialBuf[40+STARTCOUNT]<<8) | (serialBuf[41+STARTCOUNT])); //42
-           //calib Done
-		   calibGyroDone = ((serialBuf[39+STARTCOUNT]<<8) | serialBuf[40+STARTCOUNT]);
-           //angle y for displaying in the horizon bar
-           angley= ((serialBuf[33+STARTCOUNT]<<8) | (serialBuf[34+STARTCOUNT]))/100; //35
-		   //Voltage ESC
-		   if(((serialBuf[85+STARTCOUNT]<<8) | serialBuf[86+STARTCOUNT]) > 5) // the ESC's read the voltage better then the FC
-           {
-             tmpVoltage += ((serialBuf[85+STARTCOUNT]<<8) | serialBuf[86+STARTCOUNT]);
-             voltDev++;
-           }
-           if(((serialBuf[95+STARTCOUNT]<<8) | serialBuf[96+STARTCOUNT]) > 5)
-           {
-             tmpVoltage += ((serialBuf[95+STARTCOUNT]<<8) | serialBuf[96+STARTCOUNT]);
-             voltDev++;
-           }
-           if(((serialBuf[105+STARTCOUNT]<<8) | serialBuf[106+STARTCOUNT]) > 5)
-           {
-             tmpVoltage += ((serialBuf[105+STARTCOUNT]<<8) | serialBuf[106+STARTCOUNT]);
-             voltDev++;
-           }
-           if(((serialBuf[115+STARTCOUNT]<<8) | serialBuf[116+STARTCOUNT]) > 5)
-           {
-             tmpVoltage += ((serialBuf[115+STARTCOUNT]<<8) | serialBuf[116+STARTCOUNT]);
-             voltDev++;
-           }
-           if(((serialBuf[125+STARTCOUNT]<<8) | serialBuf[126+STARTCOUNT]) > 5)
-           {
-             tmpVoltage += ((serialBuf[125+STARTCOUNT]<<8) | serialBuf[126+STARTCOUNT]);
-             voltDev++;
-           }
-           if(((serialBuf[125+STARTCOUNT]<<8) | serialBuf[126+STARTCOUNT]) > 5)
-           {
-             tmpVoltage += ((serialBuf[125+STARTCOUNT]<<8) | serialBuf[126+STARTCOUNT]);
-             voltDev++;
-           }
-           if(voltDev!=0) LipoVoltage = tmpVoltage/voltDev;
-           LipoVoltage=LipoVoltage+VoltageOffset;
-		   //capacity
-           LipoMAH =       ((serialBuf[148+STARTCOUNT]<<8) | serialBuf[149+STARTCOUNT]);
-		   //read Motor Current and other ESC datas
-           static uint32_t windedupfilterdatas[8];
-		   //RPM
-           windedupfilterdatas[0] = ESC_filter((uint32_t)windedupfilterdatas[0],(uint32_t)((serialBuf[91+STARTCOUNT]<<8) | serialBuf[92+STARTCOUNT])/(MAGNETPOLECOUNT/2)<<4);
-           windedupfilterdatas[1] = ESC_filter((uint32_t)windedupfilterdatas[1],(uint32_t)((serialBuf[101+STARTCOUNT]<<8) | serialBuf[102+STARTCOUNT])/(MAGNETPOLECOUNT/2)<<4);
-           windedupfilterdatas[2] = ESC_filter((uint32_t)windedupfilterdatas[2],(uint32_t)((serialBuf[111+STARTCOUNT]<<8) | serialBuf[112+STARTCOUNT])/(MAGNETPOLECOUNT/2)<<4);
-           windedupfilterdatas[3] = ESC_filter((uint32_t)windedupfilterdatas[3],(uint32_t)((serialBuf[121+STARTCOUNT]<<8) | serialBuf[122+STARTCOUNT])/(MAGNETPOLECOUNT/2)<<4);
-           motorKERPM[0] = windedupfilterdatas[0]>>4;
-           motorKERPM[1] = windedupfilterdatas[1]>>4;
-           motorKERPM[2] = windedupfilterdatas[2]>>4;
-           motorKERPM[3] = windedupfilterdatas[3]>>4;
-		   //Current
-           windedupfilterdatas[4] = ESC_filter((uint32_t)windedupfilterdatas[4],(uint32_t)((serialBuf[87+STARTCOUNT]<<8) | serialBuf[88+STARTCOUNT])<<4);
-           windedupfilterdatas[5] = ESC_filter((uint32_t)windedupfilterdatas[5],(uint32_t)((serialBuf[97+STARTCOUNT]<<8) | serialBuf[98+STARTCOUNT])<<4);
-           windedupfilterdatas[6] = ESC_filter((uint32_t)windedupfilterdatas[6],(uint32_t)((serialBuf[107+STARTCOUNT]<<8) | serialBuf[108+STARTCOUNT])<<4);
-           windedupfilterdatas[7] = ESC_filter((uint32_t)windedupfilterdatas[7],(uint32_t)((serialBuf[117+STARTCOUNT]<<8) | serialBuf[118+STARTCOUNT])<<4);
-           motorCurrent[0] = windedupfilterdatas[4]>>4;
-           motorCurrent[1] = windedupfilterdatas[5]>>4;
-           motorCurrent[2] = windedupfilterdatas[6]>>4;
-           motorCurrent[3] = windedupfilterdatas[7]>>4;
-		   //ESC Temps
-           ESCTemps[0] = ((serialBuf[83+STARTCOUNT]<<8) | serialBuf[84+STARTCOUNT]);
-           ESCTemps[1] = ((serialBuf[93+STARTCOUNT]<<8) | serialBuf[94+STARTCOUNT]);
-           ESCTemps[2] = ((serialBuf[103+STARTCOUNT]<<8) | serialBuf[104+STARTCOUNT]);
-           ESCTemps[3] = ((serialBuf[113+STARTCOUNT]<<8) | serialBuf[114+STARTCOUNT]);
-		   //Aux chan vals
-           AuxChanVals[0] = ((serialBuf[8+STARTCOUNT]<<8) | serialBuf[9+STARTCOUNT]);
-           AuxChanVals[1] = ((serialBuf[10+STARTCOUNT]<<8) | serialBuf[11+STARTCOUNT]);
-           AuxChanVals[2] = ((serialBuf[12+STARTCOUNT]<<8) | serialBuf[13+STARTCOUNT]);
-           AuxChanVals[3] = ((serialBuf[14+STARTCOUNT]<<8) | serialBuf[15+STARTCOUNT]);
-		   //StickChanVals
-		   StickChanVals[0] = ((serialBuf[0 + STARTCOUNT] << 8) | serialBuf[1 + STARTCOUNT]);
-		   StickChanVals[1] = ((serialBuf[2 + STARTCOUNT] << 8) | serialBuf[3 + STARTCOUNT]);
-		   StickChanVals[2] = ((serialBuf[4 + STARTCOUNT] << 8) | serialBuf[5 + STARTCOUNT]);
-		   StickChanVals[3] = ((serialBuf[6 + STARTCOUNT] << 8) | serialBuf[7 + STARTCOUNT]);
-		   //total current
-           current = (uint16_t)(motorCurrent[0]+motorCurrent[1]+motorCurrent[2]+motorCurrent[3])/10;
-        }
-      }
-    } //end of aquiring telemetry data
+    getSerialData();
 
 	//open menu if yaw left and disarmed
 	if(armed==0 && StickChanVals[3]>500)
@@ -398,514 +288,12 @@ void loop(){
 		OSD.clear();
 		ValuePage1[5]=0;
 	}
-	  
-	//extra platz um immer ein leerzeichen zwichen der uhrzeit und den mah zu bekommen
-	if (LipoMAH>999)
-		extra_space_mah = 1;
-	else
-		extra_space_mah = 0;
+	
+	//calculate the datas to display
+	CalculateOSD();
 
-	//fix if Angle y is to big
-	if (angley>90)
-	{
-		angley = 99;
-	}
-	else if (angley<-90)
-	{
-		angley = -99;
-	}
-
-    //calculating Voltage alarm
-    if(firstloop<254 && LipoVoltage>200)
-    {
-      //generating a delay, because voltage reading is inaccurate in the beginning.
-      firstloop++;
-      percent=(firstloop*100)/255; //for showing percentage in osd
-    }
-    if(firstloop==254 && LipoVoltage>200)
-    {
-      //check the battery cells to display the correct alarm later
-      if(LipoVoltage<SeparationVoltage3s4s)
-      {
-        BatteryCells=3;
-      }
-      else
-      {
-        BatteryCells=4;
-      }
-      firstloop=255;
-    }
-    //Voltage Alarm 1 and 2
-    if((BatteryCells==3 && LipoVoltage<ValuePage1[2] && firstloop==255)|| (BatteryCells==4 && LipoVoltage<ValuePage1[3] && firstloop==255))
-    {
-      VoltageAlarm=true;
-    }
-    if(VoltageAlarm== true && (LipoVoltage/BatteryCells)<ValuePage1[4])
-    {
-      VoltageAlarm2nd=true;
-    }
-    //no Voltage Alarm
-    if((BatteryCells==3 && LipoVoltage>(ValuePage1[2]+hysteresis) && firstloop==255)|| (BatteryCells==4 && LipoVoltage>(ValuePage1[3]+hysteresis) && firstloop==255))
-    {
-      VoltageAlarm=false;
-      VoltageAlarm2nd=false;
-    }
-    
-    if(firstloop<255)
-    {
-      VoltageAlarm=false;
-      VoltageAlarm2nd=false;
-    }
-
-    //wait if OSD is not in sync
-    while (!OSD.notInVSync());
-
-    //Variable which is set, so only upon the first arming the message with the detected battery is being displayed
-    if(armed==1 && firstarmed==0)
-    {
-      firstarmed==1;
-    }
-
-    //Calculate Timer
-    // switch disarmed => armed
-    if (armedOld == 0 && armed > 0)
-    {
-      start_time = millis();
-    }
-    // switch armed => disarmed
-    else if (armedOld > 0 && armed == 0)
-    {
-      total_time = total_time + (millis() - start_time);
-      start_time = 0;
-    }
-    else if (armed > 0)
-    {
-      time = millis() - start_time+ total_time;
-    }
-    armedOld = armed;
-
-    //clearing the RPM and TEMP Arrays and then rewriting the nwe values
-    for(i=0;i<10;i++)
-    {
-      Motor1KERPM[i] = ' ';
-      Motor2KERPM[i] = ' ';
-      Motor3KERPM[i] = ' ';
-      Motor4KERPM[i] = ' ';
-
-      Motor1Current[i] = ' ';
-      Motor2Current[i] = ' ';
-      Motor3Current[i] = ' ';
-      Motor4Current[i] = ' ';
-
-      ESC1Temp[i] = ' ';
-      ESC2Temp[i] = ' ';
-      ESC3Temp[i] = ' ';
-      ESC4Temp[i] = ' ';
-
-      LipoVoltC[i] = ' ';
-      Throttle[i] = ' ';
-    }
-    uint8_t ThrottlePos = print_int16(StickChanVals[0], Throttle,0,1);
-    Throttle[ThrottlePos++] = '%';
-	//
-	uint8_t CurrentPos = print_int16(current, Current,1,0);
-    Current[CurrentPos++] = 'a';
-    Current[CurrentPos++] = 't';
-	//
-    KRPMPoses[0] = print_int16(motorKERPM[0], Motor1KERPM,1,1);
-    Motor1KERPM[KRPMPoses[0]++] = 'k';
-    Motor1KERPM[KRPMPoses[0]++] = 'r';
-	//
-    KRPMPoses[1] = print_int16(motorKERPM[1], Motor2KERPM,1,0);
-    Motor2KERPM[KRPMPoses[1]++] = 'k';
-    Motor2KERPM[KRPMPoses[1]++] = 'r';
-	//
-    KRPMPoses[2] = print_int16(motorKERPM[2], Motor3KERPM,1,0);
-    Motor3KERPM[KRPMPoses[2]++] = 'k';
-    Motor3KERPM[KRPMPoses[2]++] = 'r';
-	//
-    KRPMPoses[3] = print_int16(motorKERPM[3], Motor4KERPM,1,1);
-    Motor4KERPM[KRPMPoses[3]++] = 'k';
-    Motor4KERPM[KRPMPoses[3]++] = 'r';
-	//
-    CurrentPoses[0] = print_int16(motorCurrent[0], Motor1Current,2,1);
-    Motor1Current[CurrentPoses[0]++] = 'a';
-	//
-    CurrentPoses[1] = print_int16(motorCurrent[1], Motor2Current,2,0);
-    Motor2Current[CurrentPoses[1]++] = 'a';
-	//
-    CurrentPoses[2] = print_int16(motorCurrent[2], Motor3Current,2,0);
-    Motor3Current[CurrentPoses[2]++] = 'a';
-	//
-    CurrentPoses[3] = print_int16(motorCurrent[3], Motor4Current,2,1);
-    Motor4Current[CurrentPoses[3]++] = 'a';
-	//
-    TempPoses[0] = print_int16(ESCTemps[0], ESC1Temp,0,1);
-    ESC1Temp[TempPoses[0]++] = '°';
-	//
-    TempPoses[1] = print_int16(ESCTemps[1], ESC2Temp,0,0);
-    ESC2Temp[TempPoses[1]++] = '°';
-	//
-    TempPoses[2] = print_int16(ESCTemps[2], ESC3Temp,0,0);
-    ESC3Temp[TempPoses[2]++] = '°';
-	//
-    TempPoses[3] = print_int16(ESCTemps[3], ESC4Temp,0,1);
-    ESC4Temp[TempPoses[3]++] = '°';
-
-	//Declaring some vars
-    uint8_t lipoVoltPos = print_int16(LipoVoltage, LipoVoltC,2,1);
-    LipoVoltC[lipoVoltPos++] = 'v';
-
-    uint8_t lipoMAHPos = print_int16(LipoMAH, LipoMAHC,0,1);
-
-    uint8_t ESCmarginBot       = 0;
-    uint8_t ESCmarginTop       = 0;
-    uint8_t TMPmargin          = 0;
-    uint8_t CurrentMargin      = 0;
-    uint8_t MarginMiddleY      = 6;
-    uint8_t MarginMiddleY_Old  = 6;
-
-    uint8_t displayRCthrottle  = 0;
-    uint8_t displayCombCurrent = 0;
-    uint8_t displayLipoVoltage = 0;
-    uint8_t displayConsumption = 0;
-    uint8_t displayKRPM        = 0;
-    uint8_t displayCurrent     = 0;
-    uint8_t displayTemperature = 0;
-    uint8_t displayTime        = 0;
-    uint8_t displayPilot       = 0;
-    uint8_t displayAngle       = 0;
-
-
-    //************from here we will start the code for displaying the datas***************
-    //reduced mode1
-    #if(RED_MODE_AUX_CHAN != 0)
-
-      if(AuxChanVals[RED_MODE_AUX_CHAN-1]<-250)
-      {
-        reducedModeDisplay = 1;
-      }
-      else if(AuxChanVals[RED_MODE_AUX_CHAN-1]>250)
-      {
-        reducedModeDisplay = 2;
-      }
-      else reducedModeDisplay = 0 ;
-    #endif
-
-    //when display mode has changed clear the screen
-    if(reducedModeDisplay != lastMode)
-    {
-      lastMode = reducedModeDisplay;
-      for(i=0;i<20;i++)
-      {
-          OSD.setCursor( 0, i );
-          OSD.print( clean );
-      }
-      while (!OSD.notInVSync());
-    }
-
-    if(reducedModeDisplay == 0){
-      #if defined(DISPLAY_RC_THROTTLE)
-      displayRCthrottle = 1;
-      #endif
-      #if defined(DISPLAY_COMB_CURRENT)
-      displayCombCurrent = 1;
-      #endif
-      #if defined(DISPLAY_LIPO_VOLTAGE)
-      displayLipoVoltage = 1;
-      #endif
-      #if defined(DISPLAY_MA_CONSUMPTION)
-      displayConsumption = 1;
-      #endif
-      #if defined(DISPLAY_ESC_KRPM)
-      displayKRPM = 1;
-      #endif
-      #if defined(DISPLAY_ESC_CURRENT)
-      displayCurrent = 1;
-      #endif
-      #if defined(DISPLAY_ESC_TEMPERATURE)
-      displayTemperature = 1;
-      #endif
-      #if defined(DISPLAY_PILOTNAME)
-      displayPilot = 1;
-      #endif
-      #if defined(DISPLAY_TIMER)
-      displayTime = 1;
-      #endif
-      #if defined(DISPLAY_ANGLE)
-      displayAngle = 1;
-      #endif
-    }
-    else if(reducedModeDisplay==1)
-    {
-      #if defined(RED_DISPLAY_RC_THROTTLE)
-      displayRCthrottle = 1;
-      #endif
-      #if defined(RED_DISPLAY_COMB_CURRENT)
-      displayCombCurrent = 1;
-      #endif
-      #if defined(RED_DISPLAY_LIPO_VOLTAGE)
-      displayLipoVoltage = 1;
-      #endif
-      #if defined(RED_DISPLAY_MA_CONSUMPTION)
-      displayConsumption = 1;
-      #endif
-      #if defined(RED_DISPLAY_ESC_KRPM)
-      displayKRPM = 1;
-      #endif
-      #if defined(RED_DISPLAY_ESC_CURRENT)
-      displayCurrent = 1;
-      #endif
-      #if defined(RED_DISPLAY_ESC_TEMPERATURE)
-      displayTemperature = 1;
-      #endif
-      #if defined(RED_DISPLAY_PILOTNAME)
-      displayPilot = 1;
-      #endif
-      #if defined(RED_DISPLAY_TIMER)
-      displayTime = 1;
-      #endif
-      #if defined(RED_DISPLAY_ANGLE)
-      displayAngle = 1;
-      #endif
-    }
-    else if(reducedModeDisplay==2)
-    {
-      #if defined(RED2_DISPLAY_RC_THROTTLE)
-      displayRCthrottle = 1;
-      #endif
-      #if defined(RED2_DISPLAY_COMB_CURRENT)
-      displayCombCurrent = 1;
-      #endif
-      #if defined(RED2_DISPLAY_LIPO_VOLTAGE)
-      displayLipoVoltage = 1;
-      #endif
-      #if defined(RED2_DISPLAY_MA_CONSUMPTION)
-      displayConsumption = 1;
-      #endif
-      #if defined(RED2_DISPLAY_ESC_KRPM)
-      displayKRPM = 1;
-      #endif
-      #if defined(RED2_DISPLAY_ESC_CURRENT)
-      displayCurrent = 1;
-      #endif
-      #if defined(RED2_DISPLAY_ESC_TEMPERATURE)
-      displayTemperature = 1;
-      #endif
-      #if defined(RED2_DISPLAY_PILOTNAME)
-      displayPilot = 1;
-      #endif
-      #if defined(RED2_DISPLAY_TIMER)
-      displayTime = 1;
-      #endif
-      #if defined(RED2_DISPLAY_ANGLE)
-      displayAngle = 1;
-      #endif
-    }
-
-    if(displayRCthrottle)
-    {
-      OSD.setCursor( 0, 0 );
-      OSD.print( "throt:" );
-      OSD.print( Throttle );
-      ESCmarginTop = 1;
-    }
-
-    if(displayCombCurrent)
-    {
-      OSD.setCursor( -CurrentPos, 0 );
-      OSD.print( Current );
-      ESCmarginTop = 1;
-    }
-
-    if(displayPilot)
-    {
-      OSD.setCursor( 10, 0 );
-      OSD.print( Pilotname );
-    }
-
-    if(displayLipoVoltage)
-    {
-      OSD.setCursor( marginLastRow, -1 );
-      if(VoltageAlarm==true)
-      {
-        OSD.blink();
-        OSD.print( LipoVoltC );
-        if(VoltageAlarm2nd == true)
-        {
-          OSD.setCursor(4,MarginMiddleY);
-          MarginMiddleY++;
-          OSD.print("    lipo voltage    ");
-        }
-        OSD.noBlink();
-      }
-      else
-      {
-        OSD.print( LipoVoltC );
-      }
-      ESCmarginBot = 1;
-    }
-
-    if(displayTime)
-    {
-      OSD.setCursor( marginLastRow+8, -1 );
-      print_time(time, Time);
-      OSD.print(" ");
-      OSD.print(Time);
-    }
-
-    if(displayConsumption)
-    {
-      OSD.setCursor( -(5+(lipoMAHPos+marginLastRow+extra_space_mah)), -1 );
-      //OSD.print( "co:" );
-      if(LipoMAH>ValuePage1[0])
-      {
-        OSD.blink();
-        OSD.print( LipoMAHC );
-        OSD.print( "ma" );
-        if(LipoMAH>ValuePage1[1])
-        {
-          OSD.setCursor(4,MarginMiddleY);
-          MarginMiddleY++;
-          OSD.print("      capacity      ");
-        }
-		OSD.noBlink();
-      }
-      else
-      {
-        OSD.print( LipoMAHC );
-        OSD.print( "ma" );
-      }
-      ESCmarginBot = 1;
-    }
-
-    if(displayKRPM)
-    {
-      OSD.setCursor( 0, ESCmarginTop );
-      OSD.print( Motor1KERPM );
-      OSD.setCursor( -KRPMPoses[1], ESCmarginTop );
-      OSD.print( Motor2KERPM );
-      OSD.setCursor( -KRPMPoses[2], -(1+ESCmarginBot) );
-      OSD.print( Motor3KERPM );
-      OSD.setCursor( 0, -(1+ESCmarginBot) );
-      OSD.print( Motor4KERPM );
-      TMPmargin++;
-      CurrentMargin++;
-    }
-
-    if(displayCurrent)
-    {
-      OSD.setCursor( 0, CurrentMargin+ESCmarginTop );
-      OSD.print( Motor1Current );
-      OSD.setCursor( -CurrentPoses[1], CurrentMargin+ESCmarginTop );
-      OSD.print( Motor2Current );
-      OSD.setCursor( -CurrentPoses[2], -(1+CurrentMargin+ESCmarginBot) );
-      OSD.print( Motor3Current );
-      OSD.setCursor( 0, -(1+CurrentMargin+ESCmarginBot) );
-      OSD.print( Motor4Current );
-      TMPmargin++;
-    }
-
-    if(displayTemperature)
-    {
-      OSD.setCursor( 0, TMPmargin+ESCmarginTop );
-      OSD.print( ESC1Temp );
-      OSD.setCursor( -TempPoses[1], TMPmargin+ESCmarginTop );
-      OSD.print( ESC2Temp );
-      OSD.setCursor( -TempPoses[2], -(1+TMPmargin+ESCmarginBot) );
-      OSD.print( ESC3Temp );
-      OSD.setCursor( 0, -(1+TMPmargin+ESCmarginBot) );
-      OSD.print( ESC4Temp );
-    }
-
-    if(displayAngle)
-    {
-      OSD.setCursor(0,6);
-      OSD.print(angley);
-      if(angley>-10)
-      {
-        OSD.print(" ");
-      }
-      if(angley<10 && angley>-1)
-      {
-        OSD.print(" ");
-      }
-    }
-
-    //show the detected cell count upon the first 30 flight-sec if not armed
-    if(current==0 && BatteryCells!=0 && armed==0 && firstarmed==0 && firstloop==255 && time<30000)
-    {
-      OSD.setCursor(4,MarginMiddleY);
-      MarginMiddleY++;
-      if(BatteryCells==3)
-      {
-        OSD.print(threeSBatteryDetected);
-      }
-      if(BatteryCells==4)
-      {
-        OSD.print(fourSBatteryDetected);
-      }
-    }
-
-    if(firstloop<255)
-    { 
-      OSD.setCursor(4,MarginMiddleY);
-      MarginMiddleY++;
-      OSD.print("      v 4.4.0       ");
-      OSD.setCursor(4,MarginMiddleY);
-      MarginMiddleY++;
-      OSD.blink();
-      OSD.print("wait - don't arm: ");
-      OSD.noBlink();
-      OSD.print(percent); 
-    }
-
-    //show armed | dissarmed
-    if(armed==0)
-    {
-      OSD.setCursor(4,MarginMiddleY);
-      MarginMiddleY++;
-      OSD.print("     dissarmed      ");
-      armedstarted=millis();
-    }
-    else if (armedstarted+2000>millis())
-    {
-        OSD.setCursor(4,MarginMiddleY);
-        MarginMiddleY++;
-        OSD.blink();
-        OSD.print("       armed        ");
-        OSD.noBlink();
-    }
-    else if (firstarmed==0)
-    {
-      firstarmed==1;
-    }
-
-    if(failsafe>5)
-    {
-      OSD.setCursor(4,MarginMiddleY);
-      MarginMiddleY++;
-      OSD.print("      failsafe      ");
-    }
-
-    if(calibGyroDone>100)
-    {
-      OSD.setCursor(4,MarginMiddleY);
-      MarginMiddleY++;
-      OSD.print("  calibrating gyro  ");
-    }
-
-    //clearing middle screen below displayed datas
-    uint8_t iii=0;
-    while((MarginMiddleY+iii)<=10)
-    {
-      OSD.setCursor(4,MarginMiddleY+iii);
-      OSD.print("                    ");
-      iii++;
-    }
-
+	//Display the datas
+    DisplayOSD();
   }
-}
 
-// END OF Main-Loop
-//=========================================================================================================================
+}
