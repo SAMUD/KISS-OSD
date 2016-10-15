@@ -207,6 +207,7 @@ void loop()
 		menumain();
 		OSD.clear();
 		EEPROMsave();
+		delay(500);
 	}
 	
 	//calculate the datas to display

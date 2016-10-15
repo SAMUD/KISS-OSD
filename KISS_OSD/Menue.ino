@@ -22,11 +22,22 @@ void menumain()
 	
 
 	OSD.clear();
-	delay(100);
-	OSD.setCursor(0, 0);
-	delay(25);
-	OSD.print("SAMUD - P  ");
-	delay(1000);
+	while(OSD.clearIsBusy()) {}
+	OSD.grayBackground();
+	for (int makegrey = 0; makegrey < 15; makegrey++)
+	{
+		OSD.setCursor(0,makegrey);
+		OSD.print(F("                             "));
+	}
+	OSD.setCursor(6,3);
+	OSD.print(F("SAMUD - KISS OSD"));
+	OSD.setCursor(1, 5);
+	OSD.print(F("MORE INFORMATION AND WIKI: "));
+	OSD.setCursor(1, 6);
+	OSD.print(F("GITHUB.COM/SAMUD/KISS-OSD  "));
+	delay(2000);
+
+	OSD.videoBackground();
 	
 
 	while (!exitmenu)
@@ -145,9 +156,11 @@ void menuprintsite() {
 	{
 		case 1:
 			//VoltageSite
-			OSD.print(F("SAMUD - P1/3 VOLTAGE  "));
-			OSD.setCursor(2,14);
-			OSD.print(F("<-PAGE-> : YAW / EXIT"));
+			OSD.grayBackground();
+			OSD.print(F("SAMUD OSD - P1/4 VOLTAGE     "));
+			OSD.setCursor(0,14);
+			OSD.print(F(" <-YAW-> : PAGE / EXIT       "));
+			OSD.videoBackground();
 			OSD.setCursor(1,2);
 			OSD.print(F("VOLTAGE ALARM 3S:"));
 			OSD.setCursor(1, 3);
@@ -164,9 +177,11 @@ void menuprintsite() {
 			break;
 		case 2:
 			//CapacitySite
-			OSD.print(F("SAMUD MENU - P2/4  "));
-			OSD.setCursor(2, 14);
-			OSD.print(F("<-UP/DOWN-> : PITCH"));
+			OSD.grayBackground();
+			OSD.print(F("SAMUD OSD - P2/4 CAPACITY    "));
+			OSD.setCursor(0, 14);
+			OSD.print(F(" <-PITCH-> : MOVE UP/DOWN    "));
+			OSD.videoBackground();
 			OSD.setCursor(1, 2);
 			OSD.print(F("CAPACITY 1ST WARN:"));
 			OSD.setCursor(1, 3);
@@ -175,9 +190,11 @@ void menuprintsite() {
 			break;
 		case 3:
 			//Other Settings
-			OSD.print(F("SAMUD MENU - P3/4  "));
-			OSD.setCursor(2, 14);
-			OSD.print(F("<-VALUE-> : ROLL"));
+			OSD.grayBackground();
+			OSD.print(F("SAMUD MENU - P3/4 VARIOUS    "));
+			OSD.setCursor(0, 14);
+			OSD.print(F(" <-ROLL-> : CHANGE VALUE     "));
+			OSD.videoBackground();
 			OSD.setCursor(1, 2);
 			OSD.print(F("MARGIN LAST ROW:"));
 			OSD.setCursor(1, 3);
@@ -190,7 +207,9 @@ void menuprintsite() {
 			break;
 		case 4:
 			//Info
-			OSD.print(F("SAMUD MENU - P4/4  "));
+			OSD.grayBackground();
+			OSD.print(F("SAMUD MENU - P4/4 INFO       "));
+			OSD.videoBackground();
 			cursorlineMax=0;
 			break;
 		default:
