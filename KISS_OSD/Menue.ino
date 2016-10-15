@@ -272,19 +272,45 @@ void value(bool addsub)
 		//VoltageSite
 		switch (cursorline)
 		{
-			case 1: changeval(addsub,9900,1260,10,&Settings.LowVoltage3s);
-					break;
-			case 2: changeval(addsub,1320,1680,10,&Settings.LowVoltage4s);
-
+		case 1: changeval(addsub, 990, 1260, 10, &Settings.LowVoltage3s);
+			break;
+		case 2: changeval(addsub, 1320, 1680, 10, &Settings.LowVoltage4s);
+			break;
+		case 3: changeval(addsub, 300, 420, 5, &Settings.MinimalCellVoltage2nd);
+			break;
+		case 4: changeval(addsub, -100, 100, 1, &Settings.VoltageOffset);
+			break;
+		case 5: changeval(addsub, 0, 100, 5, &Settings.hysteresis);
+			break;
+		case 6: changeval(addsub, 990, 1680, 10, &Settings.SeparationVoltage3s4s);
+			break;
 		}
 		break;
 	case 2:
 		//CapacitySite
-		
+		switch (cursorline)
+		{
+		case 1: changeval(addsub, 0, 9999, 10, &Settings.CapacityThreshold);
+			break;
+		case 2: changeval(addsub, 0, 9999, 10, &Settings.CapacityThreshold2ndStage);
+			break;
+		}
 		break;
 	case 3:
 		//Other Settings
-
+		switch (cursorline)
+		{
+		case 1: changeval(addsub, 0,4, 1, &Settings.marginLastRow);
+			break;
+		case 2: changeval(addsub, 2, 20, 1, &Settings.MAGNETPOLECOUNT);
+			break;
+		case 3: changeval(addsub, 0, 20, 1, &Settings.ESC_FILTER);
+			break;
+		case 4: changeval(addsub, -100, 100, 1, &Settings.VoltageOffset);
+			break;
+		case 5: changeval(addsub, 0, 4, 1, &Settings.RED_MODE_AUX_CHANNEL);
+			break;
+		}
 		break;
 	case 4:
 		//Info
@@ -295,13 +321,37 @@ void value(bool addsub)
 
 void changeval(bool addsub, int16_t min_value, int16_t max_value, uint16_t increment, uint16_t *variable)
 {
-	if (addsub)     // && *variable<max_value
+	if (addsub && *variable<max_value)     // 
 	{
 		*variable=*variable+increment;
 	}
-	if (!addsub)	// && *variable>min_value
+	if (!addsub && *variable>min_value)	// && *variable>min_value
 	{
 		*variable = *variable-increment;
+	}
+}
+
+void changeval(bool addsub, int16_t min_value, int16_t max_value, uint16_t increment, uint8_t *variable)
+{
+	if (addsub && *variable<max_value)     // && *variable<max_value
+	{
+		*variable = *variable + increment;
+	}
+	if (!addsub && *variable>min_value)	// 
+	{
+		*variable = *variable - increment;
+	}
+}
+
+void changeval(bool addsub, int16_t min_value, int16_t max_value, uint16_t increment, int8_t *variable)
+{
+	if (addsub && *variable<max_value)     // && *variable<max_value
+	{
+		*variable = *variable + increment;
+	}
+	if (!addsub && *variable>min_value)	// 
+	{
+		*variable = *variable - increment;
 	}
 }
 

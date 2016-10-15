@@ -5,7 +5,7 @@ KISS FC OSD
 by Samuel Daurat (sdaurat@outlook.de)
 based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
-const char OSDVersion[]="     V 4.5.3     ";
+const char OSDVersion[]="     V 5     ";
 #define DMemoryVersion 1
 /*
 *****************************************************************************************************
@@ -212,22 +212,6 @@ void loop()
 	
 	//calculate the datas to display
 	CalculateOSD();
-
-	// Blink Basic Sanity Test Led at 0.5hz
-	
-	/*static int LEDI=0;
-	if (LEDI>100)
-		{digitalWrite(LEDPIN, HIGH);
-		if(LEDI>200)
-			LEDI=0;}
-	else
-		digitalWrite(LEDPIN, LOW);
-	LEDI++;
-	*/
-
-	OSD.setCursor(2,2);
-	OSD.print(LipoVoltage);
-
 
 	//Display the datas
     DisplayOSD();
