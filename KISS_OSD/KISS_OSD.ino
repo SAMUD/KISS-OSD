@@ -5,8 +5,8 @@ KISS FC OSD
 by Samuel Daurat (sdaurat@outlook.de)
 based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
-const char OSDVersion[]="     V 4.5.2     ";
-#define DMemoryVersion 0
+const char OSDVersion[]="     V 4.5.3     ";
+#define DMemoryVersion 1
 /*
 *****************************************************************************************************
 If you like my work and want to support me, I would love to get some support:  https://paypal.me/SamuelDaurat
@@ -17,13 +17,10 @@ Wenn Ihr meine Arbeit mögt, würde ich mich über etwas Support freuen: https:/
 GITHUB: https://github.com/SAMUD/KISS-OSD
 
 Changelog:
-*added a space between the clock and the current consumption to avoid having constellations like 1:251236mah
-*added 2nd stage mah alarm
+*
 
 TODO:
-*adding stats at the end of flight
-*adding virtual horizon (Milestone1 achieved)
-*adding flight mode indicator
+*
 
 
 Anyone is free to copy, modify, publish, use, compile, sell, or distribute this software, either in source code form or as a compiled
@@ -111,7 +108,7 @@ const char Pilotname[]=" SAMU";
 #define RED2_DISPLAY_ANGLE
 
 //margin left and right for the last line.
-#define DmarginLastRow  3;
+#define DmarginLastRow  4;
 
 //Voltage Settings
 #define DLowVoltage3s 1050;
@@ -168,6 +165,8 @@ void setup(){
   #endif
   OSD.display();
 
+  pinMode(LEDPIN, OUTPUT);
+
   //clean used area
   for(i=0;i<30;i++) clean[i] = ' ';
   while (!OSD.notInVSync());
@@ -203,7 +202,6 @@ void loop()
     getSerialData();
 
 	//open menu if yaw left and disarmed
-	//armed==0 && StickChanVals[3]>500
 	if(armed == 0 && StickChanVals[3]>500)
 	{
 		menumain();
@@ -213,6 +211,22 @@ void loop()
 	
 	//calculate the datas to display
 	CalculateOSD();
+
+	// Blink Basic Sanity Test Led at 0.5hz
+	
+	/*static int LEDI=0;
+	if (LEDI>100)
+		{digitalWrite(LEDPIN, HIGH);
+		if(LEDI>200)
+			LEDI=0;}
+	else
+		digitalWrite(LEDPIN, LOW);
+	LEDI++;
+	*/
+
+	OSD.setCursor(2,2);
+	OSD.print(LipoVoltage);
+
 
 	//Display the datas
     DisplayOSD();

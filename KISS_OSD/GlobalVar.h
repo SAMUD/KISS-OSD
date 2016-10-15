@@ -3,15 +3,16 @@ const byte masterOutSlaveIn = MOSI;
 const byte masterInSlaveOut = MISO;
 const byte slaveClock = SCK;
 const byte osdReset = 2;
+#define LEDPIN        7
 
 MAX7456 OSD(osdChipSelect);
 
 static char clean[30];
 
-uint8_t firstloop = 0;
-uint8_t BatteryCells = 0;		//stores the number of cells recognized in the first run
-boolean VoltageAlarm = false;	//works with the const defined in the beginning | Filters Voltage drops to avoid erratic voltage alarms
-boolean VoltageAlarm2nd = false;	//2nd stage of voltage alarms
+static uint8_t firstloop = 0;
+static uint8_t BatteryCells = 0;		//stores the number of cells recognized in the first run
+static boolean VoltageAlarm = false;	//works with the const defined in the beginning | Filters Voltage drops to avoid erratic voltage alarms
+static boolean VoltageAlarm2nd = false;	//2nd stage of voltage alarms
 
 static uint16_t current = 0;
 static int16_t LipoVoltage = 0;
@@ -29,10 +30,10 @@ static uint8_t armedOld = 0;
 static uint8_t failsafe = 0;
 static uint16_t calibGyroDone = 0;
 
-int16_t angley = 0;
+static int16_t angley = 0;
 
 static unsigned long start_time = 0;
-unsigned long time = 0;
+static unsigned long time = 0;
 static unsigned long total_time = 0;
 
 static uint8_t percent = 0;
@@ -40,9 +41,9 @@ static uint8_t firstarmed = 0;
 
 static unsigned long armedstarted = 0;
 
-uint8_t extra_space_mah = 0;
+static uint8_t extra_space_mah = 0;
 
-uint16_t i = 0;
+static uint16_t i = 0;
 static uint8_t KRPMPoses[4];
 static uint8_t lastMode = 0;
 
@@ -73,8 +74,8 @@ static char Time[10];
 
 static uint32_t LastLoopTime;
 
-uint32_t tmpVoltage = 0;
-uint32_t voltDev = 0;
+static uint32_t tmpVoltage = 0;
+static uint32_t voltDev = 0;
 
 static uint8_t ThrottlePos;
 static uint8_t CurrentPos;
@@ -98,7 +99,7 @@ struct StoreStruct {
 	uint16_t CapacityThreshold2ndStage;
 	uint8_t MemoryVersion;
 
-} Settings;
+} static Settings;
 
 enum Page {
 	null,

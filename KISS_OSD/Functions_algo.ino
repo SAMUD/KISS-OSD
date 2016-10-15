@@ -98,7 +98,7 @@ void print_time(unsigned long time, char *time_str)
 //Read serial data from FC and store in var
 void getSerialData()
 {
-	uint8_t serialBuf[255];
+	static uint8_t serialBuf[255];
 	uint8_t minBytes = 100;
 	uint8_t recBytes = 0;
 	
@@ -132,6 +132,9 @@ void getSerialData()
 				calibGyroDone = ((serialBuf[39 + STARTCOUNT] << 8) | serialBuf[40 + STARTCOUNT]);
 				//angle y for displaying in the horizon bar
 				angley = ((serialBuf[33 + STARTCOUNT] << 8) | (serialBuf[34 + STARTCOUNT])) / 100; //35
+				
+				tmpVoltage=0;
+				voltDev=0;
 																								   //Voltage ESC
 				if (((serialBuf[85 + STARTCOUNT] << 8) | serialBuf[86 + STARTCOUNT]) > 5) // the ESC's read the voltage better then the FC
 				{
@@ -163,8 +166,9 @@ void getSerialData()
 					tmpVoltage += ((serialBuf[125 + STARTCOUNT] << 8) | serialBuf[126 + STARTCOUNT]);
 					voltDev++;
 				}
-				if (voltDev != 0) LipoVoltage = tmpVoltage / voltDev;
-				LipoVoltage = LipoVoltage + Settings.VoltageOffset;
+				if (voltDev != 0)
+					LipoVoltage = (tmpVoltage / voltDev);
+				LipoVoltage=LipoVoltage+Settings.VoltageOffset;
 				//capacity
 				LipoMAH = ((serialBuf[148 + STARTCOUNT] << 8) | serialBuf[149 + STARTCOUNT]);
 				//read Motor Current and other ESC datas
@@ -215,6 +219,7 @@ void DisplayOSD()
 {
 	//Declaring some vars
 	uint8_t lipoVoltPos = print_int16(LipoVoltage, LipoVoltC, 2, 1);
+	
 
 	uint8_t lipoMAHPos = print_int16(LipoMAH, LipoMAHC, 0, 1);
 
@@ -408,7 +413,7 @@ void DisplayOSD()
 
 	if (displayTime)
 	{
-		OSD.setCursor(Settings.marginLastRow + 8, -1);
+		OSD.setCursor(12, -1);
 		print_time(time, Time);
 		OSD.write(SYM_FLY_M);
 		OSD.print(Time);
@@ -416,8 +421,7 @@ void DisplayOSD()
 
 	if (displayConsumption)
 	{
-		OSD.setCursor(-(5 + (lipoMAHPos + Settings.marginLastRow + extra_space_mah)), -1);
-		//OSD.print( "co:" );
+		OSD.setCursor(-(lipoMAHPos+1+Settings.marginLastRow), -1);
 		if (LipoMAH>Settings.CapacityThreshold)
 		{
 			OSD.blink();
@@ -561,12 +565,6 @@ void DisplayOSD()
 //Calculate the OSD data
 void CalculateOSD()
 {
-	//extra platz um immer ein leerzeichen zwichen der uhrzeit und den mah zu bekommen
-	if (LipoMAH>999)
-		extra_space_mah = 1;
-	else
-		extra_space_mah = 0;
-
 
 	//calculating Voltage alarm
 	if (firstloop<254 && LipoVoltage>200)

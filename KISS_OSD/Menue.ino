@@ -255,6 +255,8 @@ void value(bool addsub)
 		{
 			case 1: changeval(addsub,9900,1260,10,&Settings.LowVoltage3s);
 					break;
+			case 2: changeval(addsub,1320,1680,10,&Settings.LowVoltage4s);
+
 		}
 		break;
 	case 2:
