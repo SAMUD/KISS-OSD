@@ -235,20 +235,20 @@ void DisplayOSD()
 	uint8_t displayTime = 0;
 	uint8_t displayPilot = 0;
 	uint8_t displayAngle = 0;
-
+	
 	//reduced mode1
-	#if(RED_MODE_AUX_CHAN != 0)
-
-	if (AuxChanVals[RED_MODE_AUX_CHAN - 1]<-250)
+	if(Settings.RED_MODE_AUX_CHANNEL != 0)
 	{
-		reducedModeDisplay = 1;
+		if (AuxChanVals[Settings.RED_MODE_AUX_CHANNEL - 1]<-250)
+		{
+			reducedModeDisplay = 1;
+		}
+		else if (AuxChanVals[Settings.RED_MODE_AUX_CHANNEL - 1]>250)
+		{
+			reducedModeDisplay = 2;
+		}
+		else reducedModeDisplay = 0;
 	}
-	else if (AuxChanVals[RED_MODE_AUX_CHAN - 1]>250)
-	{
-		reducedModeDisplay = 2;
-	}
-	else reducedModeDisplay = 0;
-	#endif
 
 	//when display mode has changed clear the screen
 	if (reducedModeDisplay != lastMode)

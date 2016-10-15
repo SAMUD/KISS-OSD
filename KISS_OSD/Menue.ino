@@ -46,12 +46,12 @@ void menumain()
 
 			
 			//set cursor position
-			if (StickChanVals[2] < -500 && cursorline<10)
+			if (StickChanVals[2] < -500 && cursorline<cursorlineMax)
 			{
 				cursorline++;
 				pause=10;
 			}
-			if (StickChanVals[2] > 500 && cursorline>0)
+			if (StickChanVals[2] > 500 && cursorline>1)
 			{
 				cursorline--;
 				pause=10;
@@ -95,26 +95,21 @@ void menumain()
 			//draw cursor position
 			if (cursorline != cursorlineOLD)
 			{
-				OSD.setCursor(23, cursorlineOLD + 2);
+				OSD.setCursor(23, cursorlineOLD + 1);
 				OSD.print(" ");
-				OSD.setCursor(23, cursorline + 2);
+				OSD.setCursor(23, cursorline + 1);
 				OSD.print(">");
 				cursorlineOLD=cursorline;
 			}
 			
 			
 			//redraw menu site
-			if (MenuPage == OldMenuPage)
-			{
-				
-			}
-			else
+			if (MenuPage != OldMenuPage)
 			{
 				menuprintsite();
 				OldMenuPage = MenuPage;
 			}
 			
-
 			//redraw value
 			menuprintvalue();
 			
@@ -143,7 +138,7 @@ void menuprintsite() {
 	OSD.clear();
 	delay(100);
 	OSD.setCursor(0, 0);
-	cursorline=0;
+	cursorline=1;
 	cursorlineOLD=0;
 
 	switch (MenuPage)
@@ -151,7 +146,7 @@ void menuprintsite() {
 		case 1:
 			//VoltageSite
 			OSD.print(F("SAMUD - P1/3 VOLTAGE  "));
-			OSD.setCursor(2,15);
+			OSD.setCursor(2,14);
 			OSD.print(F("<-PAGE-> : YAW / EXIT"));
 			OSD.setCursor(1,2);
 			OSD.print(F("VOLTAGE ALARM 3S:"));
@@ -165,23 +160,23 @@ void menuprintsite() {
 			OSD.print(F("VOLT ALARM HYST:"));
 			OSD.setCursor(1, 7);
 			OSD.print(F("DIFF VOLT 3S 4S:"));
-			cursorlineMax=5;
+			cursorlineMax=6;
 			break;
 		case 2:
 			//CapacitySite
 			OSD.print(F("SAMUD MENU - P2/4  "));
-			OSD.setCursor(2, 15);
+			OSD.setCursor(2, 14);
 			OSD.print(F("<-UP/DOWN-> : PITCH"));
 			OSD.setCursor(1, 2);
 			OSD.print(F("CAPACITY 1ST WARN:"));
 			OSD.setCursor(1, 3);
 			OSD.print(F("CAPACITY 2ND WARN:"));
-			cursorlineMax=1;
+			cursorlineMax=2;
 			break;
 		case 3:
 			//Other Settings
 			OSD.print(F("SAMUD MENU - P3/4  "));
-			OSD.setCursor(2, 15);
+			OSD.setCursor(2, 14);
 			OSD.print(F("<-VALUE-> : ROLL"));
 			OSD.setCursor(1, 2);
 			OSD.print(F("MARGIN LAST ROW:"));
@@ -191,7 +186,7 @@ void menuprintsite() {
 			OSD.print(F("ESC FILTER:"));
 			OSD.setCursor(1, 5);
 			OSD.print(F("RED MODE AUX CHANNEL:"));
-			cursorlineMax=3;
+			cursorlineMax=4;
 			break;
 		case 4:
 			//Info
@@ -250,7 +245,7 @@ void menuprintvalue() {
 
 }
 
-void value(bool positiv)
+void value(bool addsub)
 {
 	switch (MenuPage)
 	{
@@ -258,7 +253,7 @@ void value(bool positiv)
 		//VoltageSite
 		switch (cursorline)
 		{
-			case 0: changeval(positiv,9900,1260,10,&Settings.LowVoltage3s);
+			case 1: changeval(addsub,9900,1260,10,&Settings.LowVoltage3s);
 					break;
 		}
 		break;
@@ -274,17 +269,18 @@ void value(bool positiv)
 		//Info
 		break;
 	}
+	pause=1;
 }
 
-void changeval(bool positiv, int16_t min_value, int16_t max_value, uint16_t increment, uint16_t *variable)
+void changeval(bool addsub, int16_t min_value, int16_t max_value, uint16_t increment, uint16_t *variable)
 {
-	if (positiv && *variable<max_value)
+	if (addsub)     // && *variable<max_value
 	{
-		*variable=+increment;
+		*variable=*variable+increment;
 	}
-	if (!positiv && *variable>min_value)
+	if (!addsub)	// && *variable>min_value
 	{
-		*variable = -increment;
+		*variable = *variable-increment;
 	}
 }
 
