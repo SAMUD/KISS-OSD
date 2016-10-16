@@ -3,7 +3,6 @@ const byte masterOutSlaveIn = MOSI;
 const byte masterInSlaveOut = MISO;
 const byte slaveClock = SCK;
 const byte osdReset = 2;
-#define LEDPIN        7
 
 MAX7456 OSD(osdChipSelect);
 

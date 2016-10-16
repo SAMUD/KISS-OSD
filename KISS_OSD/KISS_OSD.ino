@@ -165,8 +165,6 @@ void setup(){
   #endif
   OSD.display();
 
-  pinMode(LEDPIN, OUTPUT);
-
   //clean used area
   for(i=0;i<30;i++) clean[i] = ' ';
   while (!OSD.notInVSync());
@@ -208,7 +206,6 @@ void loop()
 		OSD.clear();
 		EEPROMsave();
 		delay(1000);
-		getSerialData();
 	}
 	
 	//calculate the datas to display
