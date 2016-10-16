@@ -7,7 +7,19 @@ void EEPROMinit()
 
 	if (!memValid)
 	{
+		OSD.blink();
+		OSDmakegrey();
+		OSD.setCursor(3,6);
+		OSD.print(F("WARNING: MEMORY INVALID"));
+		OSD.setCursor(3, 7);
+		OSD.print(F("LOADING DEFAULT CONFIG"));
 		EEPROMsaveDefaultValues();
+		OSD.noBlink();
+		OSD.videoBackground();
+		delay(6000);
+		OSD.clear();
+		while(OSD.clearIsBusy()) {}
+
 	}
 }
 

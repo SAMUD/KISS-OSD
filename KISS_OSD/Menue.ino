@@ -21,41 +21,28 @@ void menumain()
 	static uint8_t ii;
 	
 
-	OSD.clear();
-	while(OSD.clearIsBusy()) {}
-	OSD.grayBackground();
-	for (int makegrey = 0; makegrey < 15; makegrey++)
-	{
-		OSD.setCursor(0,makegrey);
-		OSD.print(F("                             "));
-	}
+	OSDmakegrey();
 	OSD.setCursor(6,3);
 	OSD.print(F("SAMUD - KISS OSD"));
 	OSD.setCursor(1, 5);
 	OSD.print(F("MORE INFORMATION AND WIKI: "));
 	OSD.setCursor(1, 6);
 	OSD.print(F("GITHUB.COM/SAMUD/KISS-OSD  "));
+	OSD.videoBackground();
 	delay(2000);
 
-	OSD.videoBackground();
+	
 	
 
 	while (!exitmenu)
 	{
-		//Serial.println(i);
-		//Serial.println(freeRam());
-		//delay(1000);
-		//i++;
 
 		if (micros() - LastLoopTime > 10000) //limits the speed of the OSD to 10Hz  millis() - LastLoopTimeMenu > 100
 		{
 			LastLoopTime = micros();
 
 			getSerialData();
-			
-			
 
-			
 			//set cursor position
 			if (StickChanVals[2] < -500 && cursorline<cursorlineMax)
 			{
@@ -68,7 +55,6 @@ void menumain()
 				pause=10;
 			}
 			
-			
 			//changevalue
 			if (StickChanVals[1] > 500)
 			{
@@ -78,8 +64,7 @@ void menumain()
 			{
 				value(false);
 			}
-			
-			
+				
 			//changepage
 			if (StickChanVals[3] > 500)
 			{
@@ -89,7 +74,10 @@ void menumain()
 					pause=10;
 				}
 				else
+				{
 					exitmenu=true;
+					//pause=10;
+				}
 			}
 			if (StickChanVals[3] < -500)
 			{
@@ -99,18 +87,11 @@ void menumain()
 					pause=10;
 				}
 				else
+				{
 					exitmenu = true;
-			}
-			
-			
-			//draw cursor position
-			if (cursorline != cursorlineOLD)
-			{
-				OSD.setCursor(23, cursorlineOLD + 1);
-				OSD.print(" ");
-				OSD.setCursor(23, cursorline + 1);
-				OSD.print(">");
-				cursorlineOLD=cursorline;
+					//pause=10;
+				}
+
 			}
 			
 			
@@ -123,6 +104,16 @@ void menumain()
 			
 			//redraw value
 			menuprintvalue();
+
+			//draw cursor position
+			if (cursorline != cursorlineOLD && MenuPage!=4)
+			{
+				OSD.setCursor(23, cursorlineOLD + 1);
+				OSD.print(" ");
+				OSD.setCursor(23, cursorline + 1);
+				OSD.print(">");
+				cursorlineOLD = cursorline;
+			}
 			
 			//pause (multiples of 50ms)
 			while (pause > 0)
@@ -132,7 +123,7 @@ void menumain()
 			}
 
 			
-			if (armed == 1 || StickChanVals[0]>500)
+			if (armed == 1)
 			{
 				exitmenu=true;
 			}
@@ -142,6 +133,7 @@ void menumain()
 	exitmenu=false;
 	MenuPage=1;
 	OldMenuPage=0;
+	StickChanVals[3]=0;
 }
 
 void menuprintsite() {
@@ -210,6 +202,12 @@ void menuprintsite() {
 			OSD.grayBackground();
 			OSD.print(F("SAMUD MENU - P4/4 INFO       "));
 			OSD.videoBackground();
+			OSD.setCursor(1, 2);
+			OSD.print(F("FREE RAM:"));
+			OSD.setCursor(1, 3);
+			OSD.print(F("OSD VERSION:"));
+			OSD.setCursor(1, 4);
+			OSD.print(F("MEMORY VERSION:"));
 			cursorlineMax=0;
 			break;
 		default:
@@ -259,6 +257,12 @@ void menuprintvalue() {
 		break;
 	case 4:
 		//Info
+		OSD.setCursor(24, 2);
+		OSD.print(freeRam());
+		OSD.setCursor(22, 3);
+		OSD.print(OSDVersion);
+		OSD.setCursor(22, 4);
+		OSD.print(DMemoryVersion);
 		break;
 	}
 

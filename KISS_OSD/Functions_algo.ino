@@ -507,9 +507,6 @@ void DisplayOSD()
 	{
 		OSD.setCursor(4, MarginMiddleY);
 		MarginMiddleY++;
-		OSD.print(OSDVersion);
-		OSD.setCursor(4, MarginMiddleY);
-		MarginMiddleY++;
 		OSD.blink();
 		OSD.print(F("WAIT - DON'T ARM: "));
 		OSD.noBlink();
@@ -728,4 +725,15 @@ int freeRam() {
 	extern int __heap_start, *__brkval;
 	int v;
 	return (int)&v - (__brkval == 0 ? (int)&__heap_start : (int)__brkval);
+}
+
+void OSDmakegrey() {
+	OSD.clear();
+	while (OSD.clearIsBusy()) {}
+	OSD.grayBackground();
+	for (int makegrey = 0; makegrey < 15; makegrey++)
+	{
+		OSD.setCursor(0, makegrey);
+		OSD.print(F("                             "));
+	}
 }

@@ -5,7 +5,7 @@ KISS FC OSD
 by Samuel Daurat (sdaurat@outlook.de)
 based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
-const char OSDVersion[]="     V 5     ";
+# define OSDVersion "5.1"
 #define DMemoryVersion 1
 /*
 *****************************************************************************************************
@@ -207,7 +207,8 @@ void loop()
 		menumain();
 		OSD.clear();
 		EEPROMsave();
-		delay(500);
+		delay(1000);
+		getSerialData();
 	}
 	
 	//calculate the datas to display
