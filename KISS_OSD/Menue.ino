@@ -304,7 +304,7 @@ void value(bool addsub)
 		//Other Settings
 		switch (cursorline)
 		{
-		case 1: changeval(addsub, 0,4, 1, &Settings.marginLastRow);
+		case 1: changeval(addsub, 0,6, 1, &Settings.marginLastRow);
 			break;
 		case 2: changeval(addsub, 2, 20, 1, &Settings.MAGNETPOLECOUNT);
 			break;
