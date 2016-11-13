@@ -1,12 +1,54 @@
 <VisualMicro>
   <Program Name="KISS_OSD" Ext=".ino" Location="C:\Users\sdaur\Documents\GitHub\KISS-OSD\KISS_OSD">
-    <Compile IsGdb="0" CompilerErrors="0" ConfigurationName="Debug" StopOnError="False" OptimiseLibs="True" OptimiseCore="True" ReCompileIfSourceIsNewer="1" BuildPath="D:\Temp\VMicroBuilds\KISS_OSD\nano328" IsDebugStart="0" IncludeDebug="0" IncludesDebug="0" SketchName="KISS_OSD" IsCompiled="1" />
+    <Compile IsGdb="0" CompilerErrors="0" ConfigurationName="Debug" StopOnError="False" OptimiseLibs="True" OptimiseCore="True" ReCompileIfSourceIsNewer="1" IsDebugStart="1" BuildPath="D:\Win10\Temp\VMicroBuilds\KISS_OSD\nano328" SketchName="KISS_OSD" ReportDigitalPins="0" ReportAnalogPins="0" ReportI2C="0" ReportFreeMemory="0" IncludeDebug="1" LastDebugPreProcessorDefinitions="VM_DEBUG;VM_DEBUG_ENABLE 1;VM_DEBUG_BANDWIDTH_THROTTLE_MS 100;VM_DEBUGGER_TYPE_HARDWARESERIAL 0;VM_DEBUGGER_TYPE_SOFTWARESERIAL 1;VM_DEBUGGER_TYPE_FASTSERIAL 2;VM_DEBUGGER_TYPE_USB 3;VM_DEBUGGER_TYPE_TEENSY 4;VM_DEBUGGER_TYPE_UART 5;VM_DEBUGGER_TYPE_USART 6;VM_DEBUGGER_TYPE_USBSERIAL 7;VM_DEBUGGER_TYPE_TTYUART 8;VM_DEBUGGER_TYPE_NET_CONSOLE 9;VM_DEBUGGER_TYPE_Uart 10;VM_DEBUGGER_TYPE_COSA 11;VM_DEBUGGER_TYPE_CDCSerialClass 12;VM_DEBUGGER_TYPE_HARDWARESERIAL1 13;VM_DEBUGGER_TYPE_HARDWARESERIAL2 14;VM_DEBUGGER_TYPE_HARDWARESERIAL3 15;VM_DEBUGGER_TYPE VM_DEBUGGER_TYPE_HARDWARESERIAL;VM_DEBUG_BREAKPAUSE;" IncludesDebug="1" IsCompiled="1" />
     <Platform Name="arduino10x" Package="arduino" Platform="avr" Architecture="avr">
-      <Board Name="nano328" Description="Arduino Nano w/ ATmega328" CoreFolder="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino" VariantFullPath="C:\Program Files (x86)\Arduino\hardware\arduino\variants\eightanaloginputs" McuIdePath="C:\Program Files (x86)\Arduino" McuSketchBookPath="C:\Users\sdaur\Documents\Arduino" name="Arduino Nano w/ ATmega328" upload.protocol="arduino" upload.maximum_size="30720" upload.speed="57600" bootloader.low_fuses="0xFF" bootloader.high_fuses="0xDA" bootloader.extended_fuses="0x05" bootloader.path="atmega" bootloader.file="ATmegaBOOT_168_atmega328.hex" bootloader.unlock_bits="0x3F" bootloader.lock_bits="0x0F" build.mcu="atmega328p" build.f_cpu="16000000L" build.core="arduino" build.variant="eightanaloginputs" runtime.ide.path="C:\Program Files (x86)\Arduino" runtime.os="windows" build.system.path="C:\Program Files (x86)\Arduino\hardware\arduino\system" runtime.ide.version="105" target_package="arduino" target_platform="avr" runtime.hardware.path="C:\Program Files (x86)\Arduino\hardware" originalid="nano328" vm.platform.root.path="D:\Programme\VisualStudio\Common7\IDE\Extensions\5nz4lpxd.nrp\Micro Platforms\arduino10x" avrisp.name="AVR ISP" avrisp.communication="serial" avrisp.protocol="stk500v1" avrispmkii.name="AVRISP mkII" avrispmkii.communication="usb" avrispmkii.protocol="stk500v2" usbtinyisp.name="USBtinyISP" usbtinyisp.protocol="usbtiny" usbasp.name="USBasp" usbasp.communication="usb" usbasp.protocol="usbasp" parallel.name="Parallel Programmer" parallel.protocol="dapa" parallel.force="true" arduinoisp.name="Arduino as ISP" arduinoisp.communication="serial" arduinoisp.protocol="stk500v1" arduinoisp.speed="19200" runtime.vm.boardinfo.id="nano328" runtime.vm.boardinfo.name="nano328" runtime.vm.boardinfo.desc="Arduino Nano w/ ATmega328" runtime.vm.boardinfo.src_location="C:\Program Files (x86)\Arduino\hardware\arduino" ide.hint="For use with Arduino 0023 and 1.0.x versions" ide.location.key="Arduino" ide.location.ide.winreg="Arduino 1.0.x Application" ide.location.sketchbook.winreg="Arduino 1.0.x Sketchbook" ide.location.sketchbook.preferences="sketchbook.path" ide.location.sketchbook.default="%MYDOCUMENTS%\arduino" ide.location.preferences="%VM_APPDATA_ROAMING%\arduino\preferences.txt" ide.default.package="arduino" ide.default.platform="avr" ide.multiplatform="true" ide.includes="arduino.h" ide.platformswithoutpackage="true" ide.includes.fallback="wprogram.h" ide.extension="ino" ide.extension.fallback="pde" ide.versionLTEQ="149" ide.exe="arduino.exe" ide.hosts="atmel" ide.url="http://arduino.cc/en/Main/Software" vm.debug="true" software="ARDUINO" ide.appid="arduino10x" location.sketchbook="C:\Users\sdaur\Documents\Arduino" build.core.vmresolved="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino" build.core.parentfolder.vmresolved="C:\Program Files (x86)\Arduino\hardware\arduino\cores" build.core.coresparentfolder.vmresolved="C:\Program Files (x86)\Arduino\hardware\arduino" build.core.path="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino" vm.core.include="arduino.h" build.board="AVR_NANO328" vm.boardsource.path="C:\Program Files (x86)\Arduino\hardware\arduino" runtime.platform.path="C:\Program Files (x86)\Arduino\hardware\arduino" vm.platformname.name="avr" build.arch="AVR" builder.noino="false" build.variant.vmresolved="C:\Program Files (x86)\Arduino\hardware\arduino\variants\eightanaloginputs" vm.runtime.compiler.showwarnings="false" vm.runtime.upload.verbose="false" vm.runtime.upload.verify="false" serial.port.file="COM3" serial.port="COM3" serial.port.num="3" vm.runtime.compiler.auto_discover_includes="true" build.vm.build.vmdebug="0" build.vm.build.isgdb="0" build.vm.build.optimised="1" vm.last.buildpath="D:\Temp\VMicroBuilds\KISS_OSD\nano328" />
+      <Board Name="nano328" Description="Arduino Nano w/ ATmega328" CoreFolder="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino" VariantFullPath="C:\Program Files (x86)\Arduino\hardware\arduino\variants\eightanaloginputs" McuIdePath="C:\Program Files (x86)\Arduino" McuSketchBookPath="C:\Users\sdaur\Documents\Arduino" name="Arduino Nano w/ ATmega328" upload.protocol="arduino" upload.maximum_size="30720" upload.speed="57600" bootloader.low_fuses="0xFF" bootloader.high_fuses="0xDA" bootloader.extended_fuses="0x05" bootloader.path="atmega" bootloader.file="ATmegaBOOT_168_atmega328.hex" bootloader.unlock_bits="0x3F" bootloader.lock_bits="0x0F" build.mcu="atmega328p" build.f_cpu="16000000L" build.core="arduino" build.variant="eightanaloginputs" runtime.ide.path="C:\Program Files (x86)\Arduino" runtime.os="windows" build.system.path="C:\Program Files (x86)\Arduino\hardware\arduino\system" runtime.ide.version="105" target_package="arduino" target_platform="avr" runtime.hardware.path="C:\Program Files (x86)\Arduino\hardware" originalid="nano328" vm.platform.root.path="C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\jdb2flzv.wfd\Micro Platforms\arduino10x" avrisp.name="AVR ISP" avrisp.communication="serial" avrisp.protocol="stk500v1" avrispmkii.name="AVRISP mkII" avrispmkii.communication="usb" avrispmkii.protocol="stk500v2" usbtinyisp.name="USBtinyISP" usbtinyisp.protocol="usbtiny" usbasp.name="USBasp" usbasp.communication="usb" usbasp.protocol="usbasp" parallel.name="Parallel Programmer" parallel.protocol="dapa" parallel.force="true" arduinoisp.name="Arduino as ISP" arduinoisp.communication="serial" arduinoisp.protocol="stk500v1" arduinoisp.speed="19200" runtime.vm.boardinfo.id="nano328" runtime.vm.boardinfo.name="nano328" runtime.vm.boardinfo.desc="Arduino Nano w/ ATmega328" runtime.vm.boardinfo.src_location="C:\Program Files (x86)\Arduino\hardware\arduino" ide.hint="For use with Arduino 0023 and 1.0.x versions" ide.location.key="Arduino" ide.location.ide.winreg="Arduino 1.0.x Application" ide.location.sketchbook.winreg="Arduino 1.0.x Sketchbook" ide.location.sketchbook.preferences="sketchbook.path" ide.location.sketchbook.default="%MYDOCUMENTS%\arduino" ide.location.preferences="%VM_APPDATA_ROAMING%\arduino\preferences.txt" ide.default.package="arduino" ide.default.platform="avr" ide.multiplatform="true" ide.includes="arduino.h" ide.platformswithoutpackage="true" ide.includes.fallback="wprogram.h" ide.extension="ino" ide.extension.fallback="pde" ide.versionLTEQ="149" ide.exe="arduino.exe" ide.hosts="atmel" ide.url="http://arduino.cc/en/Main/Software" vm.debug="true" software="ARDUINO" ide.appid="arduino10x" location.sketchbook="C:\Users\sdaur\Documents\Arduino" build.core.vmresolved="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino" build.core.parentfolder.vmresolved="C:\Program Files (x86)\Arduino\hardware\arduino\cores" build.core.coresparentfolder.vmresolved="C:\Program Files (x86)\Arduino\hardware\arduino" build.core.path="C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino" vm.core.include="arduino.h" build.board="AVR_NANO328" vm.boardsource.path="C:\Program Files (x86)\Arduino\hardware\arduino" runtime.platform.path="C:\Program Files (x86)\Arduino\hardware\arduino" vm.platformname.name="avr" build.arch="AVR" builder.noino="false" build.variant.vmresolved="C:\Program Files (x86)\Arduino\hardware\arduino\variants\eightanaloginputs" vm.runtime.compiler.showwarnings="false" vm.runtime.upload.verbose="false" vm.runtime.upload.verify="false" serial.port.file="COM3" serial.port="COM3" serial.port.num="3" vm.runtime.compiler.auto_discover_includes="true" build.vm.build.vmdebug="1" build.vm.build.isgdb="0" build.vm.build.optimised="1" vm.last.buildpath="D:\Win10\Temp\VMicroBuilds\KISS_OSD\nano328" />
     </Platform>
-    <Debug EnableBreak="1" DebugEnabled="0" LocalPort="COM3" LocalPortSpeed="115200" />
+    <Debug EnableBreak="1" DebugEnabled="1" LocalPort="COM3" LocalPortSpeed="115200" IsGdb="0" RemotePortSpeedWrittenToDebugSource="115200" />
     <VCCodeModel>
       <VCCodeMacros />
     </VCCodeModel>
+    <BreakPoints>
+      <BreakPoint Index="1" Name="Menue.ino, Zeile 133" Id="df55969d-253e-4923-a5a9-faf92bd48146" Enabled="1" Message="" MessageTextType="2" PreProcessedMessage="" Condition="" ConditionType="1" CurrentHits="0" File="c:\users\sdaur\documents\github\kiss-osd\kiss_osd\menue.ino" FileLine="133" FileColumn="1" FunctionName="menumain()" FunctionLineOffset="117" FunctionColumnOffset="1" HitCountTarget="1" HitCountType="1" Language="C++" LocationType="3" Tag="&lt;vmbp Id='df55969d-253e-4923-a5a9-faf92bd48146'/&gt;" Type="1" ToString="System.__ComObject" BreakWhenHit="1">
+        <Source>126				if (armed == 1)
+127				{
+128					exitmenu=true;
+129				}
+130	
+131			}
+132		}
+--&gt;133		exitmenu=false;
+134		MenuPage=1;
+135		OldMenuPage=0;
+136		StickChanVals[3]=0;
+137	}
+138	
+139	void menuprintsite() {
+140	
+141		OSD.clear();
+142		delay(100);
+</Source>
+      </BreakPoint>
+      <BreakPoint Index="2" Name="Menue.ino, Zeile 101" Id="82c2ecf7-364c-4e6e-a5e5-62cb4c10a97e" Enabled="1" Message="" MessageTextType="2" PreProcessedMessage="" Condition="" ConditionType="1" CurrentHits="0" File="c:\users\sdaur\documents\github\kiss-osd\kiss_osd\menue.ino" FileLine="101" FileColumn="1" FunctionName="menumain()" FunctionLineOffset="85" FunctionColumnOffset="1" HitCountTarget="1" HitCountType="1" Language="C++" LocationType="3" Tag="&lt;vmbp Id='82c2ecf7-364c-4e6e-a5e5-62cb4c10a97e'/&gt;" Type="1" ToString="System.__ComObject" BreakWhenHit="1">
+        <Source>94	
+95				}
+96				
+97				
+98				//redraw menu site
+99				if (MenuPage != OldMenuPage)
+100				{
+--&gt;101					menuprintsite();
+102					OldMenuPage = MenuPage;
+103				}
+104				
+105				//redraw value
+106				menuprintvalue();
+107	
+108				//draw cursor position
+109				if (cursorline != cursorlineOLD &amp;&amp; MenuPage!=4)
+110				{
+</Source>
+      </BreakPoint>
+    </BreakPoints>
   </Program>
 </VisualMicro>
