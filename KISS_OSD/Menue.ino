@@ -15,6 +15,8 @@ static uint8_t pause = 0; //makes a pause of multiples of 50ms
 
 void menumain()
 {
+	wdt_reset();
+	
 	static uint32_t LastLoopTimeMenu;
 	static boolean exitmenu=false;
 	static uint8_t i;
@@ -32,11 +34,11 @@ void menumain()
 	delay(2000);
 
 	
-	
-
 	while (!exitmenu)
 	{
 
+		wdt_reset();
+		
 		if (micros() - LastLoopTime > 10000) //limits the speed of the OSD to 10Hz  millis() - LastLoopTimeMenu > 100
 		{
 			LastLoopTime = micros();

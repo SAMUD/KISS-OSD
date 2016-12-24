@@ -139,50 +139,53 @@ const char Pilotname[]=" SAMU";
 #include "symbols.h"
 #include <EEPROMex.h>
 #include "GlobalVar.h"
+#include <avr/wdt.h>
 
 
 //==============
 //SETUP function
 void setup(){
-  uint8_t i = 0;
-  SPI.begin();
-  SPI.setClockDivider( SPI_CLOCK_DIV2 );
-  #if defined(PAL)
-    OSD.begin(28,15,0);
-    OSD.setTextOffset(-1,-6);
-    OSD.setDefaultSystem(MAX7456_PAL);
-  #endif
-  #if defined(NTSC)
-    OSD.begin(MAX7456_COLS_N1,MAX7456_ROWS_N0);
-    OSD.setDefaultSystem(MAX7456_NTSC);
-  #endif
-  OSD.setSwitchingTime( 4 );
-  #if defined(USE_MAX7456_ASCII)
-    OSD.setCharEncoding( MAX7456_ASCII );
-  #endif
-  #if defined(USE_MAX7456_MAXIM)
-    OSD.setCharEncoding( MAX7456_MAXIM );
-  #endif
-  OSD.display();
+	wdt_enable(WDTO_8S);
+	wdt_reset();
 
-  //clean used area
-  for(i=0;i<30;i++) clean[i] = ' ';
-  while (!OSD.notInVSync());
-  for(i=0;i<20;i++)
-  {
-      OSD.setCursor( 0, i );
-      OSD.print( clean );
-  }
+	  uint8_t i = 0;
+	  SPI.begin();
+	  SPI.setClockDivider( SPI_CLOCK_DIV2 );
+	  #if defined(PAL)
+		OSD.begin(28,15,0);
+		OSD.setTextOffset(-1,-6);
+		OSD.setDefaultSystem(MAX7456_PAL);
+	  #endif
+	  #if defined(NTSC)
+		OSD.begin(MAX7456_COLS_N1,MAX7456_ROWS_N0);
+		OSD.setDefaultSystem(MAX7456_NTSC);
+	  #endif
+	  OSD.setSwitchingTime( 4 );
+	  #if defined(USE_MAX7456_ASCII)
+		OSD.setCharEncoding( MAX7456_ASCII );
+	  #endif
+	  #if defined(USE_MAX7456_MAXIM)
+		OSD.setCharEncoding( MAX7456_MAXIM );
+	  #endif
+	  OSD.display();
 
-  //set blinktime
-  OSD.setBlinkingTime(2); //0-3
-  OSD.setBlinkingDuty(1); //0-3
+	  //clean used area
+	  for(i=0;i<30;i++) clean[i] = ' ';
+	  while (!OSD.notInVSync());
+	  for(i=0;i<20;i++)
+	  {
+		  OSD.setCursor( 0, i );
+		  OSD.print( clean );
+	  }
 
-  Serial.begin(115200);
+	  //set blinktime
+	  OSD.setBlinkingTime(2); //0-3
+	  OSD.setBlinkingDuty(1); //0-3
 
-  //init memory
-  EEPROMinit();
+	  Serial.begin(115200);
 
+	  //init memory
+	  EEPROMinit();
 }
 
 
@@ -192,12 +195,14 @@ void setup(){
 void loop()
 {
   
-  //big if with all code
-  if(micros()-LastLoopTime > 10000) //limits the speed of the OSD to 100Hz
-  {
-    LastLoopTime = micros();
+	wdt_reset();
 
-    getSerialData();
+	//big if with all code
+	if(micros()-LastLoopTime > 10000) //limits the speed of the OSD to 100Hz
+	{
+	LastLoopTime = micros();
+
+	getSerialData();
 
 	//open menu if yaw left and disarmed
 	if(armed == 0 && StickChanVals[3]>500)
@@ -212,7 +217,7 @@ void loop()
 	CalculateOSD();
 
 	//Display the datas
-    DisplayOSD();
-  }
+	DisplayOSD();
+	}
 
 }
