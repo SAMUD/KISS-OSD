@@ -188,42 +188,20 @@ void menuprintsite() {
 		cursorlineMax = 3;
 		break;
 	case 3:
-		//CapacitySite
+		//Red1
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P3/7 RED MODE 1  "));
 		OSD.setCursor(0, 14);
 		OSD.print(F(" <-ROLL-> : CHANGE VALUE     "));
-		OSD.videoBackground();
-		OSD.setCursor(1, 2);
-		OSD.print(F("CAPACITY IN MAH"));
-		OSD.setCursor(1, 3);
-		OSD.print(F("1ST WARN AT % USED:"));
-		OSD.setCursor(1, 4);
-		OSD.print(F("2ND WARN AT % USED:"));
-		OSD.setCursor(1, 6);
-		OSD.print(F("1ST WARN AT MAH USED:"));
-		OSD.setCursor(1, 7);
-		OSD.print(F("2ND WARN AT MAH USED:"));
-		cursorlineMax = 3;
+		printRED();
 		break;
 	case 4:
 		//CapacitySite
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P4/7 RED MODE 2  "));
 		OSD.setCursor(0, 14);
-		OSD.print(F("SEE PAGE 6 FOR RED-CHANNEL SEL"));
-		OSD.videoBackground();
-		OSD.setCursor(1, 2);
-		OSD.print(F("CAPACITY IN MAH"));
-		OSD.setCursor(1, 3);
-		OSD.print(F("1ST WARN AT % USED:"));
-		OSD.setCursor(1, 4);
-		OSD.print(F("2ND WARN AT % USED:"));
-		OSD.setCursor(1, 6);
-		OSD.print(F("1ST WARN AT MAH USED:"));
-		OSD.setCursor(1, 7);
-		OSD.print(F("2ND WARN AT MAH USED:"));
-		cursorlineMax = 3;
+		OSD.print(F("SEE PAG6 FOR RED-CHANNEL SELE"));
+		printRED();
 		break;
 	case 5:
 		//CapacitySite
@@ -231,18 +209,7 @@ void menuprintsite() {
 		OSD.print(F("SAMUD OSD - P5/7 RED MODE 3  "));
 		OSD.setCursor(0, 14);
 		OSD.print(F("                             "));
-		OSD.videoBackground();
-		OSD.setCursor(1, 2);
-		OSD.print(F("CAPACITY IN MAH"));
-		OSD.setCursor(1, 3);
-		OSD.print(F("1ST WARN AT % USED:"));
-		OSD.setCursor(1, 4);
-		OSD.print(F("2ND WARN AT % USED:"));
-		OSD.setCursor(1, 6);
-		OSD.print(F("1ST WARN AT MAH USED:"));
-		OSD.setCursor(1, 7);
-		OSD.print(F("2ND WARN AT MAH USED:"));
-		cursorlineMax = 3;
+		printRED();
 		break;
 	case 6:
 		//Other Settings
@@ -325,6 +292,105 @@ void menuprintvalue() {
 		OSD.print(" ");
 		
 		break;
+	case 3:
+		//RED1
+		OSD.setCursor(24, 2);
+		showONOFF(Settings.DispRCThrottle1);
+		OSD.print(" ");
+		OSD.setCursor(24, 3);
+		showONOFF(Settings.DispCombCurrent1);
+		OSD.print(" ");
+		OSD.setCursor(24, 4);
+		showONOFF(Settings.DispLipoVoltage1);
+		OSD.print(" ");
+		OSD.setCursor(24, 5);
+		showONOFF(Settings.DispMaConsumption1);
+		OSD.print(" ");
+		OSD.setCursor(24, 6);
+		showONOFF(Settings.DispEscKrpm1);
+		OSD.print(" ");
+		OSD.setCursor(24, 7);
+		showONOFF(Settings.DispEscCurrent1);
+		OSD.print(" ");
+		OSD.setCursor(24, 8);
+		showONOFF(Settings.DispEscTemp1);
+		OSD.print(" ");
+		OSD.setCursor(24, 9);
+		showONOFF(Settings.DispPilotname1);
+		OSD.print(" ");
+		OSD.setCursor(24, 10);
+		showONOFF(Settings.DispTimer1);
+		OSD.print(" ");
+		OSD.setCursor(24, 11);
+		showONOFF(Settings.DispAngle1);
+		OSD.print(" ");
+		break;
+	case 4:
+		//RED2
+		OSD.setCursor(24, 2);
+		showONOFF(Settings.DispRCThrottle2);
+		OSD.print(" ");
+		OSD.setCursor(24, 3);
+		showONOFF(Settings.DispCombCurrent2);
+		OSD.print(" ");
+		OSD.setCursor(24, 4);
+		showONOFF(Settings.DispLipoVoltage2);
+		OSD.print(" ");
+		OSD.setCursor(24, 5);
+		showONOFF(Settings.DispMaConsumption2);
+		OSD.print(" ");
+		OSD.setCursor(24, 6);
+		showONOFF(Settings.DispEscKrpm2);
+		OSD.print(" ");
+		OSD.setCursor(24, 7);
+		showONOFF(Settings.DispEscCurrent2);
+		OSD.print(" ");
+		OSD.setCursor(24, 8);
+		showONOFF(Settings.DispEscTemp2);
+		OSD.print(" ");
+		OSD.setCursor(24, 9);
+		showONOFF(Settings.DispPilotname2);
+		OSD.print(" ");
+		OSD.setCursor(24, 10);
+		showONOFF(Settings.DispTimer2);
+		OSD.print(" ");
+		OSD.setCursor(24, 11);
+		showONOFF(Settings.DispAngle2);
+		OSD.print(" ");
+		break;
+	case 5:
+		//RED1
+		OSD.setCursor(24, 2);
+		showONOFF(Settings.DispRCThrottle3);
+		OSD.print(" ");
+		OSD.setCursor(24, 3);
+		showONOFF(Settings.DispCombCurrent3);
+		OSD.print(" ");
+		OSD.setCursor(24, 4);
+		showONOFF(Settings.DispLipoVoltage3);
+		OSD.print(" ");
+		OSD.setCursor(24, 5);
+		showONOFF(Settings.DispMaConsumption3);
+		OSD.print(" ");
+		OSD.setCursor(24, 6);
+		showONOFF(Settings.DispEscKrpm3);
+		OSD.print(" ");
+		OSD.setCursor(24, 7);
+		showONOFF(Settings.DispEscCurrent3);
+		OSD.print(" ");
+		OSD.setCursor(24, 8);
+		showONOFF(Settings.DispEscTemp3);
+		OSD.print(" ");
+		OSD.setCursor(24, 9);
+		showONOFF(Settings.DispPilotname3);
+		OSD.print(" ");
+		OSD.setCursor(24, 10);
+		showONOFF(Settings.DispTimer3);
+		OSD.print(" ");
+		OSD.setCursor(24, 11);
+		showONOFF(Settings.DispAngle3);
+		OSD.print(" ");
+		break;
 	case 6:
 		//Other Settings
 		OSD.setCursor(24, 2);
@@ -390,6 +456,84 @@ void value(bool addsub)
 		case 3: changeval(addsub, 0, 100, 1, &Settings.Capacity2nd);
 			if (Settings.Capacity2nd < Settings.Capacity1st)
 				Settings.Capacity1st = Settings.Capacity2nd;
+			break;
+		}
+		break;
+	case 3:
+		//RED1
+		switch (cursorline)
+		{
+		case 1: changeval(addsub, 0, 1, 1, &Settings.DispRCThrottle1);
+			break;
+		case 2: changeval(addsub, 0, 1, 1, &Settings.DispCombCurrent1);
+			break;
+		case 3: changeval(addsub, 0, 1, 1, &Settings.DispLipoVoltage1);
+			break;
+		case 4: changeval(addsub, 0, 1, 1, &Settings.DispMaConsumption1);
+			break;
+		case 5: changeval(addsub, 0, 1, 1, &Settings.DispEscKrpm1);
+			break;
+		case 6: changeval(addsub, 0, 1, 1, &Settings.DispEscCurrent1);
+			break;
+		case 7: changeval(addsub, 0, 1, 1, &Settings.DispEscTemp1);
+			break;
+		case 8: changeval(addsub, 0, 1, 1, &Settings.DispPilotname1);
+			break;
+		case 9: changeval(addsub, 0, 1, 1, &Settings.DispTimer1);
+			break;
+		case 10: changeval(addsub, 0, 1, 1, &Settings.DispAngle1);
+			break;
+		}
+		break;
+	case 4:
+		//RED2
+		switch (cursorline)
+		{
+		case 1: changeval(addsub, 0, 1, 1, &Settings.DispRCThrottle2);
+			break;
+		case 2: changeval(addsub, 0, 1, 1, &Settings.DispCombCurrent2);
+			break;
+		case 3: changeval(addsub, 0, 1, 1, &Settings.DispLipoVoltage2);
+			break;
+		case 4: changeval(addsub, 0, 1, 1, &Settings.DispMaConsumption2);
+			break;
+		case 5: changeval(addsub, 0, 1, 1, &Settings.DispEscKrpm2);
+			break;
+		case 6: changeval(addsub, 0, 1, 1, &Settings.DispEscCurrent2);
+			break;
+		case 7: changeval(addsub, 0, 1, 1, &Settings.DispEscTemp2);
+			break;
+		case 8: changeval(addsub, 0, 1, 1, &Settings.DispPilotname2);
+			break;
+		case 9: changeval(addsub, 0, 1, 1, &Settings.DispTimer2);
+			break;
+		case 10: changeval(addsub, 0, 1, 1, &Settings.DispAngle2);
+			break;
+		}
+		break;
+	case 5:
+		//RED3
+		switch (cursorline)
+		{
+		case 1: changeval(addsub, 0, 1, 1, &Settings.DispRCThrottle3);
+			break;
+		case 2: changeval(addsub, 0, 1, 1, &Settings.DispCombCurrent3);
+			break;
+		case 3: changeval(addsub, 0, 1, 1, &Settings.DispLipoVoltage3);
+			break;
+		case 4: changeval(addsub, 0, 1, 1, &Settings.DispMaConsumption3);
+			break;
+		case 5: changeval(addsub, 0, 1, 1, &Settings.DispEscKrpm3);
+			break;
+		case 6: changeval(addsub, 0, 1, 1, &Settings.DispEscCurrent3);
+			break;
+		case 7: changeval(addsub, 0, 1, 1, &Settings.DispEscTemp3);
+			break;
+		case 8: changeval(addsub, 0, 1, 1, &Settings.DispPilotname3);
+			break;
+		case 9: changeval(addsub, 0, 1, 1, &Settings.DispTimer3);
+			break;
+		case 10: changeval(addsub, 0, 1, 1, &Settings.DispAngle3);
 			break;
 		}
 		break;
@@ -468,4 +612,30 @@ void showONOFF(uint8_t val)
 		OSD.print("OFF");
 	else
 		OSD.print("ON");
+}
+
+void printRED()
+{
+	OSD.videoBackground();
+	OSD.setCursor(1, 2);
+	OSD.print(F("RC THROTTLE:"));
+	OSD.setCursor(1, 3);
+	OSD.print(F("COMBINED CURRENT:"));
+	OSD.setCursor(1, 4);
+	OSD.print(F("LIPO VOLTAGE:"));
+	OSD.setCursor(1, 5);
+	OSD.print(F("CONSUMPTION MA:"));
+	OSD.setCursor(1, 6);
+	OSD.print(F("ESC KRPM *1000:"));
+	OSD.setCursor(1, 7);
+	OSD.print(F("ESC CURRENT:"));
+	OSD.setCursor(1, 8);
+	OSD.print(F("ESC TEMPERATURE:"));
+	OSD.setCursor(1, 9);
+	OSD.print(F("PILOTNAME:"));
+	OSD.setCursor(1, 10);
+	OSD.print(F("TIMER:"));
+	OSD.setCursor(1, 11);
+	OSD.print(F("ANGLE PITCH:"));
+	cursorlineMax = 10;
 }

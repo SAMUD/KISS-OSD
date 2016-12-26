@@ -1,3 +1,61 @@
+//default values used for initialising the EEPROM
+//*************************************************
+												//*
+// displayed datas in normal mode				//*
+#define RED_DISPLAY_RC_THROTTLE 0				//*
+#define RED_DISPLAY_COMB_CURRENT 1				//*
+#define RED_DISPLAY_LIPO_VOLTAGE 1				//*
+#define RED_DISPLAY_MA_CONSUMPTION 1			//*
+#define RED_DISPLAY_ESC_KRPM 0					//*
+#define RED_DISPLAY_ESC_CURRENT 0				//*
+#define RED_DISPLAY_ESC_TEMPERATURE 0			//*
+#define RED_DISPLAY_PILOTNAME 1					//*
+#define RED_DISPLAY_TIMER 1						//*
+#define RED_DISPLAY_ANGLE 1						//*
+// displayed datas in reduced mode 1			//*
+#define RED2_DISPLAY_RC_THROTTLE 0				//*
+#define RED2_DISPLAY_COMB_CURRENT 0				//*
+#define RED2_DISPLAY_LIPO_VOLTAGE 1				//*
+#define RED2_DISPLAY_MA_CONSUMPTION 1			//*
+#define RED2_DISPLAY_ESC_KRPM 0					//*
+#define RED2_DISPLAY_ESC_CURRENT 0				//*
+#define RED2_DISPLAY_ESC_TEMPERATURE 0			//*
+#define RED2_DISPLAY_PILOTNAME 0				//*
+#define RED2_DISPLAY_TIMER 0					//*
+#define RED2_DISPLAY_ANGLE 0					//*
+// displayed datas in reduced mode 2			//*
+#define RED3_DISPLAY_RC_THROTTLE 0				//*
+#define RED3_DISPLAY_COMB_CURRENT 0				//*
+#define RED3_DISPLAY_LIPO_VOLTAGE 1				//*
+#define RED3_DISPLAY_MA_CONSUMPTION 1			//*
+#define RED3_DISPLAY_ESC_KRPM 1					//*
+#define RED3_DISPLAY_ESC_CURRENT 1				//*
+#define RED3_DISPLAY_ESC_TEMPERATURE 1			//*
+#define RED3_DISPLAY_PILOTNAME 1				//*
+#define RED3_DISPLAY_TIMER 1					//*
+#define RED3_DISPLAY_ANGLE 1					//*
+//margin left and right for the last line.		//*
+#define DmarginLastRow  4;						//*
+//Voltage Settings								//*
+#define DLowVoltage1st 350;						//*
+#define DLowVoltage2nd  320;					//*
+#define Dhysteresis  10;						//*
+#define DVoltageOffset  0;						//*
+#define DLowVoltageAllowed 1;					//*
+//Capacity settings								//*
+#define DCapacity  1800;						//*
+#define DCapacity1st  70;						//*
+#define DCapacity2nd  80;						//*
+// motors magnepole count						//*
+#define DMAGNETPOLECOUNT 14 // 2 for ERPMs		//*
+// Filter for ESC datas							//*
+#define DESC_FILTER 10							//*
+// reduced mode channel config					//*
+#define DRED_MODE_AUX_CHAN 4 // 0-4, 0 = none	//*
+												//*
+//*************************************************
+
+
 const byte osdChipSelect = 6;
 const byte masterOutSlaveIn = MOSI;
 const byte masterInSlaveOut = MISO;
@@ -130,13 +188,3 @@ struct StoreStruct {
 };
 
 static StoreStruct Settings;
-
-enum Page {
-	null,
-	Info,
-	Voltage,
-	Capacity,
-	other_Settings
-	
-
-};
