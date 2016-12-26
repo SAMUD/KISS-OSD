@@ -268,102 +268,42 @@ void DisplayOSD()
 	}
 
 	if (reducedModeDisplay == 0) {
-#if defined(DISPLAY_RC_THROTTLE)
-		displayRCthrottle = 1;
-#endif
-#if defined(DISPLAY_COMB_CURRENT)
-		displayCombCurrent = 1;
-#endif
-#if defined(DISPLAY_LIPO_VOLTAGE)
-		displayLipoVoltage = 1;
-#endif
-#if defined(DISPLAY_MA_CONSUMPTION)
-		displayConsumption = 1;
-#endif
-#if defined(DISPLAY_ESC_KRPM)
-		displayKRPM = 1;
-#endif
-#if defined(DISPLAY_ESC_CURRENT)
-		displayCurrent = 1;
-#endif
-#if defined(DISPLAY_ESC_TEMPERATURE)
-		displayTemperature = 1;
-#endif
-#if defined(DISPLAY_PILOTNAME)
-		displayPilot = 1;
-#endif
-#if defined(DISPLAY_TIMER)
-		displayTime = 1;
-#endif
-#if defined(DISPLAY_ANGLE)
-		displayAngle = 1;
-#endif
+		displayRCthrottle = Settings.DispRCThrottle1;
+		displayCombCurrent = Settings.DispCombCurrent1;
+		displayLipoVoltage = Settings.DispLipoVoltage1;
+		displayConsumption = Settings.DispMaConsumption1;
+		displayKRPM = Settings.DispEscKrpm1;
+		displayCurrent = Settings.DispEscCurrent1;
+		displayTemperature = Settings.DispEscTemp1;
+		displayPilot = Settings.DispPilotname1;
+		displayTime = Settings.DispTimer1;
+		displayAngle = Settings.DispAngle1;
 	}
 	else if (reducedModeDisplay == 1)
 	{
-#if defined(RED_DISPLAY_RC_THROTTLE)
-		displayRCthrottle = 1;
-#endif
-#if defined(RED_DISPLAY_COMB_CURRENT)
-		displayCombCurrent = 1;
-#endif
-#if defined(RED_DISPLAY_LIPO_VOLTAGE)
-		displayLipoVoltage = 1;
-#endif
-#if defined(RED_DISPLAY_MA_CONSUMPTION)
-		displayConsumption = 1;
-#endif
-#if defined(RED_DISPLAY_ESC_KRPM)
-		displayKRPM = 1;
-#endif
-#if defined(RED_DISPLAY_ESC_CURRENT)
-		displayCurrent = 1;
-#endif
-#if defined(RED_DISPLAY_ESC_TEMPERATURE)
-		displayTemperature = 1;
-#endif
-#if defined(RED_DISPLAY_PILOTNAME)
-		displayPilot = 1;
-#endif
-#if defined(RED_DISPLAY_TIMER)
-		displayTime = 1;
-#endif
-#if defined(RED_DISPLAY_ANGLE)
-		displayAngle = 1;
-#endif
+		displayRCthrottle = Settings.DispRCThrottle2;
+		displayCombCurrent = Settings.DispCombCurrent2;
+		displayLipoVoltage = Settings.DispLipoVoltage2;
+		displayConsumption = Settings.DispMaConsumption2;
+		displayKRPM = Settings.DispEscKrpm2;
+		displayCurrent = Settings.DispEscCurrent2;
+		displayTemperature = Settings.DispEscTemp2;
+		displayPilot = Settings.DispPilotname2;
+		displayTime = Settings.DispTimer2;
+		displayAngle = Settings.DispAngle2;
 	}
 	else if (reducedModeDisplay == 2)
 	{
-#if defined(RED2_DISPLAY_RC_THROTTLE)
-		displayRCthrottle = 1;
-#endif
-#if defined(RED2_DISPLAY_COMB_CURRENT)
-		displayCombCurrent = 1;
-#endif
-#if defined(RED2_DISPLAY_LIPO_VOLTAGE)
-		displayLipoVoltage = 1;
-#endif
-#if defined(RED2_DISPLAY_MA_CONSUMPTION)
-		displayConsumption = 1;
-#endif
-#if defined(RED2_DISPLAY_ESC_KRPM)
-		displayKRPM = 1;
-#endif
-#if defined(RED2_DISPLAY_ESC_CURRENT)
-		displayCurrent = 1;
-#endif
-#if defined(RED2_DISPLAY_ESC_TEMPERATURE)
-		displayTemperature = 1;
-#endif
-#if defined(RED2_DISPLAY_PILOTNAME)
-		displayPilot = 1;
-#endif
-#if defined(RED2_DISPLAY_TIMER)
-		displayTime = 1;
-#endif
-#if defined(RED2_DISPLAY_ANGLE)
-		displayAngle = 1;
-#endif
+		displayRCthrottle = Settings.DispRCThrottle3;
+		displayCombCurrent = Settings.DispCombCurrent3;
+		displayLipoVoltage = Settings.DispLipoVoltage3;
+		displayConsumption = Settings.DispMaConsumption3;
+		displayKRPM = Settings.DispEscKrpm3;
+		displayCurrent = Settings.DispEscCurrent3;
+		displayTemperature = Settings.DispEscTemp3;
+		displayPilot = Settings.DispPilotname3;
+		displayTime = Settings.DispTimer3;
+		displayAngle = Settings.DispAngle3;
 	}
 
 	if (displayRCthrottle)

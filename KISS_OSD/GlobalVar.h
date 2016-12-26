@@ -97,7 +97,36 @@ struct StoreStruct {
 	uint8_t Capacity1st;
 	uint8_t Capacity2nd;
 	uint8_t MemoryVersion;
-
+	uint8_t DispRCThrottle1;
+	uint8_t DispCombCurrent1;
+	uint8_t DispLipoVoltage1;
+	uint8_t DispMaConsumption1;
+	uint8_t DispEscKrpm1;
+	uint8_t DispEscCurrent1;
+	uint8_t DispEscTemp1;
+	uint8_t DispPilotname1;
+	uint8_t DispTimer1;
+	uint8_t DispAngle1;
+	uint8_t DispRCThrottle2;
+	uint8_t DispCombCurrent2;
+	uint8_t DispLipoVoltage2;
+	uint8_t DispMaConsumption2;
+	uint8_t DispEscKrpm2;
+	uint8_t DispEscCurrent2;
+	uint8_t DispEscTemp2;
+	uint8_t DispPilotname2;
+	uint8_t DispTimer2;
+	uint8_t DispAngle2;
+	uint8_t DispRCThrottle3;
+	uint8_t DispCombCurrent3;
+	uint8_t DispLipoVoltage3;
+	uint8_t DispMaConsumption3;
+	uint8_t DispEscKrpm3;
+	uint8_t DispEscCurrent3;
+	uint8_t DispEscTemp3;
+	uint8_t DispPilotname3;
+	uint8_t DispTimer3;
+	uint8_t DispAngle3;
 };
 
 static StoreStruct Settings;

@@ -5,8 +5,8 @@ KISS FC OSD
 by Samuel Daurat (sdaurat@outlook.de)
 based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
-# define OSDVersion "5.1"
-#define DMemoryVersion 5
+# define OSDVersion "5.3"
+#define DMemoryVersion 6
 /*
 *****************************************************************************************************
 If you like my work and want to support me, I would love to get some support:  https://paypal.me/SamuelDaurat
@@ -15,12 +15,6 @@ Wenn Ihr meine Arbeit mögt, würde ich mich über etwas Support freuen: https:/
 *****************************************************************************************************
 
 GITHUB: https://github.com/SAMUD/KISS-OSD
-
-Changelog:
-*
-
-TODO:
-*
 
 
 Anyone is free to copy, modify, publish, use, compile, sell, or distribute this software, either in source code form or as a compiled
@@ -72,40 +66,40 @@ const char Pilotname[] = " SAMU";
 #define DRED_MODE_AUX_CHAN 4 // 0-4, 0 = none
 
 // displayed datas in normal mode
-//#define DISPLAY_RC_THROTTLE
-#define DISPLAY_COMB_CURRENT
-#define DISPLAY_LIPO_VOLTAGE
-#define DISPLAY_MA_CONSUMPTION
-//#define DISPLAY_ESC_KRPM
-//#define DISPLAY_ESC_CURRENT
-//#define DISPLAY_ESC_TEMPERATURE
-#define DISPLAY_PILOTNAME
-#define DISPLAY_TIMER
-#define DISPLAY_ANGLE
+#define RED_DISPLAY_RC_THROTTLE 0
+#define RED_DISPLAY_COMB_CURRENT 1
+#define RED_DISPLAY_LIPO_VOLTAGE 1
+#define RED_DISPLAY_MA_CONSUMPTION 1
+#define RED_DISPLAY_ESC_KRPM 0
+#define RED_DISPLAY_ESC_CURRENT 0
+#define RED_DISPLAY_ESC_TEMPERATURE 0
+#define RED_DISPLAY_PILOTNAME 1
+#define RED_DISPLAY_TIMER 1
+#define RED_DISPLAY_ANGLE 1
 
 // displayed datas in reduced mode 1 
-//#define RED_DISPLAY_RC_THROTTLE
-//#define RED_DISPLAY_COMB_CURRENT
-#define RED_DISPLAY_LIPO_VOLTAGE
-#define RED_DISPLAY_MA_CONSUMPTION
-//#define RED_DISPLAY_ESC_KRPM
-//#define RED_DISPLAY_ESC_CURRENT
-//#define RED_DISPLAY_ESC_TEMPERATURE
-//#define RED_DISPLAY_PILOTNAME
-//#define RED_DISPLAY_TIMER
-//#define RED_DISPLAY_ANGLE
+#define RED2_DISPLAY_RC_THROTTLE 0
+#define RED2_DISPLAY_COMB_CURRENT 0
+#define RED2_DISPLAY_LIPO_VOLTAGE 1
+#define RED2_DISPLAY_MA_CONSUMPTION 1
+#define RED2_DISPLAY_ESC_KRPM 0
+#define RED2_DISPLAY_ESC_CURRENT 0
+#define RED2_DISPLAY_ESC_TEMPERATURE 0
+#define RED2_DISPLAY_PILOTNAME 0
+#define RED2_DISPLAY_TIMER 0
+#define RED2_DISPLAY_ANGLE 0
 
 // displayed datas in reduced mode 2
-//#define RED2_DISPLAY_RC_THROTTLE
-#define RED2_DISPLAY_COMB_CURRENT
-#define RED2_DISPLAY_LIPO_VOLTAGE
-#define RED2_DISPLAY_MA_CONSUMPTION
-#define RED2_DISPLAY_ESC_KRPM
-#define RED2_DISPLAY_ESC_CURRENT
-#define RED2_DISPLAY_ESC_TEMPERATURE
-#define RED2_DISPLAY_PILOTNAME
-#define RED2_DISPLAY_TIMER
-#define RED2_DISPLAY_ANGLE
+#define RED3_DISPLAY_RC_THROTTLE 0
+#define RED3_DISPLAY_COMB_CURRENT 1
+#define RED3_DISPLAY_LIPO_VOLTAGE 1
+#define RED3_DISPLAY_MA_CONSUMPTION 1
+#define RED3_DISPLAY_ESC_KRPM 1
+#define RED3_DISPLAY_ESC_CURRENT 1
+#define RED3_DISPLAY_ESC_TEMPERATURE 1
+#define RED3_DISPLAY_PILOTNAME 1
+#define RED3_DISPLAY_TIMER 1
+#define RED3_DISPLAY_ANGLE 1
 
 //margin left and right for the last line.
 #define DmarginLastRow  4;
