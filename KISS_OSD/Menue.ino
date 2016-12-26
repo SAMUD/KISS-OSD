@@ -325,9 +325,7 @@ void value(bool addsub)
 			break;
 		case 3: changeval(addsub, 0, 20, 1, &Settings.ESC_FILTER);
 			break;
-		case 4: changeval(addsub, -100, 100, 1, &Settings.VoltageOffset);
-			break;
-		case 5: changeval(addsub, 0, 4, 1, &Settings.RED_MODE_AUX_CHANNEL);
+		case 4: changeval(addsub, 0, 4, 1, &Settings.RED_MODE_AUX_CHANNEL);
 			break;
 		}
 		break;
