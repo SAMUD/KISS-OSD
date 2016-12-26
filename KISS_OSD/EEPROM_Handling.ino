@@ -9,7 +9,7 @@ void EEPROMinit()
 	{
 		OSD.blink();
 		OSDmakegrey();
-		OSD.setCursor(3,6);
+		OSD.setCursor(3, 6);
 		OSD.print(F("WARNING: MEMORY INVALID"));
 		OSD.setCursor(3, 7);
 		OSD.print(F("LOADING DEFAULT CONFIG"));
@@ -18,7 +18,7 @@ void EEPROMinit()
 		OSD.videoBackground();
 		delay(6000);
 		OSD.clear();
-		while(OSD.clearIsBusy()) {}
+		while (OSD.clearIsBusy()) {}
 
 	}
 }
@@ -26,12 +26,12 @@ void EEPROMinit()
 bool EEPROMloadConfig()
 {
 	EEPROM.readBlock(configAdress, Settings);
-	return (Settings.MemoryVersion== DMemoryVersion);
+	return (Settings.MemoryVersion == DMemoryVersion);
 }
 
 void EEPROMsaveDefaultValues()
 {
-	Settings.CapacityThreshold= DCapacityThreshold;
+	Settings.CapacityThreshold = DCapacityThreshold;
 	Settings.CapacityThreshold2ndStage = DCapacityThreshold2ndStage;
 	Settings.ESC_FILTER = DESC_FILTER;
 	Settings.hysteresis = Dhysteresis;
@@ -50,5 +50,5 @@ void EEPROMsaveDefaultValues()
 
 void EEPROMsave()
 {
-	EEPROM.updateBlock(configAdress,Settings);
+	EEPROM.updateBlock(configAdress, Settings);
 }

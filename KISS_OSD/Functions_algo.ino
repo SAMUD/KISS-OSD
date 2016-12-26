@@ -10,43 +10,43 @@ Fonctions needed for various things in the OSD.
 //=====================
 // fonction print_int16
 uint8_t print_int16(int16_t p_int, char *str, uint8_t dec, uint8_t AlignLeft)
-  {
-  	uint16_t useVal  = p_int;
-  	uint8_t pre      = ' ';
-  	if(p_int < 0)
-    {
-  		useVal = p_int*-1;
-  		pre = '-';
-  	}
-  	uint8_t aciidig[10] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
-  	uint8_t i = 0;
-    uint8_t digits[6] = {0,0,0,0,0,0};
-  	while(useVal >= 10000){digits[0]++; useVal-=10000;}
-  	while(useVal >= 1000){digits[1]++; useVal-=1000;}
-  	while(useVal >= 100){digits[2]++; useVal-=100;}
-  	while(useVal >= 10){digits[3]++; useVal-=10;}
-  	digits[4] = useVal;
-    char result[6] = {' ',' ',' ',' ',' ','0'};
-  	uint8_t signdone = 0;
-  	for(i = 0; i < 6;i++)
-    {
-  		if(i == 5 && signdone == 0) continue;
-  		else if(aciidig[digits[i]] != '0' && signdone == 0)
-      {
-  			result[i] = pre;
-  			signdone = 1;
-  		}
-      else if(signdone)
-        result[i] = aciidig[digits[i-1]];
-  	}
-          uint8_t CharPos = 0;
-          for(i = 0; i < 6;i++)
-          {
-            if(result[i] != ' ' || (AlignLeft == 0 || (i > 5-dec))) str[CharPos++] = result[i];
-            if(dec != 0 && i == 5-dec) str[CharPos++] = '.';
-            if(dec != 0 && i > 5-dec && str[CharPos-1] == ' ') str[CharPos-1] = '0';
-          }
-          return CharPos;
+{
+	uint16_t useVal = p_int;
+	uint8_t pre = ' ';
+	if (p_int < 0)
+	{
+		useVal = p_int*-1;
+		pre = '-';
+	}
+	uint8_t aciidig[10] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+	uint8_t i = 0;
+	uint8_t digits[6] = { 0,0,0,0,0,0 };
+	while (useVal >= 10000) { digits[0]++; useVal -= 10000; }
+	while (useVal >= 1000) { digits[1]++; useVal -= 1000; }
+	while (useVal >= 100) { digits[2]++; useVal -= 100; }
+	while (useVal >= 10) { digits[3]++; useVal -= 10; }
+	digits[4] = useVal;
+	char result[6] = { ' ',' ',' ',' ',' ','0' };
+	uint8_t signdone = 0;
+	for (i = 0; i < 6; i++)
+	{
+		if (i == 5 && signdone == 0) continue;
+		else if (aciidig[digits[i]] != '0' && signdone == 0)
+		{
+			result[i] = pre;
+			signdone = 1;
+		}
+		else if (signdone)
+			result[i] = aciidig[digits[i - 1]];
+	}
+	uint8_t CharPos = 0;
+	for (i = 0; i < 6; i++)
+	{
+		if (result[i] != ' ' || (AlignLeft == 0 || (i > 5 - dec))) str[CharPos++] = result[i];
+		if (dec != 0 && i == 5 - dec) str[CharPos++] = '.';
+		if (dec != 0 && i > 5 - dec && str[CharPos - 1] == ' ') str[CharPos - 1] = '0';
+	}
+	return CharPos;
 }
 
 
@@ -54,44 +54,44 @@ uint8_t print_int16(int16_t p_int, char *str, uint8_t dec, uint8_t AlignLeft)
 // ESC-Filter
 uint32_t ESC_filter(uint32_t oldVal, uint32_t newVal)
 {
-  return (uint32_t)((uint32_t)((uint32_t)((uint32_t)oldVal*Settings.ESC_FILTER)+(uint32_t)newVal))/(Settings.ESC_FILTER+1);
+	return (uint32_t)((uint32_t)((uint32_t)((uint32_t)oldVal*Settings.ESC_FILTER) + (uint32_t)newVal)) / (Settings.ESC_FILTER + 1);
 }
 
 //========================
 //Convert time in a string
 void print_time(unsigned long time, char *time_str)
 {
-    uint16_t seconds = time / 1000;
-    uint8_t mills = time % 1000;
-    uint8_t minutes = 0;
-    if (seconds >= 60)
-    {
-      minutes = seconds/60;
-    }
-    else
-    {
-      minutes = 0;
-    }
-    seconds = seconds % 60; // reste
-    static char time_sec[6];
-    static char time_mil[6];
-    uint8_t i = 0;
-    uint8_t time_pos = print_int16(minutes, time_str,0,1);
-    time_str[time_pos++] = ':';
+	uint16_t seconds = time / 1000;
+	uint8_t mills = time % 1000;
+	uint8_t minutes = 0;
+	if (seconds >= 60)
+	{
+		minutes = seconds / 60;
+	}
+	else
+	{
+		minutes = 0;
+	}
+	seconds = seconds % 60; // reste
+	static char time_sec[6];
+	static char time_mil[6];
+	uint8_t i = 0;
+	uint8_t time_pos = print_int16(minutes, time_str, 0, 1);
+	time_str[time_pos++] = ':';
 
-    uint8_t sec_pos = print_int16(seconds, time_sec,0,1);
-    for (i=0; i<sec_pos; i++)
-    {
-      time_str[time_pos++] = time_sec[i];
-    }
-    //time_str[time_pos++] = '.';
+	uint8_t sec_pos = print_int16(seconds, time_sec, 0, 1);
+	for (i = 0; i<sec_pos; i++)
+	{
+		time_str[time_pos++] = time_sec[i];
+	}
+	//time_str[time_pos++] = '.';
 
-    //uint8_t mil_pos = print_int16(mills, time_mil,0,1);
-    //time_str[time_pos++] = time_mil[0];
-    for (i=time_pos; i<9; i++)
-    {
-      time_str[time_pos++] = ' ';
-    }
+	//uint8_t mil_pos = print_int16(mills, time_mil,0,1);
+	//time_str[time_pos++] = time_mil[0];
+	for (i = time_pos; i<9; i++)
+	{
+		time_str[time_pos++] = ' ';
+	}
 }
 
 //=========================================
@@ -101,20 +101,20 @@ void getSerialData()
 	static uint8_t serialBuf[255];
 	uint8_t minBytes = 100;
 	uint8_t recBytes = 0;
-	
+
 	Serial.write(0x20); // request telemetrie
-	
-	//aquire serial data and write it to normal variables
+
+						//aquire serial data and write it to normal variables
 	while (recBytes < minBytes && micros() - LastLoopTime < 20000)
 	{
-		#define STARTCOUNT 2
+#define STARTCOUNT 2
 		while (Serial.available()) serialBuf[recBytes++] = Serial.read();
 		if (recBytes == 1 && serialBuf[0] != 5)recBytes = 0; // check for start byte, reset if its wrong
 		if (recBytes == 2) minBytes = serialBuf[1] + STARTCOUNT + 1; // got the transmission length
 		if (recBytes == minBytes)
 		{
 			uint32_t checksum = 0;
-			for (i = 2;i<minBytes;i++)
+			for (i = 2; i<minBytes; i++)
 			{
 				checksum += serialBuf[i];
 			}
@@ -132,10 +132,10 @@ void getSerialData()
 				calibGyroDone = ((serialBuf[39 + STARTCOUNT] << 8) | serialBuf[40 + STARTCOUNT]);
 				//angle y for displaying in the horizon bar
 				angley = ((serialBuf[33 + STARTCOUNT] << 8) | (serialBuf[34 + STARTCOUNT])) / 100; //35
-				
-				tmpVoltage=0;
-				voltDev=0;
-																								   //Voltage ESC
+
+				tmpVoltage = 0;
+				voltDev = 0;
+				//Voltage ESC
 				if (((serialBuf[85 + STARTCOUNT] << 8) | serialBuf[86 + STARTCOUNT]) > 5) // the ESC's read the voltage better then the FC
 				{
 					tmpVoltage += ((serialBuf[85 + STARTCOUNT] << 8) | serialBuf[86 + STARTCOUNT]);
@@ -168,7 +168,7 @@ void getSerialData()
 				}
 				if (voltDev != 0)
 					LipoVoltage = (tmpVoltage / voltDev);
-				LipoVoltage=LipoVoltage+Settings.VoltageOffset;
+				LipoVoltage = LipoVoltage + Settings.VoltageOffset;
 				//capacity
 				LipoMAH = ((serialBuf[148 + STARTCOUNT] << 8) | serialBuf[149 + STARTCOUNT]);
 				//read Motor Current and other ESC datas
@@ -219,7 +219,7 @@ void DisplayOSD()
 {
 	//Declaring some vars
 	uint8_t lipoVoltPos = print_int16(LipoVoltage, LipoVoltC, 2, 1);
-	
+
 
 	uint8_t lipoMAHPos = print_int16(LipoMAH, LipoMAHC, 0, 1);
 
@@ -240,9 +240,9 @@ void DisplayOSD()
 	uint8_t displayTime = 0;
 	uint8_t displayPilot = 0;
 	uint8_t displayAngle = 0;
-	
+
 	//reduced mode1
-	if(Settings.RED_MODE_AUX_CHANNEL != 0)
+	if (Settings.RED_MODE_AUX_CHANNEL != 0)
 	{
 		if (AuxChanVals[Settings.RED_MODE_AUX_CHANNEL - 1]<-250)
 		{
@@ -259,7 +259,7 @@ void DisplayOSD()
 	if (reducedModeDisplay != lastMode)
 	{
 		lastMode = reducedModeDisplay;
-		for (i = 0;i<20;i++)
+		for (i = 0; i<20; i++)
 		{
 			OSD.setCursor(0, i);
 			OSD.print(clean);
@@ -268,102 +268,102 @@ void DisplayOSD()
 	}
 
 	if (reducedModeDisplay == 0) {
-		#if defined(DISPLAY_RC_THROTTLE)
-			displayRCthrottle = 1;
-		#endif
-		#if defined(DISPLAY_COMB_CURRENT)
-			displayCombCurrent = 1;
-		#endif
-		#if defined(DISPLAY_LIPO_VOLTAGE)
-			displayLipoVoltage = 1;
-		#endif
-		#if defined(DISPLAY_MA_CONSUMPTION)
-			displayConsumption = 1;
-		#endif
-		#if defined(DISPLAY_ESC_KRPM)
-			displayKRPM = 1;
-		#endif
-		#if defined(DISPLAY_ESC_CURRENT)
-			displayCurrent = 1;
-		#endif
-		#if defined(DISPLAY_ESC_TEMPERATURE)
-			displayTemperature = 1;
-		#endif
-		#if defined(DISPLAY_PILOTNAME)
-			displayPilot = 1;
-		#endif
-		#if defined(DISPLAY_TIMER)
-			displayTime = 1;
-		#endif
-		#if defined(DISPLAY_ANGLE)
-			displayAngle = 1;
-		#endif
+#if defined(DISPLAY_RC_THROTTLE)
+		displayRCthrottle = 1;
+#endif
+#if defined(DISPLAY_COMB_CURRENT)
+		displayCombCurrent = 1;
+#endif
+#if defined(DISPLAY_LIPO_VOLTAGE)
+		displayLipoVoltage = 1;
+#endif
+#if defined(DISPLAY_MA_CONSUMPTION)
+		displayConsumption = 1;
+#endif
+#if defined(DISPLAY_ESC_KRPM)
+		displayKRPM = 1;
+#endif
+#if defined(DISPLAY_ESC_CURRENT)
+		displayCurrent = 1;
+#endif
+#if defined(DISPLAY_ESC_TEMPERATURE)
+		displayTemperature = 1;
+#endif
+#if defined(DISPLAY_PILOTNAME)
+		displayPilot = 1;
+#endif
+#if defined(DISPLAY_TIMER)
+		displayTime = 1;
+#endif
+#if defined(DISPLAY_ANGLE)
+		displayAngle = 1;
+#endif
 	}
 	else if (reducedModeDisplay == 1)
 	{
-		#if defined(RED_DISPLAY_RC_THROTTLE)
-			displayRCthrottle = 1;
-		#endif
-		#if defined(RED_DISPLAY_COMB_CURRENT)
-			displayCombCurrent = 1;
-		#endif
-		#if defined(RED_DISPLAY_LIPO_VOLTAGE)
-			displayLipoVoltage = 1;
-		#endif
-		#if defined(RED_DISPLAY_MA_CONSUMPTION)
-			displayConsumption = 1;
-		#endif
-		#if defined(RED_DISPLAY_ESC_KRPM)
-			displayKRPM = 1;
-		#endif
-		#if defined(RED_DISPLAY_ESC_CURRENT)
-			displayCurrent = 1;
-		#endif
-		#if defined(RED_DISPLAY_ESC_TEMPERATURE)
-			displayTemperature = 1;
-		#endif
-		#if defined(RED_DISPLAY_PILOTNAME)
-			displayPilot = 1;
-		#endif
-		#if defined(RED_DISPLAY_TIMER)
-			displayTime = 1;
-		#endif
-		#if defined(RED_DISPLAY_ANGLE)
-			displayAngle = 1;
-		#endif
+#if defined(RED_DISPLAY_RC_THROTTLE)
+		displayRCthrottle = 1;
+#endif
+#if defined(RED_DISPLAY_COMB_CURRENT)
+		displayCombCurrent = 1;
+#endif
+#if defined(RED_DISPLAY_LIPO_VOLTAGE)
+		displayLipoVoltage = 1;
+#endif
+#if defined(RED_DISPLAY_MA_CONSUMPTION)
+		displayConsumption = 1;
+#endif
+#if defined(RED_DISPLAY_ESC_KRPM)
+		displayKRPM = 1;
+#endif
+#if defined(RED_DISPLAY_ESC_CURRENT)
+		displayCurrent = 1;
+#endif
+#if defined(RED_DISPLAY_ESC_TEMPERATURE)
+		displayTemperature = 1;
+#endif
+#if defined(RED_DISPLAY_PILOTNAME)
+		displayPilot = 1;
+#endif
+#if defined(RED_DISPLAY_TIMER)
+		displayTime = 1;
+#endif
+#if defined(RED_DISPLAY_ANGLE)
+		displayAngle = 1;
+#endif
 	}
 	else if (reducedModeDisplay == 2)
 	{
-		#if defined(RED2_DISPLAY_RC_THROTTLE)
-			displayRCthrottle = 1;
-		#endif
-		#if defined(RED2_DISPLAY_COMB_CURRENT)
-			displayCombCurrent = 1;
-		#endif
-		#if defined(RED2_DISPLAY_LIPO_VOLTAGE)
-			displayLipoVoltage = 1;
-		#endif
-		#if defined(RED2_DISPLAY_MA_CONSUMPTION)
-			displayConsumption = 1;
-		#endif
-		#if defined(RED2_DISPLAY_ESC_KRPM)
-			displayKRPM = 1;
-		#endif
-		#if defined(RED2_DISPLAY_ESC_CURRENT)
-			displayCurrent = 1;
-		#endif
-		#if defined(RED2_DISPLAY_ESC_TEMPERATURE)
-			displayTemperature = 1;
-		#endif
-		#if defined(RED2_DISPLAY_PILOTNAME)
-			displayPilot = 1;
-		#endif
-		#if defined(RED2_DISPLAY_TIMER)
-			displayTime = 1;
-		#endif
-		#if defined(RED2_DISPLAY_ANGLE)
-			displayAngle = 1;
-		#endif
+#if defined(RED2_DISPLAY_RC_THROTTLE)
+		displayRCthrottle = 1;
+#endif
+#if defined(RED2_DISPLAY_COMB_CURRENT)
+		displayCombCurrent = 1;
+#endif
+#if defined(RED2_DISPLAY_LIPO_VOLTAGE)
+		displayLipoVoltage = 1;
+#endif
+#if defined(RED2_DISPLAY_MA_CONSUMPTION)
+		displayConsumption = 1;
+#endif
+#if defined(RED2_DISPLAY_ESC_KRPM)
+		displayKRPM = 1;
+#endif
+#if defined(RED2_DISPLAY_ESC_CURRENT)
+		displayCurrent = 1;
+#endif
+#if defined(RED2_DISPLAY_ESC_TEMPERATURE)
+		displayTemperature = 1;
+#endif
+#if defined(RED2_DISPLAY_PILOTNAME)
+		displayPilot = 1;
+#endif
+#if defined(RED2_DISPLAY_TIMER)
+		displayTime = 1;
+#endif
+#if defined(RED2_DISPLAY_ANGLE)
+		displayAngle = 1;
+#endif
 	}
 
 	if (displayRCthrottle)
@@ -421,7 +421,7 @@ void DisplayOSD()
 
 	if (displayConsumption)
 	{
-		OSD.setCursor(-(lipoMAHPos+1+Settings.marginLastRow), -1);
+		OSD.setCursor(-(lipoMAHPos + 1 + Settings.marginLastRow), -1);
 		if (LipoMAH>Settings.CapacityThreshold)
 		{
 			OSD.blink();
@@ -474,9 +474,9 @@ void DisplayOSD()
 	{
 		OSD.setCursor(0, TMPmargin + ESCmarginTop);
 		OSD.print(ESC1Temp);
-		OSD.setCursor(-TempPoses[1]-1, TMPmargin + ESCmarginTop);
+		OSD.setCursor(-TempPoses[1] - 1, TMPmargin + ESCmarginTop);
 		OSD.print(ESC2Temp);
-		OSD.setCursor(-TempPoses[2]-1, -(1 + TMPmargin + ESCmarginBot));
+		OSD.setCursor(-TempPoses[2] - 1, -(1 + TMPmargin + ESCmarginBot));
 		OSD.print(ESC3Temp);
 		OSD.setCursor(0, -(1 + TMPmargin + ESCmarginBot));
 		OSD.print(ESC4Temp);
@@ -633,7 +633,7 @@ void CalculateOSD()
 	armedOld = armed;
 
 	//clearing the RPM and TEMP Arrays and then rewriting the nwe values
-	for (i = 0;i<10;i++)
+	for (i = 0; i<10; i++)
 	{
 		Motor1KERPM[i] = ' ';
 		Motor2KERPM[i] = ' ';
@@ -703,19 +703,19 @@ void CalculateOSD()
 
 void drawAngelIndicator(int8_t Value)
 {
-	if(Value>18)
+	if (Value>18)
 		OSD.write(ANGEL_UP);
-	else if (Value<=18 && Value>7)
+	else if (Value <= 18 && Value>7)
 		OSD.write(ANGEL_LIGHTUP);
-	else if (Value<=7 && Value>1)
+	else if (Value <= 7 && Value>1)
 		OSD.write(ANGEL_MIDDLEUP);
-	else if (Value<=1 && Value>=-1)
+	else if (Value <= 1 && Value >= -1)
 		OSD.write(ANGEL_CLEAR);
-	else if (Value<-1 && Value>=-7)
+	else if (Value<-1 && Value >= -7)
 		OSD.write(ANGEL_MIDDLEDOWN);
-	else if (Value<-7 && Value>=-18)
+	else if (Value<-7 && Value >= -18)
 		OSD.write(ANGEL_LIGHTDOWN);
-	else if(Value<-18)
+	else if (Value<-18)
 		OSD.write(ANGEL_DOWN);
 	else
 		OSD.print(' ');

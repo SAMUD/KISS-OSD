@@ -6,7 +6,7 @@ by Samuel Daurat (sdaurat@outlook.de)
 based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
 # define OSDVersion "5.1"
-#define DMemoryVersion 1
+#define DMemoryVersion 2
 /*
 *****************************************************************************************************
 If you like my work and want to support me, I would love to get some support:  https://paypal.me/SamuelDaurat
@@ -56,7 +56,7 @@ For more information, please refer to <http://unlicense.org>
 //#define NTSC
 
 // Pilot-name
-const char Pilotname[]=" SAMU";
+const char Pilotname[] = " SAMU";
 
 // MAX7456 Charset
 #define USE_MAX7456_ASCII
@@ -139,53 +139,50 @@ const char Pilotname[]=" SAMU";
 #include "symbols.h"
 #include <EEPROMex.h>
 #include "GlobalVar.h"
-#include <avr/wdt.h>
 
 
 //==============
 //SETUP function
-void setup(){
-	wdt_enable(WDTO_8S);
-	wdt_reset();
+void setup() {
+	uint8_t i = 0;
+	SPI.begin();
+	SPI.setClockDivider(SPI_CLOCK_DIV2);
+#if defined(PAL)
+	OSD.begin(28, 15, 0);
+	OSD.setTextOffset(-1, -6);
+	OSD.setDefaultSystem(MAX7456_PAL);
+#endif
+#if defined(NTSC)
+	OSD.begin(MAX7456_COLS_N1, MAX7456_ROWS_N0);
+	OSD.setDefaultSystem(MAX7456_NTSC);
+#endif
+	OSD.setSwitchingTime(4);
+#if defined(USE_MAX7456_ASCII)
+	OSD.setCharEncoding(MAX7456_ASCII);
+#endif
+#if defined(USE_MAX7456_MAXIM)
+	OSD.setCharEncoding(MAX7456_MAXIM);
+#endif
+	OSD.display();
 
-	  uint8_t i = 0;
-	  SPI.begin();
-	  SPI.setClockDivider( SPI_CLOCK_DIV2 );
-	  #if defined(PAL)
-		OSD.begin(28,15,0);
-		OSD.setTextOffset(-1,-6);
-		OSD.setDefaultSystem(MAX7456_PAL);
-	  #endif
-	  #if defined(NTSC)
-		OSD.begin(MAX7456_COLS_N1,MAX7456_ROWS_N0);
-		OSD.setDefaultSystem(MAX7456_NTSC);
-	  #endif
-	  OSD.setSwitchingTime( 4 );
-	  #if defined(USE_MAX7456_ASCII)
-		OSD.setCharEncoding( MAX7456_ASCII );
-	  #endif
-	  #if defined(USE_MAX7456_MAXIM)
-		OSD.setCharEncoding( MAX7456_MAXIM );
-	  #endif
-	  OSD.display();
+	//clean used area
+	for (i = 0; i<30; i++) clean[i] = ' ';
+	while (!OSD.notInVSync());
+	for (i = 0; i<20; i++)
+	{
+		OSD.setCursor(0, i);
+		OSD.print(clean);
+	}
 
-	  //clean used area
-	  for(i=0;i<30;i++) clean[i] = ' ';
-	  while (!OSD.notInVSync());
-	  for(i=0;i<20;i++)
-	  {
-		  OSD.setCursor( 0, i );
-		  OSD.print( clean );
-	  }
+	//set blinktime
+	OSD.setBlinkingTime(2); //0-3
+	OSD.setBlinkingDuty(1); //0-3
 
-	  //set blinktime
-	  OSD.setBlinkingTime(2); //0-3
-	  OSD.setBlinkingDuty(1); //0-3
+	Serial.begin(115200);
 
-	  Serial.begin(115200);
+	//init memory
+	EEPROMinit();
 
-	  //init memory
-	  EEPROMinit();
 }
 
 
@@ -194,30 +191,28 @@ void setup(){
 //==========
 void loop()
 {
-  
-	wdt_reset();
 
 	//big if with all code
-	if(micros()-LastLoopTime > 10000) //limits the speed of the OSD to 100Hz
+	if (micros() - LastLoopTime > 10000) //limits the speed of the OSD to 100Hz
 	{
-	LastLoopTime = micros();
+		LastLoopTime = micros();
 
-	getSerialData();
+		getSerialData();
 
-	//open menu if yaw left and disarmed
-	if(armed == 0 && StickChanVals[3]>500)
-	{
-		menumain();
-		OSD.clear();
-		EEPROMsave();
-		delay(1000);
-	}
-	
-	//calculate the datas to display
-	CalculateOSD();
+		//open menu if yaw left and disarmed
+		if (armed == 0 && StickChanVals[3]>500)
+		{
+			menumain();
+			OSD.clear();
+			EEPROMsave();
+			delay(1000);
+		}
 
-	//Display the datas
-	DisplayOSD();
+		//calculate the datas to display
+		CalculateOSD();
+
+		//Display the datas
+		DisplayOSD();
 	}
 
 }

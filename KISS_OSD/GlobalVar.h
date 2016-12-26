@@ -98,7 +98,9 @@ struct StoreStruct {
 	uint16_t CapacityThreshold2ndStage;
 	uint8_t MemoryVersion;
 
-} static Settings;
+};
+
+static StoreStruct Settings;
 
 enum Page {
 	null,
