@@ -226,34 +226,46 @@ void menuprintvalue() {
 		//VoltageSite
 		OSD.setCursor(24, 2);
 		OSD.print(Settings.LowVoltage3s);
+		OSD.print(" ");
 		OSD.setCursor(24, 3);
 		OSD.print(Settings.LowVoltage4s);
+		OSD.print(" ");
 		OSD.setCursor(24, 4);
 		OSD.print(Settings.MinimalCellVoltage2nd);
+		OSD.print(" ");
 		OSD.setCursor(24, 5);
 		OSD.print(Settings.VoltageOffset);
+		OSD.print(" ");
 		OSD.setCursor(24, 6);
 		OSD.print(Settings.hysteresis);
+		OSD.print(" ");
 		OSD.setCursor(24, 7);
 		OSD.print(Settings.SeparationVoltage3s4s);
+		OSD.print(" ");
 		break;
 	case 2:
 		//CapacitySite
 		OSD.setCursor(24, 2);
 		OSD.print(Settings.CapacityThreshold);
+		OSD.print(" ");
 		OSD.setCursor(24, 3);
 		OSD.print(Settings.CapacityThreshold2ndStage);
+		OSD.print(" ");
 		break;
 	case 3:
 		//Other Settings
 		OSD.setCursor(24, 2);
 		OSD.print(Settings.marginLastRow);
+		OSD.print(" ");
 		OSD.setCursor(24, 3);
 		OSD.print(Settings.MAGNETPOLECOUNT);
+		OSD.print(" ");
 		OSD.setCursor(24, 4);
 		OSD.print(Settings.ESC_FILTER);
+		OSD.print(" ");
 		OSD.setCursor(24, 5);
 		OSD.print(Settings.RED_MODE_AUX_CHANNEL);
+		OSD.print(" ");
 		break;
 	case 4:
 		//Info
