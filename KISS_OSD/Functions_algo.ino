@@ -422,12 +422,12 @@ void DisplayOSD()
 	if (displayConsumption)
 	{
 		OSD.setCursor(-(lipoMAHPos + 1 + Settings.marginLastRow), -1);
-		if (LipoMAH>Settings.CapacityThreshold)
+		if (LipoMAH>(Settings.Capacity * (float)Settings.Capacity1st) / 100 && Settings.Capacity>0)
 		{
 			OSD.blink();
 			OSD.write(SYM_MAH);
 			OSD.print(LipoMAHC);
-			if (LipoMAH>Settings.CapacityThreshold2ndStage)
+			if (LipoMAH>(Settings.Capacity * (float)Settings.Capacity2nd) / 100)
 			{
 				OSD.setCursor(4, MarginMiddleY);
 				MarginMiddleY++;
@@ -493,13 +493,23 @@ void DisplayOSD()
 	{
 		OSD.setCursor(4, MarginMiddleY);
 		MarginMiddleY++;
-		if (BatteryCells == 3)
+		switch (BatteryCells)
 		{
-			OSD.print(F("3S BATTERY CONNECTED"));
-		}
-		if (BatteryCells == 4)
-		{
-			OSD.print(F("4S BATTERY CONNECTED"));
+		case 1: OSD.print(F("1S BATTERY CONNECTED"));
+			break;
+		case 2: OSD.print(F("2S BATTERY CONNECTED"));
+			break;
+		case 3: OSD.print(F("3S BATTERY CONNECTED"));
+			break;
+		case 4: OSD.print(F("4S BATTERY CONNECTED"));
+			break;
+		case 5: OSD.print(F("5S BATTERY CONNECTED"));
+			break;
+		case 6: OSD.print(F("6S BATTERY CONNECTED"));
+			break;
+		default:OSD.print(F("ERR BAT CELLS: "));
+				OSD.print(BatteryCells);
+			break;
 		}
 	}
 
@@ -508,9 +518,13 @@ void DisplayOSD()
 		OSD.setCursor(4, MarginMiddleY);
 		MarginMiddleY++;
 		OSD.blink();
-		OSD.print(F("WAIT - DON'T ARM: "));
+		//OSD.print(F("WAIT - DON'T ARM: "));
+		OSD.print(firstloop);
+		OSD.print(" ");
+		OSD.print(BatteryCells);
+		OSD.print(" ");
 		OSD.noBlink();
-		OSD.print(percent);
+		//OSD.print(percent);
 	}
 
 	//show armed | dissarmed
@@ -570,30 +584,30 @@ void CalculateOSD()
 		firstloop++;
 		percent = (firstloop * 100) / 255; //for showing percentage in osd
 	}
-	if (firstloop == 254 && LipoVoltage>200)
+	if (firstloop == 254  && LipoVoltage>200)
 	{
 		//check the battery cells to display the correct alarm later
-		if (LipoVoltage<Settings.SeparationVoltage3s4s)
+		uint16_t tempVoltage = LipoVoltage;
+		BatteryCells = 1;
+		while (tempVoltage > 440)
 		{
-			BatteryCells = 3;
-		}
-		else
-		{
-			BatteryCells = 4;
+			BatteryCells = BatteryCells + 1;
+			tempVoltage = tempVoltage - 440;
 		}
 		firstloop = 255;
 	}
 	//Voltage Alarm 1 and 2
-	if ((BatteryCells == 3 && LipoVoltage<Settings.LowVoltage3s && firstloop == 255) || (BatteryCells == 4 && LipoVoltage<Settings.LowVoltage4s && firstloop == 255))
+	if ( (LipoVoltage / BatteryCells)<Settings.LowVoltage1st  && firstloop == 255 && Settings.LowVoltageAllowed == 1)
 	{
+		
 		VoltageAlarm = true;
 	}
-	if (VoltageAlarm == true && (LipoVoltage / BatteryCells)<Settings.MinimalCellVoltage2nd)
+	if ( (LipoVoltage / BatteryCells)<Settings.LowVoltage2nd && VoltageAlarm == true)
 	{
 		VoltageAlarm2nd = true;
 	}
 	//no Voltage Alarm
-	if ((BatteryCells == 3 && LipoVoltage>(Settings.LowVoltage3s + Settings.hysteresis) && firstloop == 255) || (BatteryCells == 4 && LipoVoltage>(Settings.LowVoltage4s + Settings.hysteresis) && firstloop == 255))
+	if ( (LipoVoltage / BatteryCells)> (Settings.LowVoltage1st + Settings.hysteresis) && VoltageAlarm==true)
 	{
 		VoltageAlarm = false;
 		VoltageAlarm2nd = false;

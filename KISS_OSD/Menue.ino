@@ -157,18 +157,16 @@ void menuprintsite() {
 		OSD.print(F(" <-YAW-> : PAGE / EXIT       "));
 		OSD.videoBackground();
 		OSD.setCursor(1, 2);
-		OSD.print(F("VOLTAGE ALARM 3S:"));
+		OSD.print(F("VOLTAGE 1ST V/CELL:"));
 		OSD.setCursor(1, 3);
-		OSD.print(F("VOLTAGE ALARM 4S:"));
+		OSD.print(F("VOLTAGE 2ND V/CELL:"));
 		OSD.setCursor(1, 4);
-		OSD.print(F("MIN PER CELL VOLT:"));
+		OSD.print(F("V-ALARM ON/OFF:"));
 		OSD.setCursor(1, 5);
 		OSD.print(F("VOLTAGE OFFSET:"));
 		OSD.setCursor(1, 6);
-		OSD.print(F("VOLT ALARM HYST:"));
-		OSD.setCursor(1, 7);
-		OSD.print(F("DIFF VOLT 3S 4S:"));
-		cursorlineMax = 6;
+		OSD.print(F("VOLT ALARM HYST/CELL:"));
+		cursorlineMax = 5;
 		break;
 	case 2:
 		//CapacitySite
@@ -178,10 +176,16 @@ void menuprintsite() {
 		OSD.print(F(" <-PITCH-> : MOVE UP/DOWN    "));
 		OSD.videoBackground();
 		OSD.setCursor(1, 2);
-		OSD.print(F("CAPACITY 1ST WARN:"));
+		OSD.print(F("CAPACITY IN MAH"));
 		OSD.setCursor(1, 3);
-		OSD.print(F("CAPACITY 2ND WARN:"));
-		cursorlineMax = 2;
+		OSD.print(F("1ST WARN AT % USED:"));
+		OSD.setCursor(1, 4);
+		OSD.print(F("2ND WARN AT % USED:"));
+		OSD.setCursor(1, 6);
+		OSD.print(F("1ST WARN AT MAH USED:"));
+		OSD.setCursor(1, 7);
+		OSD.print(F("2ND WARN AT MAH USED:"));
+		cursorlineMax = 3;
 		break;
 	case 3:
 		//Other Settings
@@ -228,13 +232,13 @@ void menuprintvalue() {
 	case 1:
 		//VoltageSite
 		OSD.setCursor(24, 2);
-		OSD.print(Settings.LowVoltage3s);
+		OSD.print(Settings.LowVoltage1st);
 		OSD.print(" ");
 		OSD.setCursor(24, 3);
-		OSD.print(Settings.LowVoltage4s);
+		OSD.print(Settings.LowVoltage2nd);
 		OSD.print(" ");
 		OSD.setCursor(24, 4);
-		OSD.print(Settings.MinimalCellVoltage2nd);
+		showONOFF(Settings.LowVoltageAllowed);
 		OSD.print(" ");
 		OSD.setCursor(24, 5);
 		OSD.print(Settings.VoltageOffset);
@@ -242,18 +246,25 @@ void menuprintvalue() {
 		OSD.setCursor(24, 6);
 		OSD.print(Settings.hysteresis);
 		OSD.print(" ");
-		OSD.setCursor(24, 7);
-		OSD.print(Settings.SeparationVoltage3s4s);
-		OSD.print(" ");
 		break;
 	case 2:
 		//CapacitySite
 		OSD.setCursor(24, 2);
-		OSD.print(Settings.CapacityThreshold);
+		OSD.print(Settings.Capacity);
 		OSD.print(" ");
 		OSD.setCursor(24, 3);
-		OSD.print(Settings.CapacityThreshold2ndStage);
+		OSD.print(Settings.Capacity1st);
 		OSD.print(" ");
+		OSD.setCursor(24, 4);
+		OSD.print(Settings.Capacity2nd);
+		OSD.print(" ");
+		OSD.setCursor(24, 6);
+		OSD.print((Settings.Capacity * (float)Settings.Capacity1st)/100);
+		OSD.print(" ");
+		OSD.setCursor(24, 7);
+		OSD.print((Settings.Capacity * (float)Settings.Capacity2nd) / 100);
+		OSD.print(" ");
+		
 		break;
 	case 3:
 		//Other Settings
@@ -291,17 +302,19 @@ void value(bool addsub)
 		//VoltageSite
 		switch (cursorline)
 		{
-		case 1: changeval(addsub, 990, 1260, 10, &Settings.LowVoltage3s);
+		case 1: changeval(addsub, 300, 420, 2, &Settings.LowVoltage1st);
+			if (Settings.LowVoltage1st < Settings.LowVoltage2nd)
+				Settings.LowVoltage2nd = Settings.LowVoltage1st;
 			break;
-		case 2: changeval(addsub, 1320, 1680, 10, &Settings.LowVoltage4s);
+		case 2: changeval(addsub, 300, 420, 2, &Settings.LowVoltage2nd);
+			if (Settings.LowVoltage2nd > Settings.LowVoltage1st)
+				Settings.LowVoltage1st = Settings.LowVoltage2nd;
 			break;
-		case 3: changeval(addsub, 300, 420, 5, &Settings.MinimalCellVoltage2nd);
+		case 3: changeval(addsub, 0, 1, 1, &Settings.LowVoltageAllowed);
 			break;
 		case 4: changeval(addsub, -100, 100, 1, &Settings.VoltageOffset);
 			break;
-		case 5: changeval(addsub, 0, 100, 5, &Settings.hysteresis);
-			break;
-		case 6: changeval(addsub, 990, 1680, 10, &Settings.SeparationVoltage3s4s);
+		case 5: changeval(addsub, 0, 100, 1, &Settings.hysteresis);
 			break;
 		}
 		break;
@@ -309,9 +322,15 @@ void value(bool addsub)
 		//CapacitySite
 		switch (cursorline)
 		{
-		case 1: changeval(addsub, 0, 9999, 10, &Settings.CapacityThreshold);
+		case 1: changeval(addsub, 0, 9999, 10, &Settings.Capacity);
 			break;
-		case 2: changeval(addsub, 0, 9999, 10, &Settings.CapacityThreshold2ndStage);
+		case 2: changeval(addsub, 0, 100, 1, &Settings.Capacity1st);
+			if (Settings.Capacity2nd < Settings.Capacity1st)
+				Settings.Capacity2nd = Settings.Capacity1st;
+			break;
+		case 3: changeval(addsub, 0, 100, 1, &Settings.Capacity2nd);
+			if (Settings.Capacity2nd < Settings.Capacity1st)
+				Settings.Capacity1st = Settings.Capacity2nd;
 			break;
 		}
 		break;
@@ -372,4 +391,22 @@ void changeval(bool addsub, int16_t min_value, int16_t max_value, uint16_t incre
 	}
 }
 
+void changeval(bool addsub, int16_t min_value, int16_t max_value, uint16_t increment, float *variable)
+{
+	if (addsub && *variable<max_value)     // && *variable<max_value
+	{
+		*variable = *variable + increment;
+	}
+	if (!addsub && *variable>min_value)	// 
+	{
+		*variable = *variable - increment;
+	}
+}
 
+void showONOFF(uint8_t val)
+{
+	if (val == 0)
+		OSD.print("OFF");
+	else
+		OSD.print("ON");
+}

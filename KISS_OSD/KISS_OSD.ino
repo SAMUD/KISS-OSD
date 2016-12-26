@@ -6,7 +6,7 @@ by Samuel Daurat (sdaurat@outlook.de)
 based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
 # define OSDVersion "5.1"
-#define DMemoryVersion 2
+#define DMemoryVersion 5
 /*
 *****************************************************************************************************
 If you like my work and want to support me, I would love to get some support:  https://paypal.me/SamuelDaurat
@@ -111,18 +111,16 @@ const char Pilotname[] = " SAMU";
 #define DmarginLastRow  4;
 
 //Voltage Settings
-#define DLowVoltage3s 1050;
-#define DLowVoltage4s  1410;
-#define DSeparationVoltage3s4s  1370;
-#define Dhysteresis  30;
-#define DMinimalCellVoltage2nd  320;
-#define DVoltageOffset  -10;
-#define DthreeSBatteryDetected[]  "3S BAT - CRIT@ 10.5V";
-#define DfourSBatteryDetected[]  " 4S BAT - CRIT@ 14.1V ";
+#define DLowVoltage1st 350;
+#define DLowVoltage2nd  320;
+#define Dhysteresis  10;
+#define DVoltageOffset  0;
+#define DLowVoltageAllowed 1;
 
 //Capacity settings
-#define DCapacityThreshold  1050;
-#define DCapacityThreshold2ndStage  1200;
+#define DCapacity  1800;
+#define DCapacity1st  70;
+#define DCapacity2nd  80;
 
 
 

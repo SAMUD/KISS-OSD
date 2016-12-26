@@ -84,18 +84,18 @@ static bool memValid = true;
 
 struct StoreStruct {
 
-	uint16_t LowVoltage3s;
-	uint16_t LowVoltage4s;
-	uint16_t SeparationVoltage3s4s;
+	uint16_t LowVoltage1st; //
+	uint16_t LowVoltage2nd; //
+	uint8_t LowVoltageAllowed; //
 	uint16_t hysteresis;
-	uint16_t MinimalCellVoltage2nd;
 	int8_t VoltageOffset;
 	uint8_t marginLastRow;
 	uint8_t RED_MODE_AUX_CHANNEL;
 	uint8_t MAGNETPOLECOUNT;
 	uint8_t ESC_FILTER;
-	uint16_t CapacityThreshold;
-	uint16_t CapacityThreshold2ndStage;
+	uint16_t Capacity;
+	uint8_t Capacity1st;
+	uint8_t Capacity2nd;
 	uint8_t MemoryVersion;
 
 };
