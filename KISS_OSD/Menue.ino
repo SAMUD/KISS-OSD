@@ -129,6 +129,9 @@ void menumain()
 			}
 
 		}
+
+		//reset wdt
+		wdt_reset();
 	}
 	exitmenu = false;
 	MenuPage = 1;

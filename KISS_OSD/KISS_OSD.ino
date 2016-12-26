@@ -139,11 +139,15 @@ const char Pilotname[] = " SAMU";
 #include "symbols.h"
 #include <EEPROMex.h>
 #include "GlobalVar.h"
+#include <avr/wdt.h>
 
 
 //==============
 //SETUP function
 void setup() {
+	wdt_enable(WDTO_8S);
+	wdt_reset();
+	
 	uint8_t i = 0;
 	SPI.begin();
 	SPI.setClockDivider(SPI_CLOCK_DIV2);
@@ -213,6 +217,9 @@ void loop()
 
 		//Display the datas
 		DisplayOSD();
+
+		//Reset wdt
+		wdt_reset();
 	}
 
 }
