@@ -327,7 +327,7 @@ void DisplayOSD()
 		OSD.print(Pilotname);
 	}
 
-	if (Settings.stockSettings = 0)
+	if (Settings.stockSettings == 0)
 	{
 		OSD.setCursor(4, MarginMiddleY);
 		MarginMiddleY++;

@@ -6,7 +6,7 @@ by Samuel Daurat (sdaurat@outlook.de)
 based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
 # define OSDVersion "5.3"
-#define DMemoryVersion 3
+#define DMemoryVersion 4
 /*
 *****************************************************************************************************
 If you like my work and want to support me, I would love to get some support:  https://paypal.me/SamuelDaurat
