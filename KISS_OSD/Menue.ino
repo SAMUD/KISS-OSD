@@ -20,6 +20,7 @@ void menumain()
 	static uint8_t i;
 	static uint8_t ii;
 
+	Settings.stockSettings = 1;
 
 	OSDmakegrey();
 	OSD.setCursor(6, 3);

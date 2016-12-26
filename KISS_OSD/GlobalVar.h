@@ -185,6 +185,7 @@ struct StoreStruct {
 	uint8_t DispPilotname3;
 	uint8_t DispTimer3;
 	uint8_t DispAngle3;
+	uint8_t stockSettings;
 };
 
 static StoreStruct Settings;

@@ -327,6 +327,14 @@ void DisplayOSD()
 		OSD.print(Pilotname);
 	}
 
+	if (Settings.stockSettings = 0)
+	{
+		OSD.setCursor(4, MarginMiddleY);
+		MarginMiddleY++;
+		OSD.print(F("STOCK SETT-OPEN MENU"));
+	}
+	
+
 	if (displayLipoVoltage)
 	{
 		OSD.setCursor(Settings.marginLastRow, -1);
@@ -458,13 +466,9 @@ void DisplayOSD()
 		OSD.setCursor(4, MarginMiddleY);
 		MarginMiddleY++;
 		OSD.blink();
-		//OSD.print(F("WAIT - DON'T ARM: "));
-		OSD.print(firstloop);
-		OSD.print(" ");
-		OSD.print(BatteryCells);
-		OSD.print(" ");
+		OSD.print(F("WAIT - DON'T ARM: "));
 		OSD.noBlink();
-		//OSD.print(percent);
+		OSD.print(percent);
 	}
 
 	//show armed | dissarmed

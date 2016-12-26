@@ -77,6 +77,8 @@ void EEPROMsaveDefaultValues()
 	Settings.DispTimer1 = RED_DISPLAY_PILOTNAME;
 	Settings.DispAngle1 = RED_DISPLAY_PILOTNAME;
 
+	Settings.stockSettings = 0;
+
 	EEPROMsave();
 
 }
