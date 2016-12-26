@@ -471,12 +471,12 @@ void DisplayOSD()
 		OSD.print(percent);
 	}
 
-	//show armed | dissarmed
+	//show armed | DISARMED
 	if (armed == 0)
 	{
 		OSD.setCursor(4, MarginMiddleY);
 		MarginMiddleY++;
-		OSD.print(F("     DISSARMED      "));
+		OSD.print(F("     DISARMED      "));
 		armedstarted = millis();
 	}
 	else if (armedstarted + 2000>millis())
