@@ -68,7 +68,7 @@ void menumain()
 			//changepage
 			if (StickChanVals[3] > 500)
 			{
-				if (MenuPage<4)
+				if (MenuPage<7)
 				{
 					MenuPage++;
 					pause = 10;
@@ -106,7 +106,7 @@ void menumain()
 			menuprintvalue();
 
 			//draw cursor position
-			if (cursorline != cursorlineOLD && MenuPage != 4)
+			if (cursorline != cursorlineOLD && MenuPage != 7)
 			{
 				OSD.setCursor(23, cursorlineOLD + 1);
 				OSD.print(" ");
@@ -152,7 +152,7 @@ void menuprintsite() {
 	case 1:
 		//VoltageSite
 		OSD.grayBackground();
-		OSD.print(F("SAMUD OSD - P1/4 VOLTAGE     "));
+		OSD.print(F("SAMUD OSD - P1/7 VOLTAGE     "));
 		OSD.setCursor(0, 14);
 		OSD.print(F(" <-YAW-> : PAGE / EXIT       "));
 		OSD.videoBackground();
@@ -171,7 +171,7 @@ void menuprintsite() {
 	case 2:
 		//CapacitySite
 		OSD.grayBackground();
-		OSD.print(F("SAMUD OSD - P2/4 CAPACITY    "));
+		OSD.print(F("SAMUD OSD - P2/7 CAPACITY    "));
 		OSD.setCursor(0, 14);
 		OSD.print(F(" <-PITCH-> : MOVE UP/DOWN    "));
 		OSD.videoBackground();
@@ -188,11 +188,68 @@ void menuprintsite() {
 		cursorlineMax = 3;
 		break;
 	case 3:
-		//Other Settings
+		//CapacitySite
 		OSD.grayBackground();
-		OSD.print(F("SAMUD MENU - P3/4 VARIOUS    "));
+		OSD.print(F("SAMUD OSD - P3/7 RED MODE 1  "));
 		OSD.setCursor(0, 14);
 		OSD.print(F(" <-ROLL-> : CHANGE VALUE     "));
+		OSD.videoBackground();
+		OSD.setCursor(1, 2);
+		OSD.print(F("CAPACITY IN MAH"));
+		OSD.setCursor(1, 3);
+		OSD.print(F("1ST WARN AT % USED:"));
+		OSD.setCursor(1, 4);
+		OSD.print(F("2ND WARN AT % USED:"));
+		OSD.setCursor(1, 6);
+		OSD.print(F("1ST WARN AT MAH USED:"));
+		OSD.setCursor(1, 7);
+		OSD.print(F("2ND WARN AT MAH USED:"));
+		cursorlineMax = 3;
+		break;
+	case 4:
+		//CapacitySite
+		OSD.grayBackground();
+		OSD.print(F("SAMUD OSD - P4/7 RED MODE 2  "));
+		OSD.setCursor(0, 14);
+		OSD.print(F("SEE PAGE 6 FOR RED-CHANNEL SEL"));
+		OSD.videoBackground();
+		OSD.setCursor(1, 2);
+		OSD.print(F("CAPACITY IN MAH"));
+		OSD.setCursor(1, 3);
+		OSD.print(F("1ST WARN AT % USED:"));
+		OSD.setCursor(1, 4);
+		OSD.print(F("2ND WARN AT % USED:"));
+		OSD.setCursor(1, 6);
+		OSD.print(F("1ST WARN AT MAH USED:"));
+		OSD.setCursor(1, 7);
+		OSD.print(F("2ND WARN AT MAH USED:"));
+		cursorlineMax = 3;
+		break;
+	case 5:
+		//CapacitySite
+		OSD.grayBackground();
+		OSD.print(F("SAMUD OSD - P5/7 RED MODE 3  "));
+		OSD.setCursor(0, 14);
+		OSD.print(F("                             "));
+		OSD.videoBackground();
+		OSD.setCursor(1, 2);
+		OSD.print(F("CAPACITY IN MAH"));
+		OSD.setCursor(1, 3);
+		OSD.print(F("1ST WARN AT % USED:"));
+		OSD.setCursor(1, 4);
+		OSD.print(F("2ND WARN AT % USED:"));
+		OSD.setCursor(1, 6);
+		OSD.print(F("1ST WARN AT MAH USED:"));
+		OSD.setCursor(1, 7);
+		OSD.print(F("2ND WARN AT MAH USED:"));
+		cursorlineMax = 3;
+		break;
+	case 6:
+		//Other Settings
+		OSD.grayBackground();
+		OSD.print(F("SAMUD MENU - P6/7 VARIOUS    "));
+		OSD.setCursor(0, 14);
+		OSD.print(F("                             "));
 		OSD.videoBackground();
 		OSD.setCursor(1, 2);
 		OSD.print(F("MARGIN LAST ROW:"));
@@ -204,10 +261,12 @@ void menuprintsite() {
 		OSD.print(F("RED MODE AUX CHANNEL:"));
 		cursorlineMax = 4;
 		break;
-	case 4:
+	case 7:
 		//Info
 		OSD.grayBackground();
-		OSD.print(F("SAMUD MENU - P4/4 INFO       "));
+		OSD.print(F("SAMUD MENU - P7/7 INFO       "));
+		OSD.setCursor(0, 14);
+		OSD.print(F("                             "));
 		OSD.videoBackground();
 		OSD.setCursor(1, 2);
 		OSD.print(F("FREE RAM:"));
@@ -266,7 +325,7 @@ void menuprintvalue() {
 		OSD.print(" ");
 		
 		break;
-	case 3:
+	case 6:
 		//Other Settings
 		OSD.setCursor(24, 2);
 		OSD.print(Settings.marginLastRow);
@@ -281,7 +340,7 @@ void menuprintvalue() {
 		OSD.print(Settings.RED_MODE_AUX_CHANNEL);
 		OSD.print(" ");
 		break;
-	case 4:
+	case 7:
 		//Info
 		OSD.setCursor(24, 2);
 		OSD.print(freeRam());
@@ -334,7 +393,7 @@ void value(bool addsub)
 			break;
 		}
 		break;
-	case 3:
+	case 6:
 		//Other Settings
 		switch (cursorline)
 		{
@@ -348,7 +407,7 @@ void value(bool addsub)
 			break;
 		}
 		break;
-	case 4:
+	case 7:
 		//Info
 		break;
 	}
