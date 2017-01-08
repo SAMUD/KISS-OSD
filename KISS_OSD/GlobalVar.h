@@ -52,6 +52,9 @@
 #define DESC_FILTER 10							//*
 // reduced mode channel config					//*
 #define DRED_MODE_AUX_CHAN 4 // 0-4, 0 = none	//*
+//stock offset									//*
+#define DOffsetX 0								//*
+#define DOffsetY 0								//*
 												//*
 //*************************************************
 
@@ -186,6 +189,8 @@ struct StoreStruct {
 	uint8_t DispTimer3;
 	uint8_t DispAngle3;
 	uint8_t stockSettings;
+	uint8_t OffsetY;
+	uint8_t OffsetX;
 };
 
 static StoreStruct Settings;

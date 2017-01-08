@@ -99,8 +99,8 @@ void print_time(unsigned long time, char *time_str)
 void getSerialData()
 {
 	static uint8_t serialBuf[255];
-	uint8_t minBytes = 100;
-	uint8_t recBytes = 0;
+	static uint8_t minBytes = 100;
+	static uint8_t recBytes = 0;
 
 	Serial.write(0x20); // request telemetrie
 
@@ -220,7 +220,6 @@ void DisplayOSD()
 	//Declaring some vars
 	uint8_t lipoVoltPos = print_int16(LipoVoltage, LipoVoltC, 2, 1);
 
-
 	uint8_t lipoMAHPos = print_int16(LipoMAH, LipoMAHC, 0, 1);
 
 	uint8_t ESCmarginBot = 0;
@@ -230,18 +229,7 @@ void DisplayOSD()
 	uint8_t MarginMiddleY = 6;
 	uint8_t MarginMiddleY_Old = 6;
 
-	uint8_t displayRCthrottle = 0;
-	uint8_t displayCombCurrent = 0;
-	uint8_t displayLipoVoltage = 0;
-	uint8_t displayConsumption = 0;
-	uint8_t displayKRPM = 0;
-	uint8_t displayCurrent = 0;
-	uint8_t displayTemperature = 0;
-	uint8_t displayTime = 0;
-	uint8_t displayPilot = 0;
-	uint8_t displayAngle = 0;
-
-	//reduced mode1
+	//reduced mode selection
 	if (Settings.RED_MODE_AUX_CHANNEL != 0)
 	{
 		if (AuxChanVals[Settings.RED_MODE_AUX_CHANNEL - 1]<-250)
@@ -267,46 +255,7 @@ void DisplayOSD()
 		while (!OSD.notInVSync());
 	}
 
-	if (reducedModeDisplay == 0) {
-		displayRCthrottle = Settings.DispRCThrottle1;
-		displayCombCurrent = Settings.DispCombCurrent1;
-		displayLipoVoltage = Settings.DispLipoVoltage1;
-		displayConsumption = Settings.DispMaConsumption1;
-		displayKRPM = Settings.DispEscKrpm1;
-		displayCurrent = Settings.DispEscCurrent1;
-		displayTemperature = Settings.DispEscTemp1;
-		displayPilot = Settings.DispPilotname1;
-		displayTime = Settings.DispTimer1;
-		displayAngle = Settings.DispAngle1;
-	}
-	else if (reducedModeDisplay == 1)
-	{
-		displayRCthrottle = Settings.DispRCThrottle2;
-		displayCombCurrent = Settings.DispCombCurrent2;
-		displayLipoVoltage = Settings.DispLipoVoltage2;
-		displayConsumption = Settings.DispMaConsumption2;
-		displayKRPM = Settings.DispEscKrpm2;
-		displayCurrent = Settings.DispEscCurrent2;
-		displayTemperature = Settings.DispEscTemp2;
-		displayPilot = Settings.DispPilotname2;
-		displayTime = Settings.DispTimer2;
-		displayAngle = Settings.DispAngle2;
-	}
-	else if (reducedModeDisplay == 2)
-	{
-		displayRCthrottle = Settings.DispRCThrottle3;
-		displayCombCurrent = Settings.DispCombCurrent3;
-		displayLipoVoltage = Settings.DispLipoVoltage3;
-		displayConsumption = Settings.DispMaConsumption3;
-		displayKRPM = Settings.DispEscKrpm3;
-		displayCurrent = Settings.DispEscCurrent3;
-		displayTemperature = Settings.DispEscTemp3;
-		displayPilot = Settings.DispPilotname3;
-		displayTime = Settings.DispTimer3;
-		displayAngle = Settings.DispAngle3;
-	}
-
-	if (displayRCthrottle)
+	if (reducedModeDisplay==0 && Settings.DispRCThrottle1 || reducedModeDisplay==1 && Settings.DispRCThrottle2 || reducedModeDisplay==2 && Settings.DispRCThrottle3)
 	{
 		OSD.setCursor(0, 0);
 		OSD.print(F("THROT:"));
@@ -314,14 +263,14 @@ void DisplayOSD()
 		ESCmarginTop = 1;
 	}
 
-	if (displayCombCurrent)
+	if (reducedModeDisplay == 0 && Settings.DispCombCurrent1 || reducedModeDisplay == 1 && Settings.DispCombCurrent2 || reducedModeDisplay == 2 && Settings.DispCombCurrent3)
 	{
 		OSD.setCursor(-CurrentPos, 0);
 		OSD.print(Current);
 		ESCmarginTop = 1;
 	}
 
-	if (displayPilot)
+	if (reducedModeDisplay == 0 && Settings.DispPilotname1 || reducedModeDisplay == 1 && Settings.DispPilotname2 || reducedModeDisplay == 2 && Settings.DispPilotname3)
 	{
 		OSD.setCursor(10, 0);
 		OSD.print(Pilotname);
@@ -334,32 +283,26 @@ void DisplayOSD()
 		OSD.print(F("STOCK SETT-OPEN MENU"));
 	}
 	
-
-	if (displayLipoVoltage)
+	if (reducedModeDisplay == 0 && Settings.DispLipoVoltage1 || reducedModeDisplay == 1 && Settings.DispLipoVoltage2 || reducedModeDisplay == 2 && Settings.DispLipoVoltage3)
 	{
-		OSD.setCursor(Settings.marginLastRow, -1);
 		if (VoltageAlarm == true)
 		{
 			OSD.blink();
-			OSD.write(SYM_MAIN_BATT);
-			OSD.print(LipoVoltC);
 			if (VoltageAlarm2nd == true)
 			{
 				OSD.setCursor(4, MarginMiddleY);
 				MarginMiddleY++;
 				OSD.print(F("    LIPO VOLTAGE    "));
 			}
-			OSD.noBlink();
 		}
-		else
-		{
-			OSD.write(SYM_MAIN_BATT);
-			OSD.print(LipoVoltC);
-		}
+		OSD.setCursor(Settings.marginLastRow, -1);
+		OSD.write(SYM_MAIN_BATT);
+		OSD.print(LipoVoltC);
+		OSD.noBlink();
 		ESCmarginBot = 1;
 	}
 
-	if (displayTime)
+	if (reducedModeDisplay == 0 && Settings.DispTimer1 || reducedModeDisplay == 1 && Settings.DispTimer2 || reducedModeDisplay == 2 && Settings.DispTimer3)
 	{
 		OSD.setCursor(12, -1);
 		print_time(time, Time);
@@ -367,31 +310,27 @@ void DisplayOSD()
 		OSD.print(Time);
 	}
 
-	if (displayConsumption)
+	if (reducedModeDisplay == 0 && Settings.DispMaConsumption1 || reducedModeDisplay == 1 && Settings.DispMaConsumption2 || reducedModeDisplay == 2 && Settings.DispMaConsumption3)
 	{
-		OSD.setCursor(-(lipoMAHPos + 1 + Settings.marginLastRow), -1);
+		
 		if (LipoMAH>(Settings.Capacity * (float)Settings.Capacity1st) / 100 && Settings.Capacity>0)
 		{
 			OSD.blink();
-			OSD.write(SYM_MAH);
-			OSD.print(LipoMAHC);
 			if (LipoMAH>(Settings.Capacity * (float)Settings.Capacity2nd) / 100)
 			{
 				OSD.setCursor(4, MarginMiddleY);
 				MarginMiddleY++;
 				OSD.print(F("      CAPACITY      "));
 			}
-			OSD.noBlink();
 		}
-		else
-		{
-			OSD.write(SYM_MAH);
-			OSD.print(LipoMAHC);
-		}
+		OSD.setCursor(-(lipoMAHPos + 1 + Settings.marginLastRow), -1);
+		OSD.write(SYM_MAH);
+		OSD.print(LipoMAHC);
+		OSD.noBlink();
 		ESCmarginBot = 1;
 	}
 
-	if (displayKRPM)
+	if (reducedModeDisplay == 0 && Settings.DispEscKrpm1 || reducedModeDisplay == 1 && Settings.DispEscKrpm2 || reducedModeDisplay == 2 && Settings.DispEscKrpm3)
 	{
 		OSD.setCursor(0, ESCmarginTop);
 		OSD.print(Motor1KERPM);
@@ -405,7 +344,7 @@ void DisplayOSD()
 		CurrentMargin++;
 	}
 
-	if (displayCurrent)
+	if (reducedModeDisplay == 0 && Settings.DispEscCurrent1 || reducedModeDisplay == 1 && Settings.DispEscCurrent2 || reducedModeDisplay == 2 && Settings.DispEscCurrent3)
 	{
 		OSD.setCursor(0, CurrentMargin + ESCmarginTop);
 		OSD.print(Motor1Current);
@@ -418,7 +357,7 @@ void DisplayOSD()
 		TMPmargin++;
 	}
 
-	if (displayTemperature)
+	if (reducedModeDisplay == 0 && Settings.DispEscTemp1 || reducedModeDisplay == 1 && Settings.DispEscTemp2 || reducedModeDisplay == 2 && Settings.DispEscTemp3)
 	{
 		OSD.setCursor(0, TMPmargin + ESCmarginTop);
 		OSD.print(ESC1Temp);
@@ -430,7 +369,7 @@ void DisplayOSD()
 		OSD.print(ESC4Temp);
 	}
 
-	if (displayAngle)
+	if (reducedModeDisplay == 0 && Settings.DispAngle1 || reducedModeDisplay == 1 && Settings.DispAngle2 || reducedModeDisplay == 2 && Settings.DispAngle3)
 	{
 		OSD.setCursor(0, 6);
 		drawAngelIndicator(angley);
@@ -441,23 +380,28 @@ void DisplayOSD()
 	{
 		OSD.setCursor(4, MarginMiddleY);
 		MarginMiddleY++;
-		switch (BatteryCells)
+		if (BatteryCells <1 || BatteryCells>6)
 		{
-		case 1: OSD.print(F("1S BATTERY CONNECTED"));
-			break;
-		case 2: OSD.print(F("2S BATTERY CONNECTED"));
-			break;
-		case 3: OSD.print(F("3S BATTERY CONNECTED"));
-			break;
-		case 4: OSD.print(F("4S BATTERY CONNECTED"));
-			break;
-		case 5: OSD.print(F("5S BATTERY CONNECTED"));
-			break;
-		case 6: OSD.print(F("6S BATTERY CONNECTED"));
-			break;
-		default:OSD.print(F("ERR BAT CELLS: "));
-				OSD.print(BatteryCells);
-			break;
+			OSD.print(F("ERR BAT CELLS: "));
+		}
+		else
+		{
+			switch (BatteryCells)
+			{
+			case 1: OSD.print(F("1"));
+				break;
+			case 2: OSD.print(F("2"));
+				break;
+			case 3: OSD.print(F("3"));
+				break;
+			case 4: OSD.print(F("4"));
+				break;
+			case 5: OSD.print(F("5"));
+				break;
+			case 6: OSD.print(F("6"));
+				break;
+			}
+			OSD.print(F("S BATTERY CONNECTED"));
 		}
 	}
 

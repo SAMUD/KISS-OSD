@@ -5,8 +5,8 @@ KISS FC OSD
 by Samuel Daurat (sdaurat@outlook.de)
 based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
-# define OSDVersion "5.3"
-#define DMemoryVersion 4
+# define OSDVersion "5.3.1"
+#define DMemoryVersion 5
 /*
 *****************************************************************************************************
 If you like my work and want to support me, I would love to get some support:  https://paypal.me/SamuelDaurat
@@ -42,7 +42,7 @@ For more information, please refer to <http://unlicense.org>
 //um eine Linie zu aktivieren bitte das "//" entfernen
 
 //Please refer to the github wiki page for explanations on the settings
-//https://github.com/SAMUD/KISS-OSD/wiki/OSD-Settings-explained
+//https://github.com/SAMUD/KISS-OSD/wiki
 
 
 //video system
@@ -73,12 +73,15 @@ const char Pilotname[] = " SAMU";
 //==============
 //SETUP function
 void setup() {
+
+	//turn on watchdog timer
 	wdt_enable(WDTO_8S);
 	wdt_reset();
-	
-	uint8_t i = 0;
+
+
 	SPI.begin();
 	SPI.setClockDivider(SPI_CLOCK_DIV2);
+
 #if defined(PAL)
 	OSD.begin(28, 15, 0);
 	OSD.setTextOffset(-1, -6);
@@ -88,16 +91,20 @@ void setup() {
 	OSD.begin(MAX7456_COLS_N1, MAX7456_ROWS_N0);
 	OSD.setDefaultSystem(MAX7456_NTSC);
 #endif
+
 	OSD.setSwitchingTime(4);
+
 #if defined(USE_MAX7456_ASCII)
 	OSD.setCharEncoding(MAX7456_ASCII);
 #endif
 #if defined(USE_MAX7456_MAXIM)
 	OSD.setCharEncoding(MAX7456_MAXIM);
 #endif
-	OSD.display();
 
+	OSD.display();
+	
 	//clean used area
+	uint8_t i = 0;
 	for (i = 0; i<30; i++) clean[i] = ' ';
 	while (!OSD.notInVSync());
 	for (i = 0; i<20; i++)
@@ -114,7 +121,6 @@ void setup() {
 
 	//init memory
 	EEPROMinit();
-
 }
 
 
@@ -125,7 +131,7 @@ void loop()
 {
 
 	//big if with all code
-	if (micros() - LastLoopTime > 10000) //limits the speed of the OSD to 100Hz
+	if (micros() - LastLoopTime > 50000) //limits the speed of the OSD to 20Hz
 	{
 		LastLoopTime = micros();
 
