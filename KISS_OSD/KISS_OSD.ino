@@ -5,7 +5,7 @@ KISS FC OSD
 by Samuel Daurat (sdaurat@outlook.de)
 based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
-# define OSDVersion "5.3.1"
+# define OSDVersion "5.3.2"
 #define DMemoryVersion 5
 /*
 *****************************************************************************************************
@@ -121,6 +121,9 @@ void setup() {
 
 	//init memory
 	EEPROMinit();
+
+	//set the Offset
+	OSD.setTextOffset(Settings.OffsetX, Settings.OffsetY);
 }
 
 
@@ -131,7 +134,7 @@ void loop()
 {
 
 	//big if with all code
-	if (micros() - LastLoopTime > 50000) //limits the speed of the OSD to 20Hz
+	if (micros() - LastLoopTime > 20000) //limits the speed of the OSD to 20Hz
 	{
 		LastLoopTime = micros();
 

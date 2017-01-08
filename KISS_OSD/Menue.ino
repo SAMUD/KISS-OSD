@@ -21,24 +21,24 @@ void menumain()
 	static uint8_t ii;
 
 	Settings.stockSettings = 1;
+	StickChanVals[3] = 0;
 
 	OSDmakegrey();
-	OSD.setCursor(6, 3);
-	OSD.print(F("SAMUD - KISS OSD"));
-	OSD.setCursor(1, 5);
+	OSD.setCursor(9, 3);
+	OSD.print(F("SAMUD OSD"));
+	OSD.setCursor(6, 4);
+	OSD.print(F("CUSTOM KISS OSD"));
+	OSD.setCursor(1, 8);
 	OSD.print(F("MORE INFORMATION AND WIKI: "));
-	OSD.setCursor(1, 6);
+	OSD.setCursor(1, 9);
 	OSD.print(F("GITHUB.COM/SAMUD/KISS-OSD  "));
 	OSD.videoBackground();
 	delay(2000);
 
-
-
-
 	while (!exitmenu)
 	{
 
-		if (micros() - LastLoopTime > 10000) //limits the speed of the OSD to 10Hz  millis() - LastLoopTimeMenu > 100
+		if (micros() - LastLoopTime > 50000) //limits the speed of the OSD to 20Hz  millis() - LastLoopTimeMenu > 100
 		{
 			LastLoopTime = micros();
 
@@ -215,7 +215,7 @@ void menuprintsite() {
 	case 6:
 		//Other Settings
 		OSD.grayBackground();
-		OSD.print(F("SAMUD MENU - P6/7 VARIOUS    "));
+		OSD.print(F("SAMUD OSD - P6/7 VARIOUS    "));
 		OSD.setCursor(0, 14);
 		OSD.print(F("                             "));
 		OSD.videoBackground();
@@ -227,12 +227,16 @@ void menuprintsite() {
 		OSD.print(F("ESC FILTER:"));
 		OSD.setCursor(1, 5);
 		OSD.print(F("RED MODE AUX CHANNEL:"));
-		cursorlineMax = 4;
+		OSD.setCursor(1, 6);
+		OSD.print(F("SCREEN OFFSET ->RIGHT:"));
+		OSD.setCursor(15, 7);
+		OSD.print(F("->DOWN:"));
+		cursorlineMax = 6;
 		break;
 	case 7:
 		//Info
 		OSD.grayBackground();
-		OSD.print(F("SAMUD MENU - P7/7 INFO       "));
+		OSD.print(F("SAMUD OSD - P7/7 INFO       "));
 		OSD.setCursor(0, 14);
 		OSD.print(F("                             "));
 		OSD.videoBackground();
@@ -406,6 +410,12 @@ void menuprintvalue() {
 		OSD.setCursor(24, 5);
 		OSD.print(Settings.RED_MODE_AUX_CHANNEL);
 		OSD.print(" ");
+		OSD.setCursor(24, 6);
+		OSD.print(Settings.OffsetX);
+		OSD.print(" ");
+		OSD.setCursor(24, 7);
+		OSD.print(Settings.OffsetY);
+		OSD.print(" ");
 		break;
 	case 7:
 		//Info
@@ -549,6 +559,12 @@ void value(bool addsub)
 		case 3: changeval(addsub, 0, 20, 1, &Settings.ESC_FILTER);
 			break;
 		case 4: changeval(addsub, 0, 4, 1, &Settings.RED_MODE_AUX_CHANNEL);
+			break;
+		case 5: changeval(addsub, -10, 10, 1, &Settings.OffsetX);
+			OSD.setTextOffset(Settings.OffsetX, Settings.OffsetY);
+			break;
+		case 6: changeval(addsub, -10, 10, 1, &Settings.OffsetY);
+			OSD.setTextOffset(Settings.OffsetX, Settings.OffsetY);
 			break;
 		}
 		break;

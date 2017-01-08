@@ -99,8 +99,8 @@ void print_time(unsigned long time, char *time_str)
 void getSerialData()
 {
 	static uint8_t serialBuf[255];
-	static uint8_t minBytes = 100;
-	static uint8_t recBytes = 0;
+	uint8_t minBytes = 100;
+	uint8_t recBytes = 0;
 
 	Serial.write(0x20); // request telemetrie
 

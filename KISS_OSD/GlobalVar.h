@@ -189,8 +189,8 @@ struct StoreStruct {
 	uint8_t DispTimer3;
 	uint8_t DispAngle3;
 	uint8_t stockSettings;
-	uint8_t OffsetY;
-	uint8_t OffsetX;
+	int8_t OffsetY;
+	int8_t OffsetX;
 };
 
 static StoreStruct Settings;
