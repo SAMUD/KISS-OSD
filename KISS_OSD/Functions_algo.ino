@@ -107,7 +107,9 @@ void getSerialData()
 						//aquire serial data and write it to normal variables
 	while (recBytes < minBytes && micros() - LastLoopTime < 20000)
 	{
-#define STARTCOUNT 2
+		
+		
+		#define STARTCOUNT 2
 		while (Serial.available()) serialBuf[recBytes++] = Serial.read();
 		if (recBytes == 1 && serialBuf[0] != 5)recBytes = 0; // check for start byte, reset if its wrong
 		if (recBytes == 2) minBytes = serialBuf[1] + STARTCOUNT + 1; // got the transmission length
@@ -169,8 +171,16 @@ void getSerialData()
 				if (voltDev != 0)
 					LipoVoltage = (tmpVoltage / voltDev);
 				LipoVoltage = LipoVoltage + Settings.VoltageOffset;
+
 				//capacity
+
+				//Settings.StandbyCurrent is @5V so Settings.StandbyCurrent*5V=mW
+				//mW/CurrentVoltage=Current at actual Voltage
+				standbyCurrentTotal += (((Settings.StandbyCurrent * 5) / LipoVoltage) / 36000000.0) * (2*(micros() - LastLoopTime));
+
+
 				LipoMAH = ((serialBuf[148 + STARTCOUNT] << 8) | serialBuf[149 + STARTCOUNT]);
+				LipoMAH += standbyCurrentTotal;
 				//read Motor Current and other ESC datas
 				static uint32_t windedupfilterdatas[8];
 				//RPM
@@ -208,6 +218,7 @@ void getSerialData()
 				StickChanVals[3] = ((serialBuf[6 + STARTCOUNT] << 8) | serialBuf[7 + STARTCOUNT]);
 				//total current
 				current = (uint16_t)(motorCurrent[0] + motorCurrent[1] + motorCurrent[2] + motorCurrent[3]) / 10;
+				current += (((Settings.StandbyCurrent * 5) / LipoVoltage) / 100 );
 			}
 		}
 	} //end of aquiring telemetry data
@@ -320,7 +331,7 @@ void DisplayOSD()
 			{
 				OSD.setCursor(4, MarginMiddleY);
 				MarginMiddleY++;
-				OSD.print(F("      CAPACITY      "));
+				OSD.print(F("     CAPACITY       "));
 			}
 		}
 		OSD.setCursor(-(lipoMAHPos + 1 + Settings.marginLastRow), -1);

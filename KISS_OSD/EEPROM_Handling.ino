@@ -80,6 +80,8 @@ void EEPROMsaveDefaultValues()
 	Settings.OffsetX = DOffsetX;
 	Settings.OffsetY = DOffsetY;
 
+	Settings.StandbyCurrent = DStandbyCurrent;
+
 	Settings.stockSettings = 0;
 
 	EEPROMsave();

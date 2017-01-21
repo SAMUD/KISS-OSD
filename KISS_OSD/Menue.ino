@@ -182,11 +182,15 @@ void menuprintsite() {
 		OSD.print(F("1ST WARN AT % USED:"));
 		OSD.setCursor(1, 4);
 		OSD.print(F("2ND WARN AT % USED:"));
-		OSD.setCursor(1, 6);
-		OSD.print(F("1ST WARN AT MAH USED:"));
+		OSD.setCursor(1, 5);
+		OSD.print(F("STB CURRENT @5V:"));
 		OSD.setCursor(1, 7);
+		OSD.print(F("1ST WARN AT MAH USED:"));
+		OSD.setCursor(1, 8);
 		OSD.print(F("2ND WARN AT MAH USED:"));
-		cursorlineMax = 3;
+		OSD.setCursor(1, 9);
+		OSD.print(F("STB CURRENT FROM BAT:"));
+		cursorlineMax = 4;
 		break;
 	case 3:
 		//Red1
@@ -289,11 +293,17 @@ void menuprintvalue() {
 		OSD.setCursor(24, 4);
 		OSD.print(Settings.Capacity2nd);
 		OSD.print(" ");
-		OSD.setCursor(24, 6);
-		OSD.print((Settings.Capacity * (float)Settings.Capacity1st)/100);
+		OSD.setCursor(24, 5);
+		OSD.print(Settings.StandbyCurrent);
 		OSD.print(" ");
 		OSD.setCursor(24, 7);
+		OSD.print((Settings.Capacity * (float)Settings.Capacity1st)/100);
+		OSD.print(" ");
+		OSD.setCursor(24, 8);
 		OSD.print((Settings.Capacity * (float)Settings.Capacity2nd) / 100);
+		OSD.print(" ");
+		OSD.setCursor(24, 9);
+		OSD.print((Settings.StandbyCurrent * 5) / LipoVoltage);
 		OSD.print(" ");
 		
 		break;
@@ -468,6 +478,7 @@ void value(bool addsub)
 			if (Settings.Capacity2nd < Settings.Capacity1st)
 				Settings.Capacity1st = Settings.Capacity2nd;
 			break;
+		case 4: changeval(addsub, 0, 9999, 5, &Settings.StandbyCurrent);
 		}
 		break;
 	case 3:

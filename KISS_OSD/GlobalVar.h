@@ -55,7 +55,8 @@
 //stock offset									//*
 #define DOffsetX 0								//*
 #define DOffsetY 0								//*
-												//*
+//stock current									//*
+#define DStandbyCurrent 1000					//*
 //*************************************************
 
 
@@ -143,6 +144,8 @@ static uint8_t CurrentPos;
 static int configAdress = 0;
 static bool memValid = true;
 
+static float standbyCurrentTotal = 0;
+
 struct StoreStruct {
 
 	uint16_t LowVoltage1st; //
@@ -191,6 +194,7 @@ struct StoreStruct {
 	uint8_t stockSettings;
 	int8_t OffsetY;
 	int8_t OffsetX;
+	uint16_t StandbyCurrent;
 };
 
 static StoreStruct Settings;
