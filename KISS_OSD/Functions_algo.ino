@@ -555,7 +555,7 @@ void CalculateOSD()
 		LipoVoltC[i] = ' ';
 		Throttle[i] = ' ';
 	}
-	ThrottlePos = print_int16(StickChanVals[0], Throttle, 0, 1);
+	ThrottlePos = print_int16(StickChanVals[0]/10, Throttle, 0, 1);
 	Throttle[ThrottlePos++] = '%';
 	//
 	CurrentPos = print_int16(current, Current, 1, 0);

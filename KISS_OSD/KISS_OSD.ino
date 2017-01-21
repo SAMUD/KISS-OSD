@@ -5,7 +5,7 @@ KISS FC OSD
 by Samuel Daurat (sdaurat@outlook.de)
 based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
-# define OSDVersion "5.3.2"
+# define OSDVersion "5.3.3"
 #define DMemoryVersion 5
 /*
 *****************************************************************************************************
