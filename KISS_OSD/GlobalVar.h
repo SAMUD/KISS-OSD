@@ -105,31 +105,11 @@ static unsigned long armedstarted = 0;
 static uint8_t extra_space_mah = 0;
 
 static uint16_t i = 0;
-static uint8_t KRPMPoses[4];
 static uint8_t lastMode = 0;
 
-char Motor1KERPM[30];
-char Motor2KERPM[30];
-char Motor3KERPM[30];
-char Motor4KERPM[30];
 
-static uint8_t CurrentPoses[4];
-static char Motor1Current[30];
-static char Motor2Current[30];
-static char Motor3Current[30];
-static char Motor4Current[30];
-
-static uint8_t TempPoses[4];
-static char ESC1Temp[30];
-static char ESC2Temp[30];
-static char ESC3Temp[30];
-static char ESC4Temp[30];
-
-static char LipoVoltC[30];
-static char LipoMAHC[30];
-
-static char Throttle[30];
-static char Current[30];
+static uint8_t TempCharPosition;
+static char TempCharConverted[8];
 
 static char Time[10];
 

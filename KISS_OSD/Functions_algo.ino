@@ -229,9 +229,7 @@ void getSerialData()
 void DisplayOSD()
 {
 	//Declaring some vars
-	uint8_t lipoVoltPos = print_int16(LipoVoltage, LipoVoltC, 2, 1);
-
-	uint8_t lipoMAHPos = print_int16(LipoMAH, LipoMAHC, 0, 1);
+	
 
 	uint8_t ESCmarginBot = 0;
 	uint8_t ESCmarginTop = 0;
@@ -270,15 +268,20 @@ void DisplayOSD()
 	{
 		OSD.setCursor(0, 0);
 		OSD.print(F("THROT:"));
-		OSD.print(Throttle);
+		print_int16(StickChanVals[0] / 10, TempCharConverted, 0, 1);
+		OSD.print(TempCharConverted);
+		ClearTempCharConverted();
+		OSD.print('%');
 		ESCmarginTop = 1;
 	}
 
 	if (reducedModeDisplay == 0 && Settings.DispCombCurrent1 || reducedModeDisplay == 1 && Settings.DispCombCurrent2 || reducedModeDisplay == 2 && Settings.DispCombCurrent3)
 	{
-		OSD.setCursor(-CurrentPos, 0);
-		OSD.print(Current);
-		ESCmarginTop = 1;
+		TempCharPosition = 2+ print_int16(current, TempCharConverted, 1, 0);
+		OSD.setCursor(-TempCharPosition, 0);
+		OSD.print(TempCharConverted);
+		OSD.print('AT');
+		ClearTempCharConverted();
 	}
 
 	if (reducedModeDisplay == 0 && Settings.DispPilotname1 || reducedModeDisplay == 1 && Settings.DispPilotname2 || reducedModeDisplay == 2 && Settings.DispPilotname3)
@@ -308,7 +311,9 @@ void DisplayOSD()
 		}
 		OSD.setCursor(Settings.marginLastRow, -1);
 		OSD.write(SYM_MAIN_BATT);
-		OSD.print(LipoVoltC);
+		print_int16(LipoVoltage, TempCharConverted, 2, 1);
+		OSD.print(TempCharConverted);
+		ClearTempCharConverted();
 		OSD.noBlink();
 		ESCmarginBot = 1;
 	}
@@ -316,9 +321,10 @@ void DisplayOSD()
 	if (reducedModeDisplay == 0 && Settings.DispTimer1 || reducedModeDisplay == 1 && Settings.DispTimer2 || reducedModeDisplay == 2 && Settings.DispTimer3)
 	{
 		OSD.setCursor(12, -1);
-		print_time(time, Time);
+		print_time(time, TempCharConverted);
 		OSD.write(SYM_FLY_M);
-		OSD.print(Time);
+		OSD.print(TempCharConverted);
+		ClearTempCharConverted();
 	}
 
 	if (reducedModeDisplay == 0 && Settings.DispMaConsumption1 || reducedModeDisplay == 1 && Settings.DispMaConsumption2 || reducedModeDisplay == 2 && Settings.DispMaConsumption3)
@@ -334,50 +340,113 @@ void DisplayOSD()
 				OSD.print(F("     CAPACITY       "));
 			}
 		}
-		OSD.setCursor(-(lipoMAHPos + 1 + Settings.marginLastRow), -1);
+		TempCharPosition = print_int16(LipoMAH, TempCharConverted, 0, 1);
+		OSD.setCursor(-(TempCharPosition + 1 + Settings.marginLastRow), -1);
 		OSD.write(SYM_MAH);
-		OSD.print(LipoMAHC);
+		OSD.print(TempCharConverted);
+		ClearTempCharConverted();
 		OSD.noBlink();
 		ESCmarginBot = 1;
 	}
 
 	if (reducedModeDisplay == 0 && Settings.DispEscKrpm1 || reducedModeDisplay == 1 && Settings.DispEscKrpm2 || reducedModeDisplay == 2 && Settings.DispEscKrpm3)
 	{
+		
+		//print motor 1
+		TempCharPosition = 2 + print_int16(motorKERPM[0], TempCharConverted, 1, 1);
 		OSD.setCursor(0, ESCmarginTop);
-		OSD.print(Motor1KERPM);
-		OSD.setCursor(-KRPMPoses[1], ESCmarginTop);
-		OSD.print(Motor2KERPM);
-		OSD.setCursor(-KRPMPoses[2], -(1 + ESCmarginBot));
-		OSD.print(Motor3KERPM);
+		OSD.print(TempCharConverted);
+		OSD.print('KR');
+		ClearTempCharConverted();
+
+		//print motor 2
+		TempCharPosition = 2 + print_int16(motorKERPM[1], TempCharConverted, 1, 1);
+		OSD.setCursor(-TempCharPosition, ESCmarginTop);
+		OSD.print(TempCharConverted);
+		OSD.print('KR');
+		ClearTempCharConverted();
+
+		//print motor 3
+		TempCharPosition = 2 + print_int16(motorKERPM[2], TempCharConverted, 1, 1);
+		OSD.setCursor(-TempCharPosition, -(1 + ESCmarginBot));
+		OSD.print(TempCharConverted);
+		OSD.print('KR');
+		ClearTempCharConverted();
+
+		//print motor 4
+		TempCharPosition = 2 + print_int16(motorKERPM[3], TempCharConverted, 1, 1);
 		OSD.setCursor(0, -(1 + ESCmarginBot));
-		OSD.print(Motor4KERPM);
+		OSD.print(TempCharConverted);
+		OSD.print('KR');
+		ClearTempCharConverted();
+
 		TMPmargin++;
 		CurrentMargin++;
 	}
 
 	if (reducedModeDisplay == 0 && Settings.DispEscCurrent1 || reducedModeDisplay == 1 && Settings.DispEscCurrent2 || reducedModeDisplay == 2 && Settings.DispEscCurrent3)
 	{
+		//current 1
+		TempCharPosition = 1 + print_int16(motorCurrent[0], TempCharConverted, 2, 1);
 		OSD.setCursor(0, CurrentMargin + ESCmarginTop);
-		OSD.print(Motor1Current);
-		OSD.setCursor(-CurrentPoses[1], CurrentMargin + ESCmarginTop);
-		OSD.print(Motor2Current);
-		OSD.setCursor(-CurrentPoses[2], -(1 + CurrentMargin + ESCmarginBot));
-		OSD.print(Motor3Current);
+		OSD.print(TempCharConverted);
+		OSD.print('A');
+		ClearTempCharConverted();
+
+		//current 2
+		TempCharPosition = 1 + print_int16(motorCurrent[1], TempCharConverted, 2, 1);
+		OSD.setCursor(-TempCharPosition, CurrentMargin + ESCmarginTop);
+		OSD.print(TempCharConverted);
+		OSD.print('A');
+		ClearTempCharConverted();
+
+		//current3
+		TempCharPosition = 1 + print_int16(motorCurrent[2], TempCharConverted, 2, 1);
+		OSD.setCursor(-TempCharPosition, -(1 + CurrentMargin + ESCmarginBot));
+		OSD.print(TempCharConverted);
+		OSD.print('A');
+		ClearTempCharConverted();
+
+		//current4
+		TempCharPosition = 1 + print_int16(motorCurrent[3], TempCharConverted, 2, 1);
 		OSD.setCursor(0, -(1 + CurrentMargin + ESCmarginBot));
-		OSD.print(Motor4Current);
+		OSD.print(TempCharConverted);
+		OSD.print('A');
+		ClearTempCharConverted();
+
 		TMPmargin++;
 	}
 
 	if (reducedModeDisplay == 0 && Settings.DispEscTemp1 || reducedModeDisplay == 1 && Settings.DispEscTemp2 || reducedModeDisplay == 2 && Settings.DispEscTemp3)
 	{
+		//temp1
+		TempCharPosition = 1 + print_int16(ESCTemps[0], TempCharConverted, 0, 1);
 		OSD.setCursor(0, TMPmargin + ESCmarginTop);
-		OSD.print(ESC1Temp);
-		OSD.setCursor(-TempPoses[1] - 1, TMPmargin + ESCmarginTop);
-		OSD.print(ESC2Temp);
-		OSD.setCursor(-TempPoses[2] - 1, -(1 + TMPmargin + ESCmarginBot));
-		OSD.print(ESC3Temp);
+		OSD.print(TempCharConverted);
+		OSD.print('°');
+		ClearTempCharConverted();
+
+		//temp2
+		TempCharPosition = 1 + print_int16(ESCTemps[1], TempCharConverted, 0, 1);
+		OSD.setCursor(-TempCharPosition - 1, TMPmargin + ESCmarginTop);
+		OSD.print(TempCharConverted);
+		OSD.print('°');
+		ClearTempCharConverted();
+
+		//temp3
+		TempCharPosition = 1 + print_int16(ESCTemps[2], TempCharConverted, 0, 1);
+		OSD.setCursor(-TempCharPosition - 1, -(1 + TMPmargin + ESCmarginBot));
+		OSD.print(TempCharConverted);
+		OSD.print('°');
+		ClearTempCharConverted();
+
+		//temp4
+		TempCharPosition = 1 + print_int16(ESCTemps[2], TempCharConverted, 0, 1);
 		OSD.setCursor(0, -(1 + TMPmargin + ESCmarginBot));
-		OSD.print(ESC4Temp);
+		OSD.print(TempCharConverted);
+		OSD.print('°');
+		ClearTempCharConverted();
+
 	}
 
 	if (reducedModeDisplay == 0 && Settings.DispAngle1 || reducedModeDisplay == 1 && Settings.DispAngle2 || reducedModeDisplay == 2 && Settings.DispAngle3)
@@ -545,73 +614,6 @@ void CalculateOSD()
 	}
 	armedOld = armed;
 
-	//clearing the RPM and TEMP Arrays and then rewriting the nwe values
-	for (i = 0; i<10; i++)
-	{
-		Motor1KERPM[i] = ' ';
-		Motor2KERPM[i] = ' ';
-		Motor3KERPM[i] = ' ';
-		Motor4KERPM[i] = ' ';
-
-		Motor1Current[i] = ' ';
-		Motor2Current[i] = ' ';
-		Motor3Current[i] = ' ';
-		Motor4Current[i] = ' ';
-
-		ESC1Temp[i] = ' ';
-		ESC2Temp[i] = ' ';
-		ESC3Temp[i] = ' ';
-		ESC4Temp[i] = ' ';
-
-		LipoVoltC[i] = ' ';
-		Throttle[i] = ' ';
-	}
-	ThrottlePos = print_int16(StickChanVals[0]/10, Throttle, 0, 1);
-	Throttle[ThrottlePos++] = '%';
-	//
-	CurrentPos = print_int16(current, Current, 1, 0);
-	Current[CurrentPos++] = 'A';
-	Current[CurrentPos++] = 'T';
-	//
-	KRPMPoses[0] = print_int16(motorKERPM[0], Motor1KERPM, 1, 1);
-	Motor1KERPM[KRPMPoses[0]++] = 'K';
-	Motor1KERPM[KRPMPoses[0]++] = 'R';
-	//
-	KRPMPoses[1] = print_int16(motorKERPM[1], Motor2KERPM, 1, 0);
-	Motor2KERPM[KRPMPoses[1]++] = 'K';
-	Motor2KERPM[KRPMPoses[1]++] = 'R';
-	//
-	KRPMPoses[2] = print_int16(motorKERPM[2], Motor3KERPM, 1, 0);
-	Motor3KERPM[KRPMPoses[2]++] = 'K';
-	Motor3KERPM[KRPMPoses[2]++] = 'R';
-	//
-	KRPMPoses[3] = print_int16(motorKERPM[3], Motor4KERPM, 1, 1);
-	Motor4KERPM[KRPMPoses[3]++] = 'K';
-	Motor4KERPM[KRPMPoses[3]++] = 'R';
-	//
-	CurrentPoses[0] = print_int16(motorCurrent[0], Motor1Current, 2, 1);
-	Motor1Current[CurrentPoses[0]++] = 'A';
-	//
-	CurrentPoses[1] = print_int16(motorCurrent[1], Motor2Current, 2, 0);
-	Motor2Current[CurrentPoses[1]++] = 'A';
-	//
-	CurrentPoses[2] = print_int16(motorCurrent[2], Motor3Current, 2, 0);
-	Motor3Current[CurrentPoses[2]++] = 'A';
-	//
-	CurrentPoses[3] = print_int16(motorCurrent[3], Motor4Current, 2, 1);
-	Motor4Current[CurrentPoses[3]++] = 'A';
-	//
-	TempPoses[0] = print_int16(ESCTemps[0], ESC1Temp, 0, 1);
-	ESC1Temp[TempPoses[0]++] = '°';
-	//
-	TempPoses[1] = print_int16(ESCTemps[1], ESC2Temp, 0, 0);
-	ESC2Temp[TempPoses[1]++] = '°';
-	//
-	TempPoses[2] = print_int16(ESCTemps[2], ESC3Temp, 0, 0);
-	ESC3Temp[TempPoses[2]++] = '°';
-	//
-	TempPoses[3] = print_int16(ESCTemps[3], ESC4Temp, 0, 1);
-	ESC4Temp[TempPoses[3]++] = '°';
 }
 
 void drawAngelIndicator(int8_t Value)
@@ -648,5 +650,13 @@ void OSDmakegrey() {
 	{
 		OSD.setCursor(0, makegrey);
 		OSD.print(F("                             "));
+	}
+}
+
+void ClearTempCharConverted()
+{
+	for (uint8_t i; i < 8; i++)
+	{
+		TempCharConverted[i] = 'i';
 	}
 }
