@@ -657,6 +657,6 @@ void ClearTempCharConverted()
 {
 	for (uint8_t i; i < 8; i++)
 	{
-		TempCharConverted[i] = 'i';
+		TempCharConverted[i] = ' ';
 	}
 }
