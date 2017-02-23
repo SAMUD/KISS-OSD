@@ -456,7 +456,7 @@ void DisplayOSD()
 	}
 
 	//show the detected cell count upon the first 30 flight-sec if not armed
-	if (current == 0 && BatteryCells != 0 && armed == 0 && firstarmed == 0 && firstloop == 255 && time<30000)
+	if (current == 0 && BatteryCells != 0 && armed == 0 && firstarmed == 0 && time<30000)
 	{
 		OSD.setCursor(4, MarginMiddleY);
 		MarginMiddleY++;
@@ -485,7 +485,7 @@ void DisplayOSD()
 		}
 	}
 
-	if (firstloop<255)
+	/*if (firstloop<255)
 	{
 		OSD.setCursor(4, MarginMiddleY);
 		MarginMiddleY++;
@@ -493,7 +493,7 @@ void DisplayOSD()
 		OSD.print(F("WAIT - DON'T ARM: "));
 		OSD.noBlink();
 		OSD.print(percent);
-	}
+	}*/
 
 	//show armed | DISARMED
 	if (armed == 0)
@@ -546,13 +546,13 @@ void CalculateOSD()
 {
 
 	//calculating Voltage alarm
-	if (firstloop<254 && LipoVoltage>200)
+	/*if (firstloop<254 && LipoVoltage>200)
 	{
 		//generating a delay, because voltage reading is inaccurate in the beginning.
 		firstloop++;
 		percent = (firstloop * 100) / 255; //for showing percentage in osd
-	}
-	if (firstloop == 254  && LipoVoltage>200)
+	}*/
+	if (LipoVoltage>200)
 	{
 		//check the battery cells to display the correct alarm later
 		uint16_t tempVoltage = LipoVoltage;
@@ -562,10 +562,10 @@ void CalculateOSD()
 			BatteryCells = BatteryCells + 1;
 			tempVoltage = tempVoltage - 440;
 		}
-		firstloop = 255;
+		//firstloop = 255;
 	}
 	//Voltage Alarm 1 and 2
-	if ( (LipoVoltage / BatteryCells)<Settings.LowVoltage1st  && firstloop == 255 && Settings.LowVoltageAllowed == 1)
+	if ( (LipoVoltage / BatteryCells)<Settings.LowVoltage1st && Settings.LowVoltageAllowed == 1)
 	{
 		
 		VoltageAlarm = true;
@@ -576,12 +576,6 @@ void CalculateOSD()
 	}
 	//no Voltage Alarm
 	if ( (LipoVoltage / BatteryCells)> (Settings.LowVoltage1st + Settings.hysteresis) && VoltageAlarm==true)
-	{
-		VoltageAlarm = false;
-		VoltageAlarm2nd = false;
-	}
-
-	if (firstloop<255)
 	{
 		VoltageAlarm = false;
 		VoltageAlarm2nd = false;

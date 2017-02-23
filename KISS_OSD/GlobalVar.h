@@ -70,7 +70,7 @@ MAX7456 OSD(osdChipSelect);
 
 static char clean[30];
 
-static uint8_t firstloop = 0;
+//static uint8_t firstloop = 0;
 static uint8_t BatteryCells = 0;		//stores the number of cells recognized in the first run
 static boolean VoltageAlarm = false;	//works with the const defined in the beginning | Filters Voltage drops to avoid erratic voltage alarms
 static boolean VoltageAlarm2nd = false;	//2nd stage of voltage alarms
