@@ -5,7 +5,7 @@ KISS FC OSD
 by Samuel Daurat (sdaurat@outlook.de)
 based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
-# define OSDVersion "5.3.4"
+# define OSDVersion "5.4"
 #define DMemoryVersion 6
 /*
 *****************************************************************************************************
@@ -75,14 +75,9 @@ const char Pilotname[] = " SAMU";
 //SETUP function
 void setup() {
 
-  pinMode(13, OUTPUT);
-
   //turn on watchdog timer
   wdt_enable(WDTO_8S);
   wdt_reset();
-
-  
-
 
   SPI.begin();
   SPI.setClockDivider(SPI_CLOCK_DIV2);
@@ -129,18 +124,15 @@ void setup() {
   OSD.print(F("SAMUD OSD"));
   OSD.setCursor(6, 3);
   OSD.print(F("CUSTOM KISS OSD"));
-  OSD.setCursor(3, 5);
-  OSD.print(F("WAITING FOR KISS FC...  "));
   OSD.setCursor(5, 9);
   OSD.print(F("ENJOY YOUR FLIGHT"));
+  OSD.setCursor(3, 14);
+  OSD.print(F("WAITING FOR KISS FC...  "));
   OSD.videoBackground();
 	for (int i = 0; i < 10; i++)
 	{
 		wdt_reset();
-		digitalWrite(13, HIGH);
-		delay(500);
-		digitalWrite(13, LOW);
-		delay(500);
+		delay(1000);
 	}
 	OSD.clear();
 

@@ -268,20 +268,21 @@ void DisplayOSD()
 	{
 		OSD.setCursor(0, 0);
 		OSD.print(F("THROT:"));
-		print_int16(StickChanVals[0] / 10, TempCharConverted, 0, 1);
-		OSD.print(TempCharConverted);
 		ClearTempCharConverted();
-		OSD.print('%');
+		TempCharPosition = print_int16(StickChanVals[0] / 10, TempCharConverted, 0, 1);
+		TempCharConverted[TempCharPosition++] = '%';
+		OSD.print(TempCharConverted);
 		ESCmarginTop = 1;
 	}
 
 	if (reducedModeDisplay == 0 && Settings.DispCombCurrent1 || reducedModeDisplay == 1 && Settings.DispCombCurrent2 || reducedModeDisplay == 2 && Settings.DispCombCurrent3)
 	{
+		ClearTempCharConverted();
 		TempCharPosition = 2+ print_int16(current, TempCharConverted, 1, 0);
+		TempCharConverted[TempCharPosition++] = 'A';
+		TempCharConverted[TempCharPosition++] = 'T';
 		OSD.setCursor(-TempCharPosition, 0);
 		OSD.print(TempCharConverted);
-		OSD.print('AT');
-		ClearTempCharConverted();
 	}
 
 	if (reducedModeDisplay == 0 && Settings.DispPilotname1 || reducedModeDisplay == 1 && Settings.DispPilotname2 || reducedModeDisplay == 2 && Settings.DispPilotname3)
@@ -311,9 +312,9 @@ void DisplayOSD()
 		}
 		OSD.setCursor(Settings.marginLastRow, -1);
 		OSD.write(SYM_MAIN_BATT);
+		ClearTempCharConverted();
 		print_int16(LipoVoltage, TempCharConverted, 2, 1);
 		OSD.print(TempCharConverted);
-		ClearTempCharConverted();
 		OSD.noBlink();
 		ESCmarginBot = 1;
 	}
@@ -321,10 +322,10 @@ void DisplayOSD()
 	if (reducedModeDisplay == 0 && Settings.DispTimer1 || reducedModeDisplay == 1 && Settings.DispTimer2 || reducedModeDisplay == 2 && Settings.DispTimer3)
 	{
 		OSD.setCursor(12, -1);
+		ClearTempCharConverted();
 		print_time(time, TempCharConverted);
 		OSD.write(SYM_FLY_M);
 		OSD.print(TempCharConverted);
-		ClearTempCharConverted();
 	}
 
 	if (reducedModeDisplay == 0 && Settings.DispMaConsumption1 || reducedModeDisplay == 1 && Settings.DispMaConsumption2 || reducedModeDisplay == 2 && Settings.DispMaConsumption3)
@@ -340,11 +341,15 @@ void DisplayOSD()
 				OSD.print(F("     CAPACITY       "));
 			}
 		}
+		ClearTempCharConverted();
+		for (uint8_t i = 0; i < 32; i++)
+		{
+			TempCharConverted[i] = ' ';
+		}
 		TempCharPosition = print_int16(LipoMAH, TempCharConverted, 0, 1);
 		OSD.setCursor(-(TempCharPosition + 1 + Settings.marginLastRow), -1);
 		OSD.write(SYM_MAH);
 		OSD.print(TempCharConverted);
-		ClearTempCharConverted();
 		OSD.noBlink();
 		ESCmarginBot = 1;
 	}
@@ -353,31 +358,27 @@ void DisplayOSD()
 	{
 		
 		//print motor 1
+		ClearTempCharConverted();
 		TempCharPosition = 2 + print_int16(motorKERPM[0], TempCharConverted, 1, 1);
 		OSD.setCursor(0, ESCmarginTop);
 		OSD.print(TempCharConverted);
-		OSD.print('KR');
-		ClearTempCharConverted();
 
 		//print motor 2
+		ClearTempCharConverted();
 		TempCharPosition = 2 + print_int16(motorKERPM[1], TempCharConverted, 1, 1);
 		OSD.setCursor(-TempCharPosition, ESCmarginTop);
 		OSD.print(TempCharConverted);
-		OSD.print('KR');
+
+		//print motor 4
 		ClearTempCharConverted();
+		TempCharPosition = 2 + print_int16(motorKERPM[3], TempCharConverted, 1, 1);
+		OSD.setCursor(0, -(1 + ESCmarginBot));
+		OSD.print(TempCharConverted);
 
 		//print motor 3
 		TempCharPosition = 2 + print_int16(motorKERPM[2], TempCharConverted, 1, 1);
 		OSD.setCursor(-TempCharPosition, -(1 + ESCmarginBot));
 		OSD.print(TempCharConverted);
-		OSD.print('KR');
-		ClearTempCharConverted();
-
-		//print motor 4
-		TempCharPosition = 2 + print_int16(motorKERPM[3], TempCharConverted, 1, 1);
-		OSD.setCursor(0, -(1 + ESCmarginBot));
-		OSD.print(TempCharConverted);
-		OSD.print('KR');
 		ClearTempCharConverted();
 
 		TMPmargin++;
@@ -387,32 +388,32 @@ void DisplayOSD()
 	if (reducedModeDisplay == 0 && Settings.DispEscCurrent1 || reducedModeDisplay == 1 && Settings.DispEscCurrent2 || reducedModeDisplay == 2 && Settings.DispEscCurrent3)
 	{
 		//current 1
+		ClearTempCharConverted();
 		TempCharPosition = 1 + print_int16(motorCurrent[0], TempCharConverted, 2, 1);
+		TempCharConverted[TempCharPosition++] = 'A';
 		OSD.setCursor(0, CurrentMargin + ESCmarginTop);
 		OSD.print(TempCharConverted);
-		OSD.print('A');
-		ClearTempCharConverted();
 
 		//current 2
+		ClearTempCharConverted();
 		TempCharPosition = 1 + print_int16(motorCurrent[1], TempCharConverted, 2, 1);
+		TempCharConverted[TempCharPosition++] = 'A';
 		OSD.setCursor(-TempCharPosition, CurrentMargin + ESCmarginTop);
 		OSD.print(TempCharConverted);
-		OSD.print('A');
-		ClearTempCharConverted();
-
-		//current3
-		TempCharPosition = 1 + print_int16(motorCurrent[2], TempCharConverted, 2, 1);
-		OSD.setCursor(-TempCharPosition, -(1 + CurrentMargin + ESCmarginBot));
-		OSD.print(TempCharConverted);
-		OSD.print('A');
-		ClearTempCharConverted();
 
 		//current4
+		ClearTempCharConverted();
 		TempCharPosition = 1 + print_int16(motorCurrent[3], TempCharConverted, 2, 1);
+		TempCharConverted[TempCharPosition++] = 'A';
 		OSD.setCursor(0, -(1 + CurrentMargin + ESCmarginBot));
 		OSD.print(TempCharConverted);
-		OSD.print('A');
+
+		//current3
 		ClearTempCharConverted();
+		TempCharPosition = 1 + print_int16(motorCurrent[2], TempCharConverted, 2, 1);
+		TempCharConverted[TempCharPosition++] = 'A';
+		OSD.setCursor(-TempCharPosition, -(1 + CurrentMargin + ESCmarginBot));
+		OSD.print(TempCharConverted);
 
 		TMPmargin++;
 	}
@@ -420,32 +421,32 @@ void DisplayOSD()
 	if (reducedModeDisplay == 0 && Settings.DispEscTemp1 || reducedModeDisplay == 1 && Settings.DispEscTemp2 || reducedModeDisplay == 2 && Settings.DispEscTemp3)
 	{
 		//temp1
+		ClearTempCharConverted();
 		TempCharPosition = 1 + print_int16(ESCTemps[0], TempCharConverted, 0, 1);
+		TempCharConverted[TempCharPosition++] = '°';
 		OSD.setCursor(0, TMPmargin + ESCmarginTop);
 		OSD.print(TempCharConverted);
-		OSD.print('°');
-		ClearTempCharConverted();
 
 		//temp2
+		ClearTempCharConverted();
 		TempCharPosition = 1 + print_int16(ESCTemps[1], TempCharConverted, 0, 1);
+		TempCharConverted[TempCharPosition++] = '°';
 		OSD.setCursor(-TempCharPosition - 1, TMPmargin + ESCmarginTop);
 		OSD.print(TempCharConverted);
-		OSD.print('°');
-		ClearTempCharConverted();
-
-		//temp3
-		TempCharPosition = 1 + print_int16(ESCTemps[2], TempCharConverted, 0, 1);
-		OSD.setCursor(-TempCharPosition - 1, -(1 + TMPmargin + ESCmarginBot));
-		OSD.print(TempCharConverted);
-		OSD.print('°');
-		ClearTempCharConverted();
 
 		//temp4
-		TempCharPosition = 1 + print_int16(ESCTemps[2], TempCharConverted, 0, 1);
+		ClearTempCharConverted();
+		TempCharPosition = 1 + print_int16(ESCTemps[3], TempCharConverted, 0, 1);
+		TempCharConverted[TempCharPosition++] = '°';
 		OSD.setCursor(0, -(1 + TMPmargin + ESCmarginBot));
 		OSD.print(TempCharConverted);
-		OSD.print('°');
+
+		//temp3
 		ClearTempCharConverted();
+		TempCharPosition = 1 + print_int16(ESCTemps[2], TempCharConverted, 0, 1);
+		TempCharConverted[TempCharPosition++] = '°';
+		OSD.setCursor(-TempCharPosition - 1, -(1 + TMPmargin + ESCmarginBot));
+		OSD.print(TempCharConverted);
 
 	}
 
@@ -649,7 +650,7 @@ void OSDmakegrey() {
 
 void ClearTempCharConverted()
 {
-	for (uint8_t i; i < 8; i++)
+	for (uint8_t i=0; i < 32; i++)
 	{
 		TempCharConverted[i] = ' ';
 	}
