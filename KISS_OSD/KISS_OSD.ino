@@ -81,14 +81,7 @@ void setup() {
   wdt_enable(WDTO_8S);
   wdt_reset();
 
-  for (int i = 0; i < 15; i++)
-  {
-	  wdt_reset();
-	  digitalWrite(13, HIGH);
-	  delay(1000);
-	  digitalWrite(13, LOW);
-	  delay(1000);
-  }
+  
 
 
   SPI.begin();
@@ -96,7 +89,6 @@ void setup() {
 
 #if defined(PAL)
   OSD.begin(28, 15, 0);
-  OSD.setTextOffset(-1, -6);
   OSD.setDefaultSystem(MAX7456_PAL);
 #endif
 #if defined(NTSC)
@@ -129,13 +121,34 @@ void setup() {
   OSD.setBlinkingTime(2); //0-3
   OSD.setBlinkingDuty(1); //0-3
 
+  //set the Offset
+  OSD.setTextOffset(Settings.OffsetX, Settings.OffsetY);
+
+  OSDmakegrey();
+  OSD.setCursor(9, 3);
+  OSD.print(F("SAMUD OSD"));
+  OSD.setCursor(6, 4);
+  OSD.print(F("CUSTOM KISS OSD"));
+  OSD.setCursor(3, 9);
+  OSD.print(F("WAITING FOR KISS FC...  "));
+  OSD.videoBackground();
+  delay(2000);
+
+  for (int i = 0; i < 10; i++)
+  {
+	  wdt_reset();
+	  digitalWrite(13, HIGH);
+	  delay(500);
+	  digitalWrite(13, LOW);
+	  delay(500);
+  }
+
   Serial.begin(115200);
 
   //init memory
   EEPROMinit();
 
-  //set the Offset
-  OSD.setTextOffset(Settings.OffsetX, Settings.OffsetY);
+  
 }
 
 

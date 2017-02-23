@@ -29,9 +29,11 @@ void menumain()
 	OSD.setCursor(6, 4);
 	OSD.print(F("CUSTOM KISS OSD"));
 	OSD.setCursor(1, 8);
-	OSD.print(F("MORE INFORMATION AND WIKI: "));
+	OSD.print(F("MORE INFORMATION AND WIKI:"));
 	OSD.setCursor(1, 9);
-	OSD.print(F("GITHUB.COM/SAMUD/KISS-OSD  "));
+	OSD.print(F("GITHUB.COM/SAMUD/KISS-OSD"));
+	OSD.setCursor(7, 10);
+	OSD.print(F("OR ON FACEBOOK"));
 	OSD.videoBackground();
 	delay(2000);
 
