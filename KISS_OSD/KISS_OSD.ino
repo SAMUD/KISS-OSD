@@ -125,23 +125,24 @@ void setup() {
   OSD.setTextOffset(Settings.OffsetX, Settings.OffsetY);
 
   OSDmakegrey();
-  OSD.setCursor(9, 3);
+  OSD.setCursor(9, 2);
   OSD.print(F("SAMUD OSD"));
-  OSD.setCursor(6, 4);
+  OSD.setCursor(6, 3);
   OSD.print(F("CUSTOM KISS OSD"));
-  OSD.setCursor(3, 9);
+  OSD.setCursor(3, 5);
   OSD.print(F("WAITING FOR KISS FC...  "));
+  OSD.setCursor(5, 9);
+  OSD.print(F("ENJOY YOUR FLIGHT"));
   OSD.videoBackground();
-  delay(2000);
-
-  for (int i = 0; i < 10; i++)
-  {
-	  wdt_reset();
-	  digitalWrite(13, HIGH);
-	  delay(500);
-	  digitalWrite(13, LOW);
-	  delay(500);
-  }
+	for (int i = 0; i < 10; i++)
+	{
+		wdt_reset();
+		digitalWrite(13, HIGH);
+		delay(500);
+		digitalWrite(13, LOW);
+		delay(500);
+	}
+	OSD.clear();
 
   Serial.begin(115200);
 
