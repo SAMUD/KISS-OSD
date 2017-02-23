@@ -70,60 +70,72 @@ const char Pilotname[] = " SAMU";
 #include <avr/wdt.h>
 
 
+
 //==============
 //SETUP function
 void setup() {
 
-	//turn on watchdog timer
-	wdt_enable(WDTO_8S);
-	wdt_reset();
+  pinMode(13, OUTPUT);
+
+  //turn on watchdog timer
+  wdt_enable(WDTO_8S);
+  wdt_reset();
+
+  for (int i = 0; i < 15; i++)
+  {
+	  wdt_reset();
+	  digitalWrite(13, HIGH);
+	  delay(1000);
+	  digitalWrite(13, LOW);
+	  delay(1000);
+  }
 
 
-	SPI.begin();
-	SPI.setClockDivider(SPI_CLOCK_DIV2);
+  SPI.begin();
+  SPI.setClockDivider(SPI_CLOCK_DIV2);
 
 #if defined(PAL)
-	OSD.begin(28, 15, 0);
-	OSD.setTextOffset(-1, -6);
-	OSD.setDefaultSystem(MAX7456_PAL);
+  OSD.begin(28, 15, 0);
+  OSD.setTextOffset(-1, -6);
+  OSD.setDefaultSystem(MAX7456_PAL);
 #endif
 #if defined(NTSC)
-	OSD.begin(MAX7456_COLS_N1, MAX7456_ROWS_N0);
-	OSD.setDefaultSystem(MAX7456_NTSC);
+  OSD.begin(MAX7456_COLS_N1, MAX7456_ROWS_N0);
+  OSD.setDefaultSystem(MAX7456_NTSC);
 #endif
 
-	OSD.setSwitchingTime(4);
+  OSD.setSwitchingTime(4);
 
 #if defined(USE_MAX7456_ASCII)
-	OSD.setCharEncoding(MAX7456_ASCII);
+  OSD.setCharEncoding(MAX7456_ASCII);
 #endif
 #if defined(USE_MAX7456_MAXIM)
-	OSD.setCharEncoding(MAX7456_MAXIM);
+  OSD.setCharEncoding(MAX7456_MAXIM);
 #endif
 
-	OSD.display();
-	
-	//clean used area
-	uint8_t i = 0;
-	for (i = 0; i<30; i++) clean[i] = ' ';
-	while (!OSD.notInVSync());
-	for (i = 0; i<20; i++)
-	{
-		OSD.setCursor(0, i);
-		OSD.print(clean);
-	}
+  OSD.display();
+  
+  //clean used area
+  uint8_t i = 0;
+  for (i = 0; i<30; i++) clean[i] = ' ';
+  while (!OSD.notInVSync());
+  for (i = 0; i<20; i++)
+  {
+    OSD.setCursor(0, i);
+    OSD.print(clean);
+  }
 
-	//set blinktime
-	OSD.setBlinkingTime(2); //0-3
-	OSD.setBlinkingDuty(1); //0-3
+  //set blinktime
+  OSD.setBlinkingTime(2); //0-3
+  OSD.setBlinkingDuty(1); //0-3
 
-	Serial.begin(115200);
+  Serial.begin(115200);
 
-	//init memory
-	EEPROMinit();
+  //init memory
+  EEPROMinit();
 
-	//set the Offset
-	OSD.setTextOffset(Settings.OffsetX, Settings.OffsetY);
+  //set the Offset
+  OSD.setTextOffset(Settings.OffsetX, Settings.OffsetY);
 }
 
 
@@ -133,30 +145,31 @@ void setup() {
 void loop()
 {
 
-	//big if with all code
-	if (micros() - LastLoopTime > 20000) //limits the speed of the OSD to 20Hz
-	{
-		LastLoopTime = micros();
+  //big if with all code
+  if (micros() - LastLoopTime > 20000) //limits the speed of the OSD to 20Hz
+  {
+    LastLoopTime = micros();
 
-		getSerialData();
+    getSerialData();
 
-		//open menu if yaw left and disarmed
-		if (armed == 0 && StickChanVals[3]>500)
-		{
-			menumain();
-			OSD.clear();
-			EEPROMsave();
-			delay(1000);
-		}
+    //open menu if yaw left and disarmed
+    if (armed == 0 && StickChanVals[3]>500)
+    {
+      menumain();
+      OSD.clear();
+      EEPROMsave();
+      delay(1000);
+    }
 
-		//calculate the datas to display
-		CalculateOSD();
+    //calculate the datas to display
+    CalculateOSD();
 
-		//Display the datas
-		DisplayOSD();
+    //Display the datas
+    DisplayOSD();
 
-		//Reset wdt
-		wdt_reset();
-	}
+    //Reset wdt
+    wdt_reset();
+  }
 
 }
+
