@@ -79,6 +79,7 @@ void setup() {
   wdt_enable(WDTO_8S);
   wdt_reset();
 
+  //start SPI
   SPI.begin();
   SPI.setClockDivider(SPI_CLOCK_DIV2);
 
@@ -91,7 +92,7 @@ void setup() {
   OSD.setDefaultSystem(MAX7456_NTSC);
 #endif
 
-  OSD.setSwitchingTime(4);
+  OSD.setSwitchingTime(0);					//lower value will make text a little bit sharper
 
 #if defined(USE_MAX7456_ASCII)
   OSD.setCharEncoding(MAX7456_ASCII);
@@ -100,7 +101,7 @@ void setup() {
   OSD.setCharEncoding(MAX7456_MAXIM);
 #endif
 
-  OSD.display();
+  OSD.display();							//enable OSD output
   
   //clean used area
   uint8_t i = 0;
@@ -119,16 +120,20 @@ void setup() {
   //set the Offset
   OSD.setTextOffset(Settings.OffsetX, Settings.OffsetY);
 
-  //OSDmakegrey();
-  OSD.setCursor(9, 1);
+  OSD.setCursor(9, 0);
   OSD.print(F("SAMUD OSD"));
-  OSD.setCursor(6, 2);
+  OSD.setCursor(6, 1);
   OSD.print(F("CUSTOM KISS OSD"));
-  OSD.setCursor(5, 3);
+  OSD.setCursor(5, 2);
   OSD.print(F("ENJOY YOUR FLIGHT"));
-  OSD.setCursor(3, 14);
+  OSD.setCursor(0, 13);
+  OSD.print(F("USING "));
+  if(OSD.videoSystem() == 1)
+	  OSD.print(F("PAL"));
+  else if(OSD.videoSystem() == 2)
+	  OSD.print(F("NTSC"));
+  OSD.setCursor(0, 14);
   OSD.print(F("WAITING FOR KISS FC...  "));
-  //OSD.videoBackground();
 	for (int i = 0; i < 10; i++)
 	{
 		wdt_reset();
