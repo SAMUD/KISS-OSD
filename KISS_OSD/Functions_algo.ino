@@ -644,7 +644,7 @@ void OSDmakegrey() {
 
 void ClearTempCharConverted()
 {
-	for (uint8_t i = 0; i < 9; i++)
+	for (uint8_t i = 0; i < 15; i++)
 	{
 		TempCharConverted[i] = ' ';
 	}
