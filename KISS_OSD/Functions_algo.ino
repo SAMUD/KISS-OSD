@@ -109,7 +109,7 @@ void getSerialData()
 	{
 
 
-#define STARTCOUNT 2
+
 		while (Serial.available()) serialBuf[recBytes++] = Serial.read();
 		if (recBytes == 1 && serialBuf[0] != 5)recBytes = 0; // check for start byte, reset if its wrong
 		if (recBytes == 2) minBytes = serialBuf[1] + STARTCOUNT + 1; // got the transmission length
@@ -256,21 +256,18 @@ void DisplayOSD()
 	if (reducedModeDisplay != lastMode)
 	{
 		lastMode = reducedModeDisplay;
-		for (i = 0; i<20; i++)
-		{
-			OSD.setCursor(0, i);
-			OSD.print(clean);
-		}
+		OSD.clear();
+		while(OSD.clearIsBusy())
 		while (!OSD.notInVSync());
 	}
 
 	if (reducedModeDisplay == 0 && Settings.DispRCThrottle1 || reducedModeDisplay == 1 && Settings.DispRCThrottle2 || reducedModeDisplay == 2 && Settings.DispRCThrottle3)
 	{
 		OSD.setCursor(0, 0);
-		OSD.print(F("THROT:"));
+		OSD.write(SYM_THR);
 		ClearTempCharConverted();
 		TempCharPosition = print_int16(StickChanVals[0] / 10, TempCharConverted, 0, 1);
-		TempCharConverted[TempCharPosition++] = '%';
+		TempCharConverted[TempCharPosition++] = SYM_PERC;
 		OSD.print(TempCharConverted);
 		ESCmarginTop = 1;
 	}
@@ -420,29 +417,29 @@ void DisplayOSD()
 		//temp1
 		ClearTempCharConverted();
 		TempCharPosition = print_int16(ESCTemps[0], TempCharConverted, 0, 1);
-		TempCharConverted[TempCharPosition++] = 'C';
+		TempCharConverted[TempCharPosition++] = SYM_TEMP_C;
 		OSD.setCursor(0, TMPmargin + ESCmarginTop);
 		OSD.print(TempCharConverted);
 
 		//temp2
 		ClearTempCharConverted();
 		TempCharPosition = print_int16(ESCTemps[1], TempCharConverted, 0, 1);
-		TempCharConverted[TempCharPosition++] = 'C';
-		OSD.setCursor(-TempCharPosition - 1, TMPmargin + ESCmarginTop);
+		TempCharConverted[TempCharPosition++] = SYM_TEMP_C;
+		OSD.setCursor(-TempCharPosition, TMPmargin + ESCmarginTop);
 		OSD.print(TempCharConverted);
 
 		//temp4
 		ClearTempCharConverted();
 		TempCharPosition = print_int16(ESCTemps[3], TempCharConverted, 0, 1);
-		TempCharConverted[TempCharPosition++] = 'C';
+		TempCharConverted[TempCharPosition++] = SYM_TEMP_C;
 		OSD.setCursor(0, -(1 + TMPmargin + ESCmarginBot));
 		OSD.print(TempCharConverted);
 
 		//temp3
 		ClearTempCharConverted();
 		TempCharPosition = print_int16(ESCTemps[2], TempCharConverted, 0, 1);
-		TempCharConverted[TempCharPosition++] = 'C';
-		OSD.setCursor(-TempCharPosition - 1, -(1 + TMPmargin + ESCmarginBot));
+		TempCharConverted[TempCharPosition++] = SYM_TEMP_C;
+		OSD.setCursor(-TempCharPosition, -(1 + TMPmargin + ESCmarginBot));
 		OSD.print(TempCharConverted);
 
 	}
@@ -651,4 +648,28 @@ void ClearTempCharConverted()
 	{
 		TempCharConverted[i] = ' ';
 	}
+}
+
+void WaitForKissFc()
+{
+	OSD.setCursor(9, 0);
+	OSD.print(F("SAMUD OSD"));
+	OSD.setCursor(6, 1);
+	OSD.print(F("CUSTOM KISS OSD"));
+	OSD.setCursor(5, 2);
+	OSD.print(F("ENJOY YOUR FLIGHT"));
+	OSD.setCursor(0, 13);
+	OSD.print(F("USING "));
+	if (OSD.videoSystem() == 1)
+		OSD.print(F("PAL"));
+	else if (OSD.videoSystem() == 2)
+		OSD.print(F("NTSC"));
+	OSD.setCursor(0, 14);
+	OSD.print(F("WAITING FOR KISS FC...  "));
+	for (int i = 0; i < 10; i++)
+	{
+		wdt_reset();
+		delay(1000);
+	}
+	OSD.clear();
 }

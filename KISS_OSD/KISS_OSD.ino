@@ -5,7 +5,7 @@ KISS FC OSD
 by Samuel Daurat (sdaurat@outlook.de)
 based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
-# define OSDVersion "5.4"
+# define OSDVersion "5.5"
 #define DMemoryVersion 6
 /*
 *****************************************************************************************************
@@ -103,15 +103,10 @@ void setup() {
 
   OSD.display();							//enable OSD output
   
-  //clean used area
-  uint8_t i = 0;
-  for (i = 0; i<30; i++) clean[i] = ' ';
+
   while (!OSD.notInVSync());
-  for (i = 0; i<20; i++)
-  {
-    OSD.setCursor(0, i);
-    OSD.print(clean);
-  }
+  OSD.clear();
+  while(OSD.clearIsBusy())
 
   //set blinktime
   OSD.setBlinkingTime(2); //0-3
@@ -120,26 +115,7 @@ void setup() {
   //set the Offset
   OSD.setTextOffset(Settings.OffsetX, Settings.OffsetY);
 
-  OSD.setCursor(9, 0);
-  OSD.print(F("SAMUD OSD"));
-  OSD.setCursor(6, 1);
-  OSD.print(F("CUSTOM KISS OSD"));
-  OSD.setCursor(5, 2);
-  OSD.print(F("ENJOY YOUR FLIGHT"));
-  OSD.setCursor(0, 13);
-  OSD.print(F("USING "));
-  if(OSD.videoSystem() == 1)
-	  OSD.print(F("PAL"));
-  else if(OSD.videoSystem() == 2)
-	  OSD.print(F("NTSC"));
-  OSD.setCursor(0, 14);
-  OSD.print(F("WAITING FOR KISS FC...  "));
-	for (int i = 0; i < 10; i++)
-	{
-		wdt_reset();
-		delay(1000);
-	}
-	OSD.clear();
+  WaitForKissFc();
 
   Serial.begin(115200);
 

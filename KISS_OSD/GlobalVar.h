@@ -59,16 +59,10 @@
 #define DStandbyCurrent 1000					//*
 //*************************************************
 
-
-const byte osdChipSelect = 6;
-const byte masterOutSlaveIn = MOSI;
-const byte masterInSlaveOut = MISO;
-const byte slaveClock = SCK;
-const byte osdReset = 2;
+#define osdChipSelect 6
+#define STARTCOUNT 2
 
 MAX7456 OSD(osdChipSelect);
-
-static char clean[30];
 
 //static uint8_t firstloop = 0;
 static uint8_t BatteryCells = 0;		//stores the number of cells recognized in the first run
@@ -110,8 +104,6 @@ static uint8_t lastMode = 0;
 
 static uint8_t TempCharPosition;
 static char TempCharConverted[8];
-
-static char Time[10];
 
 static uint32_t LastLoopTime;
 
