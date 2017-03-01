@@ -109,7 +109,7 @@ static uint8_t lastMode = 0;
 
 
 static uint8_t TempCharPosition;
-static char TempCharConverted[32];
+static char TempCharConverted[8];
 
 static char Time[10];
 

@@ -119,16 +119,16 @@ void setup() {
   //set the Offset
   OSD.setTextOffset(Settings.OffsetX, Settings.OffsetY);
 
-  OSDmakegrey();
-  OSD.setCursor(9, 2);
+  //OSDmakegrey();
+  OSD.setCursor(9, 1);
   OSD.print(F("SAMUD OSD"));
-  OSD.setCursor(6, 3);
+  OSD.setCursor(6, 2);
   OSD.print(F("CUSTOM KISS OSD"));
-  OSD.setCursor(5, 9);
+  OSD.setCursor(5, 3);
   OSD.print(F("ENJOY YOUR FLIGHT"));
   OSD.setCursor(3, 14);
   OSD.print(F("WAITING FOR KISS FC...  "));
-  OSD.videoBackground();
+  //OSD.videoBackground();
 	for (int i = 0; i < 10; i++)
 	{
 		wdt_reset();

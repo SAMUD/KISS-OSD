@@ -1,5 +1,5 @@
-D:\Win10\Temp\VMBuilds\KISS_OSD\mini_atmega328\KISS_OSD.cpp.o: \
- D:\Win10\Temp\VMBuilds\KISS_OSD\mini_atmega328\KISS_OSD.cpp \
+D:\Win10\Temp\VMBuilds\KISS_OSD\pro_16MHzatmega328\KISS_OSD.cpp.o: \
+ D:\Win10\Temp\VMBuilds\KISS_OSD\pro_16MHzatmega328\KISS_OSD.cpp \
  C:\Program\ Files\ (x86)\Arduino\hardware\arduino\avr\cores\arduino/arduino.h \
  C:\Program\ Files\ (x86)\Arduino\hardware\arduino\avr\cores\arduino/binary.h \
  C:\Program\ Files\ (x86)\Arduino\hardware\arduino\avr\cores\arduino/WCharacter.h \
@@ -16,6 +16,6 @@ D:\Win10\Temp\VMBuilds\KISS_OSD\mini_atmega328\KISS_OSD.cpp.o: \
  C:\Program\ Files\ (x86)\Arduino\hardware\arduino\avr\cores\arduino/Arduino.h \
  C:\Program\ Files\ (x86)\Arduino\libraries\MAX7456/MAX7456.h \
  C:\Program\ Files\ (x86)\Arduino\hardware\arduino\avr\cores\arduino/Print.h \
- D:\Win10\Temp\VMBuilds\KISS_OSD\mini_atmega328\symbols.h \
+ D:\Win10\Temp\VMBuilds\KISS_OSD\pro_16MHzatmega328\symbols.h \
  C:\Program\ Files\ (x86)\Arduino\libraries\EEPROMEx/EEPROMex.h \
- D:\Win10\Temp\VMBuilds\KISS_OSD\mini_atmega328\GlobalVar.h
+ D:\Win10\Temp\VMBuilds\KISS_OSD\pro_16MHzatmega328\GlobalVar.h

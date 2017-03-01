@@ -107,9 +107,9 @@ void getSerialData()
 						//aquire serial data and write it to normal variables
 	while (recBytes < minBytes && micros() - LastLoopTime < 20000)
 	{
-		
-		
-		#define STARTCOUNT 2
+
+
+#define STARTCOUNT 2
 		while (Serial.available()) serialBuf[recBytes++] = Serial.read();
 		if (recBytes == 1 && serialBuf[0] != 5)recBytes = 0; // check for start byte, reset if its wrong
 		if (recBytes == 2) minBytes = serialBuf[1] + STARTCOUNT + 1; // got the transmission length
@@ -176,7 +176,7 @@ void getSerialData()
 
 				//Settings.StandbyCurrent is @5V so Settings.StandbyCurrent*5V=mW
 				//mW/CurrentVoltage=Current at actual Voltage
-				standbyCurrentTotal += (((Settings.StandbyCurrent * 5) / LipoVoltage) / 36000000.0) * (2*(micros() - LastLoopTime));
+				standbyCurrentTotal += (((Settings.StandbyCurrent * 5) / LipoVoltage) / 36000000.0) * (2 * (micros() - LastLoopTime));
 
 
 				LipoMAH = ((serialBuf[148 + STARTCOUNT] << 8) | serialBuf[149 + STARTCOUNT]);
@@ -218,7 +218,7 @@ void getSerialData()
 				StickChanVals[3] = ((serialBuf[6 + STARTCOUNT] << 8) | serialBuf[7 + STARTCOUNT]);
 				//total current
 				current = (uint16_t)(motorCurrent[0] + motorCurrent[1] + motorCurrent[2] + motorCurrent[3]) / 10;
-				current += (((Settings.StandbyCurrent * 5) / LipoVoltage) / 100 );
+				current += (((Settings.StandbyCurrent * 5) / LipoVoltage) / 100);
 			}
 		}
 	} //end of aquiring telemetry data
@@ -229,7 +229,7 @@ void getSerialData()
 void DisplayOSD()
 {
 	//Declaring some vars
-	
+
 
 	uint8_t ESCmarginBot = 0;
 	uint8_t ESCmarginTop = 0;
@@ -264,7 +264,7 @@ void DisplayOSD()
 		while (!OSD.notInVSync());
 	}
 
-	if (reducedModeDisplay==0 && Settings.DispRCThrottle1 || reducedModeDisplay==1 && Settings.DispRCThrottle2 || reducedModeDisplay==2 && Settings.DispRCThrottle3)
+	if (reducedModeDisplay == 0 && Settings.DispRCThrottle1 || reducedModeDisplay == 1 && Settings.DispRCThrottle2 || reducedModeDisplay == 2 && Settings.DispRCThrottle3)
 	{
 		OSD.setCursor(0, 0);
 		OSD.print(F("THROT:"));
@@ -278,7 +278,7 @@ void DisplayOSD()
 	if (reducedModeDisplay == 0 && Settings.DispCombCurrent1 || reducedModeDisplay == 1 && Settings.DispCombCurrent2 || reducedModeDisplay == 2 && Settings.DispCombCurrent3)
 	{
 		ClearTempCharConverted();
-		TempCharPosition = 2+ print_int16(current, TempCharConverted, 1, 0);
+		TempCharPosition = print_int16(current, TempCharConverted, 1, 0);
 		TempCharConverted[TempCharPosition++] = 'A';
 		TempCharConverted[TempCharPosition++] = 'T';
 		OSD.setCursor(-TempCharPosition, 0);
@@ -297,7 +297,7 @@ void DisplayOSD()
 		MarginMiddleY++;
 		OSD.print(F("STOCK SETT-OPEN MENU"));
 	}
-	
+
 	if (reducedModeDisplay == 0 && Settings.DispLipoVoltage1 || reducedModeDisplay == 1 && Settings.DispLipoVoltage2 || reducedModeDisplay == 2 && Settings.DispLipoVoltage3)
 	{
 		if (VoltageAlarm == true)
@@ -330,7 +330,7 @@ void DisplayOSD()
 
 	if (reducedModeDisplay == 0 && Settings.DispMaConsumption1 || reducedModeDisplay == 1 && Settings.DispMaConsumption2 || reducedModeDisplay == 2 && Settings.DispMaConsumption3)
 	{
-		
+
 		if (LipoMAH>(Settings.Capacity * (float)Settings.Capacity1st) / 100 && Settings.Capacity>0)
 		{
 			OSD.blink();
@@ -342,10 +342,7 @@ void DisplayOSD()
 			}
 		}
 		ClearTempCharConverted();
-		for (uint8_t i = 0; i < 32; i++)
-		{
-			TempCharConverted[i] = ' ';
-		}
+		
 		TempCharPosition = print_int16(LipoMAH, TempCharConverted, 0, 1);
 		OSD.setCursor(-(TempCharPosition + 1 + Settings.marginLastRow), -1);
 		OSD.write(SYM_MAH);
@@ -356,27 +353,27 @@ void DisplayOSD()
 
 	if (reducedModeDisplay == 0 && Settings.DispEscKrpm1 || reducedModeDisplay == 1 && Settings.DispEscKrpm2 || reducedModeDisplay == 2 && Settings.DispEscKrpm3)
 	{
-		
+
 		//print motor 1
 		ClearTempCharConverted();
-		TempCharPosition = 2 + print_int16(motorKERPM[0], TempCharConverted, 1, 1);
+		TempCharPosition = print_int16(motorKERPM[0], TempCharConverted, 1, 1);
 		OSD.setCursor(0, ESCmarginTop);
 		OSD.print(TempCharConverted);
 
 		//print motor 2
 		ClearTempCharConverted();
-		TempCharPosition = 2 + print_int16(motorKERPM[1], TempCharConverted, 1, 1);
+		TempCharPosition = print_int16(motorKERPM[1], TempCharConverted, 1, 1);
 		OSD.setCursor(-TempCharPosition, ESCmarginTop);
 		OSD.print(TempCharConverted);
 
 		//print motor 4
 		ClearTempCharConverted();
-		TempCharPosition = 2 + print_int16(motorKERPM[3], TempCharConverted, 1, 1);
+		TempCharPosition = print_int16(motorKERPM[3], TempCharConverted, 1, 1);
 		OSD.setCursor(0, -(1 + ESCmarginBot));
 		OSD.print(TempCharConverted);
 
 		//print motor 3
-		TempCharPosition = 2 + print_int16(motorKERPM[2], TempCharConverted, 1, 1);
+		TempCharPosition = print_int16(motorKERPM[2], TempCharConverted, 1, 1);
 		OSD.setCursor(-TempCharPosition, -(1 + ESCmarginBot));
 		OSD.print(TempCharConverted);
 		ClearTempCharConverted();
@@ -389,28 +386,28 @@ void DisplayOSD()
 	{
 		//current 1
 		ClearTempCharConverted();
-		TempCharPosition = 1 + print_int16(motorCurrent[0], TempCharConverted, 2, 1);
+		TempCharPosition = print_int16(motorCurrent[0], TempCharConverted, 2, 1);
 		TempCharConverted[TempCharPosition++] = 'A';
 		OSD.setCursor(0, CurrentMargin + ESCmarginTop);
 		OSD.print(TempCharConverted);
 
 		//current 2
 		ClearTempCharConverted();
-		TempCharPosition = 1 + print_int16(motorCurrent[1], TempCharConverted, 2, 1);
+		TempCharPosition = print_int16(motorCurrent[1], TempCharConverted, 2, 1);
 		TempCharConverted[TempCharPosition++] = 'A';
 		OSD.setCursor(-TempCharPosition, CurrentMargin + ESCmarginTop);
 		OSD.print(TempCharConverted);
 
 		//current4
 		ClearTempCharConverted();
-		TempCharPosition = 1 + print_int16(motorCurrent[3], TempCharConverted, 2, 1);
+		TempCharPosition = print_int16(motorCurrent[3], TempCharConverted, 2, 1);
 		TempCharConverted[TempCharPosition++] = 'A';
 		OSD.setCursor(0, -(1 + CurrentMargin + ESCmarginBot));
 		OSD.print(TempCharConverted);
 
 		//current3
 		ClearTempCharConverted();
-		TempCharPosition = 1 + print_int16(motorCurrent[2], TempCharConverted, 2, 1);
+		TempCharPosition = print_int16(motorCurrent[2], TempCharConverted, 2, 1);
 		TempCharConverted[TempCharPosition++] = 'A';
 		OSD.setCursor(-TempCharPosition, -(1 + CurrentMargin + ESCmarginBot));
 		OSD.print(TempCharConverted);
@@ -422,29 +419,29 @@ void DisplayOSD()
 	{
 		//temp1
 		ClearTempCharConverted();
-		TempCharPosition = 1 + print_int16(ESCTemps[0], TempCharConverted, 0, 1);
-		TempCharConverted[TempCharPosition++] = '°';
+		TempCharPosition = print_int16(ESCTemps[0], TempCharConverted, 0, 1);
+		TempCharConverted[TempCharPosition++] = 'C';
 		OSD.setCursor(0, TMPmargin + ESCmarginTop);
 		OSD.print(TempCharConverted);
 
 		//temp2
 		ClearTempCharConverted();
-		TempCharPosition = 1 + print_int16(ESCTemps[1], TempCharConverted, 0, 1);
-		TempCharConverted[TempCharPosition++] = '°';
+		TempCharPosition = print_int16(ESCTemps[1], TempCharConverted, 0, 1);
+		TempCharConverted[TempCharPosition++] = 'C';
 		OSD.setCursor(-TempCharPosition - 1, TMPmargin + ESCmarginTop);
 		OSD.print(TempCharConverted);
 
 		//temp4
 		ClearTempCharConverted();
-		TempCharPosition = 1 + print_int16(ESCTemps[3], TempCharConverted, 0, 1);
-		TempCharConverted[TempCharPosition++] = '°';
+		TempCharPosition = print_int16(ESCTemps[3], TempCharConverted, 0, 1);
+		TempCharConverted[TempCharPosition++] = 'C';
 		OSD.setCursor(0, -(1 + TMPmargin + ESCmarginBot));
 		OSD.print(TempCharConverted);
 
 		//temp3
 		ClearTempCharConverted();
-		TempCharPosition = 1 + print_int16(ESCTemps[2], TempCharConverted, 0, 1);
-		TempCharConverted[TempCharPosition++] = '°';
+		TempCharPosition = print_int16(ESCTemps[2], TempCharConverted, 0, 1);
+		TempCharConverted[TempCharPosition++] = 'C';
 		OSD.setCursor(-TempCharPosition - 1, -(1 + TMPmargin + ESCmarginBot));
 		OSD.print(TempCharConverted);
 
@@ -488,12 +485,12 @@ void DisplayOSD()
 
 	/*if (firstloop<255)
 	{
-		OSD.setCursor(4, MarginMiddleY);
-		MarginMiddleY++;
-		OSD.blink();
-		OSD.print(F("WAIT - DON'T ARM: "));
-		OSD.noBlink();
-		OSD.print(percent);
+	OSD.setCursor(4, MarginMiddleY);
+	MarginMiddleY++;
+	OSD.blink();
+	OSD.print(F("WAIT - DON'T ARM: "));
+	OSD.noBlink();
+	OSD.print(percent);
 	}*/
 
 	//show armed | DISARMED
@@ -549,9 +546,9 @@ void CalculateOSD()
 	//calculating Voltage alarm
 	/*if (firstloop<254 && LipoVoltage>200)
 	{
-		//generating a delay, because voltage reading is inaccurate in the beginning.
-		firstloop++;
-		percent = (firstloop * 100) / 255; //for showing percentage in osd
+	//generating a delay, because voltage reading is inaccurate in the beginning.
+	firstloop++;
+	percent = (firstloop * 100) / 255; //for showing percentage in osd
 	}*/
 	if (LipoVoltage>200)
 	{
@@ -566,17 +563,17 @@ void CalculateOSD()
 		//firstloop = 255;
 	}
 	//Voltage Alarm 1 and 2
-	if ( (LipoVoltage / BatteryCells)<Settings.LowVoltage1st && Settings.LowVoltageAllowed == 1)
+	if ((LipoVoltage / BatteryCells)<Settings.LowVoltage1st && Settings.LowVoltageAllowed == 1)
 	{
-		
+
 		VoltageAlarm = true;
 	}
-	if ( (LipoVoltage / BatteryCells)<Settings.LowVoltage2nd && VoltageAlarm == true)
+	if ((LipoVoltage / BatteryCells)<Settings.LowVoltage2nd && VoltageAlarm == true)
 	{
 		VoltageAlarm2nd = true;
 	}
 	//no Voltage Alarm
-	if ( (LipoVoltage / BatteryCells)> (Settings.LowVoltage1st + Settings.hysteresis) && VoltageAlarm==true)
+	if ((LipoVoltage / BatteryCells)> (Settings.LowVoltage1st + Settings.hysteresis) && VoltageAlarm == true)
 	{
 		VoltageAlarm = false;
 		VoltageAlarm2nd = false;
@@ -650,7 +647,7 @@ void OSDmakegrey() {
 
 void ClearTempCharConverted()
 {
-	for (uint8_t i=0; i < 32; i++)
+	for (uint8_t i = 0; i < 9; i++)
 	{
 		TempCharConverted[i] = ' ';
 	}
