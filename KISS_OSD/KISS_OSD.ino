@@ -114,6 +114,7 @@ void setup() {
 
   //set the Offset
   OSD.setTextOffset(Settings.OffsetX, Settings.OffsetY);
+  
 
   WaitForKissFc();
 
