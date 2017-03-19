@@ -5,7 +5,7 @@ KISS FC OSD
 by Samuel Daurat (sdaurat@outlook.de)
 based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
-# define OSDVersion "5.7"
+#define OSDVersion "6.0"
 #define DMemoryVersion 6
 /*
 ***************************************************************************************************************************************************
@@ -51,7 +51,7 @@ For more information, please refer to <http://unlicense.org>
 //#define NTSC
 
 // Pilot-name
-const char Pilotname[] = " SAMU";
+const char Pilotname[] = " SAMUD";
 
 // MAX7456 Charset
 #define USE_MAX7456_ASCII
@@ -128,7 +128,7 @@ void loop()
 {
 
   //big if with all code
-  if (micros() - KissStatus.LastLoopTime > 20000) //limits the speed of the OSD to 20Hz
+  if (micros() - KissStatus.LastLoopTime > 100000) //limits the speed of the OSD to 20Hz
   {
 	  KissStatus.LastLoopTime = micros();
 
@@ -153,12 +153,19 @@ void loop()
 			EEPROMsave();
 			delay(1000);
 		}
-
-		//calculate the datas to display
+		
+		//calculate the datas
 		CalculateOSD();
+		FlightSummaryCalculate();
 
-		//Display the datas
-		DisplayOSD();
+		if (!KissData.armed && KissStatus.time > 45000)
+			//if disarmed and flighttime>45sec --> show flight summary
+			FlightSummary();
+		else
+			//Display the datas
+			DisplayOSD();
+
+		
 		break;
 	default:
 		KissConnection = WaitingForConn;

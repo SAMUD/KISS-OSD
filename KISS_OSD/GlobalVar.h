@@ -106,13 +106,14 @@ struct Status
 	int configAdress = 0;				//EEPROM ConfigAdress
 	bool memValid = true;				//MemoryIsValid
 
-	uint32_t LastLoopTime;				
+	uint32_t LastLoopTime;	
+
 } static KissStatus;
 
 static uint16_t i = 0;
 
 static uint8_t TempCharPosition;
-static char TempCharConverted[15];
+static char TempCharConverted[30];
 
 enum SerialStatus					//giving the status of the current serial connection to the Kiss FC
 {
@@ -122,6 +123,15 @@ enum SerialStatus					//giving the status of the current serial connection to th
 	Connected,
 	LostConnection
 }static KissConnection;
+
+struct Stats
+{
+	uint16_t MaxCurrentTotal = 0;
+	int16_t  MinVoltage = 32767;
+	uint16_t MAXmotorKERPM = 0;
+	uint16_t MAXmotorCurrent = 0;
+	uint16_t MAXESCTemp =  0;
+} static KissStats;
 
 
 struct StoreStruct {

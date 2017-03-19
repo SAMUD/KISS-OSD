@@ -307,11 +307,7 @@ void DisplayOSD()
 		OSD.print(TempCharConverted);
 	}
 
-	if (KissStatus.reducedModeDisplay == 0 && Settings.DispPilotname1 || KissStatus.reducedModeDisplay == 1 && Settings.DispPilotname2 || KissStatus.reducedModeDisplay == 2 && Settings.DispPilotname3)
-	{
-		OSD.setCursor(10, 0);
-		OSD.print(Pilotname);
-	}
+	
 
 	if (Settings.stockSettings == 0)
 	{
@@ -440,6 +436,7 @@ void DisplayOSD()
 	if (KissStatus.reducedModeDisplay == 0 && Settings.DispEscTemp1 || KissStatus.reducedModeDisplay == 1 && Settings.DispEscTemp2 || KissStatus.reducedModeDisplay == 2 && Settings.DispEscTemp3)
 	{
 		//temp1
+		
 		ClearTempCharConverted();
 		TempCharPosition = print_int16(KissData.ESCTemps[0], TempCharConverted, 0, 1);
 		TempCharConverted[TempCharPosition++] = SYM_TEMP_C;
@@ -458,6 +455,7 @@ void DisplayOSD()
 		TempCharPosition = print_int16(KissData.ESCTemps[3], TempCharConverted, 0, 1);
 		TempCharConverted[TempCharPosition++] = SYM_TEMP_C;
 		OSD.setCursor(0, -(1 + TMPmargin + ESCmarginBot));
+		TempCharConverted[7] = '  ';
 		OSD.print(TempCharConverted);
 
 		//temp3
@@ -465,6 +463,7 @@ void DisplayOSD()
 		TempCharPosition = print_int16(KissData.ESCTemps[2], TempCharConverted, 0, 1);
 		TempCharConverted[TempCharPosition++] = SYM_TEMP_C;
 		OSD.setCursor(-TempCharPosition, -(1 + TMPmargin + ESCmarginBot));
+		TempCharConverted[7] = '  ';
 		OSD.print(TempCharConverted);
 
 	}
@@ -473,6 +472,12 @@ void DisplayOSD()
 	{
 		OSD.setCursor(0, 6);
 		drawAngelIndicator(KissData.angley);
+	}
+
+	if (KissStatus.reducedModeDisplay == 0 && Settings.DispPilotname1 || KissStatus.reducedModeDisplay == 1 && Settings.DispPilotname2 || KissStatus.reducedModeDisplay == 2 && Settings.DispPilotname3)
+	{
+		OSD.setCursor(10, 0);
+		OSD.print(Pilotname);
 	}
 
 	//show the detected cell count upon the first 30 flight-sec if not armed
@@ -660,7 +665,7 @@ void OSDmakegrey() {
 
 void ClearTempCharConverted()
 {
-	for (uint8_t i = 0; i < 15; i++)
+	for (uint8_t i = 0; i < 30; i++)
 	{
 		TempCharConverted[i] = ' ';
 	}
@@ -686,4 +691,140 @@ void WaitForKissFc()
 	}
 	else
 		OSD.print(F("LOST COMMUNICATION WITH FC...  "));
+}
+
+void FlightSummary()
+{
+	//show stats:   MaxCurrentTotal,	Min Voltage	
+	//				ESTTemp,			ESCCurrent		ESCRPM
+	//				Time				MAHUsed
+	if (KissStatus.lastMode!=4)
+	{
+		OSD.clear();
+		while (OSD.clearIsBusy())
+		{
+		}
+		OSD.setCursor(0, 0);
+		OSD.grayBackground();
+		OSD.print(F("SAMUD OSD - FLIGHT STATISTIC "));
+		OSD.videoBackground();
+
+		//Current
+		OSD.setCursor(0, 2);
+		OSD.print(F("MAX CURRENT:"));
+		ClearTempCharConverted();
+		TempCharPosition = print_int16(KissStats.MaxCurrentTotal, TempCharConverted, 1, 1);
+		TempCharConverted[TempCharPosition++] = 'A';
+		OSD.setCursor(-TempCharPosition, 2);
+		OSD.print(TempCharConverted);
+
+		//Voltage
+		OSD.setCursor(0, 3);
+		OSD.print(F("MIN VOLTAGE:"));
+		ClearTempCharConverted();
+		TempCharPosition = print_int16(KissStats.MinVoltage/KissStatus.BatteryCells, TempCharConverted, 2, 1);
+		TempCharConverted[TempCharPosition++] = 'V';
+		OSD.setCursor(-TempCharPosition, 3);
+		OSD.print(TempCharConverted);
+
+		//Consumption
+		OSD.setCursor(0, 4);
+		OSD.print(F("CONSUMPTION:"));
+		ClearTempCharConverted();
+		TempCharPosition = print_int16(KissData.LipoMAH, TempCharConverted, 0, 1);
+		TempCharConverted[TempCharPosition++] = 'M';
+		TempCharConverted[TempCharPosition++] = 'A';
+		TempCharConverted[TempCharPosition++] = 'H';
+		OSD.setCursor(-TempCharPosition, 4);
+		OSD.print(TempCharConverted);
+
+		//Flight Time
+		OSD.setCursor(0, 5);
+		OSD.print(F("FLIGHT TIME:"));
+		OSD.setCursor(-2, 5);
+		OSD.print(F("00"));
+		ClearTempCharConverted();
+		OSD.setCursor(24, 5);
+		print_time(KissStatus.time, TempCharConverted);
+		OSD.print(TempCharConverted);
+
+		//ESC Data
+		OSD.setCursor(0, 8);
+		OSD.grayBackground();
+		OSD.print(F("ESC DATA - MAX VALUES       "));
+		OSD.videoBackground();
+		ClearTempCharConverted();
+		TempCharPosition = print_int16(KissStats.MAXESCTemp, TempCharConverted, 0, 1);
+		TempCharConverted[TempCharPosition++] = SYM_TEMP_C;
+		OSD.setCursor(0, 9);
+		OSD.print(TempCharConverted);
+		ClearTempCharConverted();
+		TempCharPosition = print_int16(KissStats.MAXmotorCurrent, TempCharConverted, 2, 1);
+		TempCharConverted[TempCharPosition++] = 'A';
+		OSD.setCursor(10, 9);
+		OSD.print(TempCharConverted);
+		ClearTempCharConverted();
+		TempCharPosition = print_int16(KissStats.MAXmotorCurrent, TempCharConverted, 1, 1);
+		TempCharConverted[TempCharPosition++] = 'K';
+		TempCharConverted[TempCharPosition++] = 'R';
+		TempCharConverted[TempCharPosition++] = 'P';
+		TempCharConverted[TempCharPosition++] = 'M';
+		OSD.setCursor(-TempCharPosition, 9);
+		OSD.print(TempCharConverted);
+
+		KissStatus.lastMode = 4;
+	}
+	
+
+	
+
+}
+
+void FlightSummaryCalculate()
+{
+	FlightSummaryCalculateFnc(&KissStats.MaxCurrentTotal, &KissData.current,1);
+	if(KissData.LipoVoltage>100)
+		FlightSummaryCalculateFnc(&KissStats.MinVoltage, &KissData.LipoVoltage, 0);
+	//FlightSummaryCalculateFnc(&KissStats.MAXESCTemp[0], &KissData.LipoVoltage, 0);
+
+	if (KissData.ESCTemps[0] > KissStats.MAXESCTemp)
+		KissStats.MAXESCTemp = KissData.ESCTemps[0];
+	if (KissData.ESCTemps[1] > KissStats.MAXESCTemp)
+		KissStats.MAXESCTemp = KissData.ESCTemps[1];
+	if (KissData.ESCTemps[2] > KissStats.MAXESCTemp)
+		KissStats.MAXESCTemp = KissData.ESCTemps[2];
+	if (KissData.ESCTemps[3] > KissStats.MAXESCTemp)
+		KissStats.MAXESCTemp = KissData.ESCTemps[3];
+
+	if (KissData.motorCurrent[0] > KissStats.MAXmotorCurrent)
+		KissStats.MAXmotorCurrent = KissData.motorCurrent[0];
+	if (KissData.motorCurrent[1] > KissStats.MAXmotorCurrent)
+		KissStats.MAXmotorCurrent = KissData.motorCurrent[1];
+	if (KissData.motorCurrent[2] > KissStats.MAXmotorCurrent)
+		KissStats.MAXmotorCurrent = KissData.motorCurrent[2];
+	if (KissData.motorCurrent[3] > KissStats.MAXmotorCurrent)
+		KissStats.MAXmotorCurrent = KissData.motorCurrent[3];
+
+	if (KissData.motorKERPM[0] > KissStats.MAXmotorKERPM)
+		KissStats.MAXmotorKERPM = KissData.motorKERPM[0];
+	if (KissData.motorKERPM[1] > KissStats.MAXmotorKERPM)
+		KissStats.MAXmotorKERPM = KissData.motorKERPM[1];
+	if (KissData.motorKERPM[2] > KissStats.MAXmotorKERPM)
+		KissStats.MAXmotorKERPM = KissData.motorKERPM[2];
+	if (KissData.motorKERPM[3] > KissStats.MAXmotorKERPM)
+		KissStats.MAXmotorKERPM = KissData.motorKERPM[3];
+
+	//show stats:
+
+}
+
+void FlightSummaryCalculateFnc(uint16_t *Stat,uint16_t *Value,uint8_t bigger )
+{
+	if ((bigger == 1 && *Value > *Stat) || bigger == 0 && *Value < *Stat)
+		*Stat = *Value;
+}
+void FlightSummaryCalculateFnc(int16_t *Stat, int16_t *Value, uint8_t bigger)
+{
+	if ((bigger == 1 && *Value > *Stat) || bigger == 0 && *Value < *Stat)
+		*Stat = *Value;
 }

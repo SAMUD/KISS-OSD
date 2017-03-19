@@ -143,6 +143,7 @@ void menumain()
 	MenuPage = 1;
 	OldMenuPage = 0;
 	KissData.StickChanVals[3] = 0;
+	KissStatus.lastMode = 5;
 }
 
 void menuprintsite() {
