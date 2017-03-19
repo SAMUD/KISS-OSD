@@ -2,10 +2,10 @@
 void EEPROMinit()
 {
 	EEPROM.setMemPool(32, EEPROMSizeATmega328);
-	configAdress = EEPROM.getAddress(sizeof(StoreStruct));
-	memValid = EEPROMloadConfig();
+	KissStatus.configAdress = EEPROM.getAddress(sizeof(StoreStruct));
+	KissStatus.memValid = EEPROMloadConfig();
 
-	if (!memValid)
+	if (!KissStatus.memValid)
 	{
 		OSD.blink();
 		OSDmakegrey();
@@ -25,7 +25,7 @@ void EEPROMinit()
 
 bool EEPROMloadConfig()
 {
-	EEPROM.readBlock(configAdress, Settings);
+	EEPROM.readBlock(KissStatus.configAdress, Settings);
 	return (Settings.MemoryVersion == DMemoryVersion);
 }
 
@@ -90,5 +90,5 @@ void EEPROMsaveDefaultValues()
 
 void EEPROMsave()
 {
-	EEPROM.updateBlock(configAdress, Settings);
+	EEPROM.updateBlock(KissStatus.configAdress, Settings);
 }

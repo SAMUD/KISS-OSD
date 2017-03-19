@@ -17,11 +17,10 @@ void menumain()
 {
 	static uint32_t LastLoopTimeMenu;
 	static boolean exitmenu = false;
-	static uint8_t i;
 	static uint8_t ii;
 
 	Settings.stockSettings = 1;
-	StickChanVals[3] = 0;
+	KissData.StickChanVals[3] = 0;
 
 	OSDmakegrey();
 	OSD.setCursor(9, 3);
@@ -40,41 +39,44 @@ void menumain()
 	while (!exitmenu)
 	{
 
-		if (micros() - LastLoopTime > 50000) //limits the speed of the OSD to 20Hz  millis() - LastLoopTimeMenu > 100
+		if (micros() - KissStatus.LastLoopTime > 100000) //limits the speed of the OSD to 20Hz  millis() - LastLoopTimeMenu > 100
 		{
-			LastLoopTime = micros();
+			KissStatus.LastLoopTime = micros();
 
 			getSerialData();
 
 			//set cursor position
-			if (StickChanVals[2] < -500 && cursorline<cursorlineMax)
+			if (KissData.StickChanVals[2] < -800 && cursorline<cursorlineMax)
 			{
 				cursorline++;
-				pause = 10;
+				KissData.StickChanVals[2] = 0;
+				pause = 5;
 			}
-			if (StickChanVals[2] > 500 && cursorline>1)
+			if (KissData.StickChanVals[2] > 800 && cursorline>1)
 			{
 				cursorline--;
-				pause = 10;
+				KissData.StickChanVals[2] = 0;
+				pause = 5;
 			}
 
 			//changevalue
-			if (StickChanVals[1] > 500)
+			if (KissData.StickChanVals[1] > 800)
 			{
 				value(true);
 			}
-			if (StickChanVals[1] < -500)
+			if (KissData.StickChanVals[1] < -800)
 			{
 				value(false);
 			}
 
 			//changepage
-			if (StickChanVals[3] > 500)
+			if (KissData.StickChanVals[3] > 800)
 			{
 				if (MenuPage<7)
 				{
 					MenuPage++;
-					pause = 10;
+					KissData.StickChanVals[3] = 0;
+					pause = 5;
 				}
 				else
 				{
@@ -82,12 +84,13 @@ void menumain()
 					//pause=10;
 				}
 			}
-			if (StickChanVals[3] < -500)
+			if (KissData.StickChanVals[3] < -800)
 			{
 				if (MenuPage > 1)
 				{
 					MenuPage--;
-					pause = 10;
+					KissData.StickChanVals[3] = 0;
+					pause = 5;
 				}
 				else
 				{
@@ -126,7 +129,7 @@ void menumain()
 			}
 
 
-			if (armed == 1)
+			if (KissData.armed == 1)
 			{
 				exitmenu = true;
 			}
@@ -139,7 +142,7 @@ void menumain()
 	exitmenu = false;
 	MenuPage = 1;
 	OldMenuPage = 0;
-	StickChanVals[3] = 0;
+	KissData.StickChanVals[3] = 0;
 }
 
 void menuprintsite() {
@@ -252,6 +255,8 @@ void menuprintsite() {
 		OSD.print(F("OSD VERSION:"));
 		OSD.setCursor(1, 4);
 		OSD.print(F("MEMORY VERSION:"));
+		OSD.setCursor(1, 5);
+		OSD.print(F("VIDEOSYSTEM:"));
 		cursorlineMax = 0;
 		break;
 	default:
@@ -305,7 +310,7 @@ void menuprintvalue() {
 		OSD.print((Settings.Capacity * (float)Settings.Capacity2nd) / 100);
 		OSD.print(" ");
 		OSD.setCursor(24, 9);
-		OSD.print((Settings.StandbyCurrent * 5) / LipoVoltage);
+		OSD.print((Settings.StandbyCurrent * 5) / KissData.LipoVoltage);
 		OSD.print(" ");
 		
 		break;
@@ -437,6 +442,11 @@ void menuprintvalue() {
 		OSD.print(OSDVersion);
 		OSD.setCursor(22, 4);
 		OSD.print(DMemoryVersion);
+		OSD.setCursor(22, 5);
+		if(OSD.videoSystem() == 1)
+			OSD.print(F("PAL"));
+		else if (OSD.videoSystem() == 2)
+			OSD.print(F("NTSC"));
 		break;
 	}
 

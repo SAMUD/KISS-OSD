@@ -5,14 +5,15 @@ KISS FC OSD
 by Samuel Daurat (sdaurat@outlook.de)
 based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
-# define OSDVersion "5.6"
+# define OSDVersion "5.7"
 #define DMemoryVersion 6
 /*
-*****************************************************************************************************
-If you like my work and want to support me, I would love to get some support:  https://paypal.me/SamuelDaurat
+***************************************************************************************************************************************************
+Donations help A LOT during development, buying me a COFFE you will keep me awake at night so I can add more stuff:  https://paypal.me/SamuelDaurat
 
-Wenn Ihr meine Arbeit mögt, würde ich mich über etwas Support freuen: https://paypal.me/SamuelDaurat
-*****************************************************************************************************
+Spenden helfen eine MENGE beim Programmieren. Mir einen KAFFE zu bezahlen, hilft mir nachts länger wach zu bleiben
+und produktiver zu programmieren: https://paypal.me/SamuelDaurat
+***************************************************************************************************************************************************
 
 GITHUB: https://github.com/SAMUD/KISS-OSD
 
@@ -102,28 +103,21 @@ void setup() {
 #endif
 
   OSD.display();							//enable OSD output
-  
-
   while (!OSD.notInVSync());
   OSD.clear();
-  while(OSD.clearIsBusy())
-
+  while (OSD.clearIsBusy());
   //set blinktime
   OSD.setBlinkingTime(2); //0-3
   OSD.setBlinkingDuty(1); //0-3
-
   //set the Offset
   OSD.setTextOffset(Settings.OffsetX, Settings.OffsetY);
-  
-
-  WaitForKissFc();
-
+ 
   Serial.begin(115200);
 
   //init memory
   EEPROMinit();
 
-  
+  KissConnection = WaitingForConn;
 }
 
 
@@ -134,28 +128,44 @@ void loop()
 {
 
   //big if with all code
-  if (micros() - LastLoopTime > 20000) //limits the speed of the OSD to 20Hz
+  if (micros() - KissStatus.LastLoopTime > 20000) //limits the speed of the OSD to 20Hz
   {
-    LastLoopTime = micros();
+	  KissStatus.LastLoopTime = micros();
 
     getSerialData();
+	
+	switch (KissConnection)
+	{
+	case WaitingForConn:
+	case LostConnection:
+		WaitForKissFc();
+		break;
+	case ConnectionEtablished:
+		OSD.clear();
+		KissConnection = Connected;
+		break;
+	case Connected:
+		//open menu if yaw left and disarmed
+		if (KissData.armed == 0 && KissData.StickChanVals[3] > 500)
+		{
+			menumain();
+			OSD.clear();
+			EEPROMsave();
+			delay(1000);
+		}
 
-    //open menu if yaw left and disarmed
-    if (armed == 0 && StickChanVals[3]>500)
-    {
-      menumain();
-      OSD.clear();
-      EEPROMsave();
-      delay(1000);
-    }
+		//calculate the datas to display
+		CalculateOSD();
 
-    //calculate the datas to display
-    CalculateOSD();
-
-    //Display the datas
-    DisplayOSD();
-
-    //Reset wdt
+		//Display the datas
+		DisplayOSD();
+		break;
+	default:
+		KissConnection = WaitingForConn;
+		break;
+	}
+    
+	//Reset wdt
     wdt_reset();
   }
 

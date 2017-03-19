@@ -64,59 +64,65 @@
 
 MAX7456 OSD(osdChipSelect);
 
-//static uint8_t firstloop = 0;
-static uint8_t BatteryCells = 0;		//stores the number of cells recognized in the first run
-static boolean VoltageAlarm = false;	//works with the const defined in the beginning | Filters Voltage drops to avoid erratic voltage alarms
-static boolean VoltageAlarm2nd = false;	//2nd stage of voltage alarms
+struct SerialData
+{
+	uint16_t current = 0;
+	uint16_t LipoMAH = 0;
+	float standbyCurrentTotal = 0;
+	int16_t	 LipoVoltage = 0;
+	
+	uint16_t motorKERPM[4] = { 0,0,0,0 };
+	uint16_t motorCurrent[4] = { 0,0,0,0 };
+	uint16_t ESCTemps[4] = { 0,0,0,0 };
 
-static uint16_t current = 0;
-static int16_t LipoVoltage = 0;
-static uint16_t LipoMAH = 0;
-static uint16_t motorKERPM[4] = { 0,0,0,0 };
-static uint16_t motorCurrent[4] = { 0,0,0,0 };
-static uint16_t ESCTemps[4] = { 0,0,0,0 };
-static int16_t  AuxChanVals[4] = { 0,0,0,0 };
-static int16_t  StickChanVals[4] = { 0,0,0,0 };
-static uint8_t  reducedMode = 0;
-static uint8_t  reducedMode2 = 0;
-static uint8_t  reducedModeDisplay = 0;
-static uint8_t armed = 0;
-static uint8_t armedOld = 0;
-static uint8_t failsafe = 0;
-static uint16_t calibGyroDone = 0;
+	int16_t  AuxChanVals[4] = { 0,0,0,0 };
+	int16_t  StickChanVals[4] = { 0,0,0,0 };
 
-static int16_t angley = 0;
+	int16_t angley = 0;
+	
+	uint8_t armed = 0;
+	uint8_t failsafe = 0;
+	uint16_t calibGyroDone = 0;
+} static KissData;
 
-static unsigned long start_time = 0;
-static unsigned long time = 0;
-static unsigned long total_time = 0;
+struct Status
+{
+	uint8_t BatteryCells = 0;			//stores the number of cells recognized in the first run
+	boolean VoltageAlarm = false;		//works with the const defined in the beginning | Filters Voltage drops to avoid erratic voltage alarms
+	boolean VoltageAlarm2nd = false;	//2nd stage of voltage alarms
 
-static uint8_t percent = 0;
-static uint8_t firstarmed = 0;
+	uint8_t  reducedModeDisplay = 0;	//Actual Display-mode
+	uint8_t lastMode = 0;				//last Display-mode
 
-static unsigned long armedstarted = 0;
+	uint8_t armedOld = 0;				//last Armed Status
 
-static uint8_t extra_space_mah = 0;
+	unsigned long start_time = 0;		//Time when armed
+	unsigned long time = 0;				//Current time to display
+	unsigned long total_time = 0;		//Total flight time
+
+	uint8_t firstarmed = 0;
+	unsigned long armedstarted = 0;
+
+	int configAdress = 0;				//EEPROM ConfigAdress
+	bool memValid = true;				//MemoryIsValid
+
+	uint32_t LastLoopTime;				
+} static KissStatus;
 
 static uint16_t i = 0;
-static uint8_t lastMode = 0;
-
 
 static uint8_t TempCharPosition;
 static char TempCharConverted[15];
 
-static uint32_t LastLoopTime;
+enum SerialStatus					//giving the status of the current serial connection to the Kiss FC
+{
+	unknown,
+	WaitingForConn,
+	ConnectionEtablished,
+	Connected,
+	LostConnection
+}static KissConnection;
 
-static uint32_t tmpVoltage = 0;
-static uint32_t voltDev = 0;
-
-static uint8_t ThrottlePos;
-static uint8_t CurrentPos;
-
-static int configAdress = 0;
-static bool memValid = true;
-
-static float standbyCurrentTotal = 0;
 
 struct StoreStruct {
 
@@ -167,6 +173,4 @@ struct StoreStruct {
 	int8_t OffsetY;
 	int8_t OffsetX;
 	uint16_t StandbyCurrent;
-};
-
-static StoreStruct Settings;
+} static Settings;
