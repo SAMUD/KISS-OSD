@@ -96,7 +96,7 @@ void print_time(unsigned long time, char *time_str)
 
 //=========================================
 //Read serial data from FC and store in var
-void getSerialData()
+void getSerialData(uint8_t Mode)	//reading serial Data from FC - Mode0:Telemetrie | Mode1:PID Settings
 {
 	static uint8_t serialBuf[255];
 	static uint32_t tmpVoltage = 0;
@@ -105,7 +105,10 @@ void getSerialData()
 	uint8_t recBytes = 0;
 	uint8_t exitreceiving = 0;
 
-	Serial.write(0x20); // request telemetrie
+	if(Mode==0)
+		Serial.write(GET_TELEMETRY);	//request telemetrie
+	if (Mode == 1)
+		Serial.write(GET_SETTINGS);		//request settings from FC
 
 	//aquire serial data and write it to normal variables
 	while (exitreceiving==0)
@@ -143,7 +146,7 @@ void getSerialData()
 			}
 			checksum = (uint32_t)checksum / (minBytes - 3);
 
-			if (checksum == serialBuf[recBytes - 1])
+			if (checksum == serialBuf[recBytes - 1] && Mode==0)
 			{
 				//armed
 				KissData.armed = ((serialBuf[15 + STARTCOUNT] << 8) | serialBuf[16 + STARTCOUNT]);
@@ -240,6 +243,39 @@ void getSerialData()
 				//total current
 				KissData.current = (uint16_t)(KissData.motorCurrent[0] + KissData.motorCurrent[1] + KissData.motorCurrent[2] + KissData.motorCurrent[3]) / 10;
 				KissData.current += (((Settings.StandbyCurrent * 5) / KissData.LipoVoltage) / 100);
+			}
+			else if(checksum == serialBuf[recBytes - 1] && Mode == 0)
+			{
+				KissSettingsPID.PID_P[0] = ((serialBuf[0 + STARTCOUNT] << 8) | serialBuf[1 + STARTCOUNT]);
+				KissSettingsPID.PID_P[1] = ((serialBuf[2 + STARTCOUNT] << 8) | serialBuf[3 + STARTCOUNT]);
+				KissSettingsPID.PID_P[2] = ((serialBuf[4 + STARTCOUNT] << 8) | serialBuf[5 + STARTCOUNT]);
+
+				KissSettingsPID.PID_I[0] = ((serialBuf[6 + STARTCOUNT] << 8) | serialBuf[7 + STARTCOUNT]);
+				KissSettingsPID.PID_I[1] = ((serialBuf[8 + STARTCOUNT] << 8) | serialBuf[9 + STARTCOUNT]);
+				KissSettingsPID.PID_I[2] = ((serialBuf[10 + STARTCOUNT] << 8) | serialBuf[11 + STARTCOUNT]);
+
+				KissSettingsPID.PID_D[0] = ((serialBuf[12 + STARTCOUNT] << 8) | serialBuf[13 + STARTCOUNT]);
+				KissSettingsPID.PID_D[1] = ((serialBuf[14 + STARTCOUNT] << 8) | serialBuf[15 + STARTCOUNT]);
+				KissSettingsPID.PID_D[2] = ((serialBuf[16 + STARTCOUNT] << 8) | serialBuf[17 + STARTCOUNT]);
+
+				KissSettingsPID.PID_A[0] = ((serialBuf[18 + STARTCOUNT] << 8) | serialBuf[19 + STARTCOUNT]);
+				KissSettingsPID.PID_A[1] = ((serialBuf[20 + STARTCOUNT] << 8) | serialBuf[21 + STARTCOUNT]);
+				KissSettingsPID.PID_A[2] = ((serialBuf[22 + STARTCOUNT] << 8) | serialBuf[23 + STARTCOUNT]);
+
+				KissSettingsPID.ACC_Trim[1] = ((serialBuf[24 + STARTCOUNT] << 8) | serialBuf[25 + STARTCOUNT]);
+				KissSettingsPID.ACC_Trim[2] = ((serialBuf[26 + STARTCOUNT] << 8) | serialBuf[27 + STARTCOUNT]);
+
+				KissSettingsPID.RC_Rate[0] = ((serialBuf[28 + STARTCOUNT] << 8) | serialBuf[29 + STARTCOUNT]);
+				KissSettingsPID.RC_Rate[1] = ((serialBuf[30 + STARTCOUNT] << 8) | serialBuf[31 + STARTCOUNT]);
+				KissSettingsPID.RC_Rate[2] = ((serialBuf[32 + STARTCOUNT] << 8) | serialBuf[33 + STARTCOUNT]);
+
+				KissSettingsPID.RPY_Expo[0] = ((serialBuf[34 + STARTCOUNT] << 8) | serialBuf[35 + STARTCOUNT]);
+				KissSettingsPID.RPY_Expo[1] = ((serialBuf[36 + STARTCOUNT] << 8) | serialBuf[37 + STARTCOUNT]);
+				KissSettingsPID.RPY_Expo[2] = ((serialBuf[38 + STARTCOUNT] << 8) | serialBuf[39 + STARTCOUNT]);
+
+				KissSettingsPID.RPY_Curve[0] = ((serialBuf[40 + STARTCOUNT] << 8) | serialBuf[41 + STARTCOUNT]);
+				KissSettingsPID.RPY_Curve[1] = ((serialBuf[42 + STARTCOUNT] << 8) | serialBuf[43 + STARTCOUNT]);
+				KissSettingsPID.RPY_Curve[2] = ((serialBuf[44 + STARTCOUNT] << 8) | serialBuf[45 + STARTCOUNT]);
 			}
 			exitreceiving = 1;
 

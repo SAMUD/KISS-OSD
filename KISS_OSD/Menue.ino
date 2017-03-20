@@ -19,8 +19,6 @@ void menumain()
 	static boolean exitmenu = false;
 	static uint8_t ii;
 
-	Settings.stockSettings = 1;
-	KissData.StickChanVals[3] = 0;
 
 	OSDmakegrey();
 	OSD.setCursor(9, 3);
@@ -36,6 +34,12 @@ void menumain()
 	OSD.videoBackground();
 	delay(2000);
 
+
+	Settings.stockSettings = 1;
+	KissData.StickChanVals[3] = 0;
+	getSerialData(1); //get the Settings from the FC
+	delay(250);
+
 	while (!exitmenu)
 	{
 
@@ -43,7 +47,7 @@ void menumain()
 		{
 			KissStatus.LastLoopTime = micros();
 
-			getSerialData();
+			getSerialData(0);
 
 			//set cursor position
 			if (KissData.StickChanVals[2] < -800 && cursorline<cursorlineMax)
@@ -72,7 +76,7 @@ void menumain()
 			//changepage
 			if (KissData.StickChanVals[3] > 800)
 			{
-				if (MenuPage<7)
+				if (MenuPage<8)
 				{
 					MenuPage++;
 					KissData.StickChanVals[3] = 0;
@@ -159,7 +163,7 @@ void menuprintsite() {
 	case 1:
 		//VoltageSite
 		OSD.grayBackground();
-		OSD.print(F("SAMUD OSD - P1/7 VOLTAGE     "));
+		OSD.print(F("SAMUD OSD - P1/8 VOLTAGE     "));
 		OSD.setCursor(0, 14);
 		OSD.print(F(" <-YAW-> : PAGE / EXIT       "));
 		OSD.videoBackground();
@@ -178,7 +182,7 @@ void menuprintsite() {
 	case 2:
 		//CapacitySite
 		OSD.grayBackground();
-		OSD.print(F("SAMUD OSD - P2/7 CAPACITY    "));
+		OSD.print(F("SAMUD OSD - P2/8 CAPACITY    "));
 		OSD.setCursor(0, 14);
 		OSD.print(F(" <-PITCH-> : MOVE UP/DOWN    "));
 		OSD.videoBackground();
@@ -201,7 +205,7 @@ void menuprintsite() {
 	case 3:
 		//Red1
 		OSD.grayBackground();
-		OSD.print(F("SAMUD OSD - P3/7 RED MODE 1  "));
+		OSD.print(F("SAMUD OSD - P3/8 RED MODE 1  "));
 		OSD.setCursor(0, 14);
 		OSD.print(F(" <-ROLL-> : CHANGE VALUE     "));
 		printRED();
@@ -209,7 +213,7 @@ void menuprintsite() {
 	case 4:
 		//CapacitySite
 		OSD.grayBackground();
-		OSD.print(F("SAMUD OSD - P4/7 RED MODE 2  "));
+		OSD.print(F("SAMUD OSD - P4/8 RED MODE 2  "));
 		OSD.setCursor(0, 14);
 		OSD.print(F("SEE PAG6 FOR RED-CHANNEL SELE"));
 		printRED();
@@ -217,7 +221,7 @@ void menuprintsite() {
 	case 5:
 		//CapacitySite
 		OSD.grayBackground();
-		OSD.print(F("SAMUD OSD - P5/7 RED MODE 3  "));
+		OSD.print(F("SAMUD OSD - P5/8 RED MODE 3  "));
 		OSD.setCursor(0, 14);
 		OSD.print(F("                             "));
 		printRED();
@@ -225,7 +229,7 @@ void menuprintsite() {
 	case 6:
 		//Other Settings
 		OSD.grayBackground();
-		OSD.print(F("SAMUD OSD - P6/7 VARIOUS    "));
+		OSD.print(F("SAMUD OSD - P6/8 VARIOUS    "));
 		OSD.setCursor(0, 14);
 		OSD.print(F("                             "));
 		OSD.videoBackground();
@@ -246,7 +250,7 @@ void menuprintsite() {
 	case 7:
 		//Info
 		OSD.grayBackground();
-		OSD.print(F("SAMUD OSD - P7/7 INFO       "));
+		OSD.print(F("SAMUD OSD - P7/8 INFO       "));
 		OSD.setCursor(0, 14);
 		OSD.print(F("                             "));
 		OSD.videoBackground();
@@ -259,6 +263,31 @@ void menuprintsite() {
 		OSD.setCursor(1, 5);
 		OSD.print(F("VIDEOSYSTEM:"));
 		cursorlineMax = 0;
+		break;
+	case 8:
+		//Info
+		OSD.grayBackground();
+		OSD.print(F("SAMUD OSD - P8/8 PID-SETTINGS"));
+		OSD.setCursor(0, 14);
+		OSD.print(F("WARNING: EXPERIMENTAL PAGE   "));
+		OSD.videoBackground();
+		OSD.setCursor(1, 2);
+		OSD.print(F("PITCH P"));
+		OSD.setCursor(1, 3);
+		OSD.print(F("      I"));
+		OSD.setCursor(1, 4);
+		OSD.print(F("      D"));
+		OSD.setCursor(1, 5);
+		OSD.print(F("ROLL  P"));
+		OSD.setCursor(1, 6);
+		OSD.print(F("      I"));
+		OSD.setCursor(1, 7);
+		OSD.print(F("      D"));
+		OSD.setCursor(1, 8);
+		OSD.print(F("YAW   P"));
+		OSD.setCursor(1, 9);
+		OSD.print(F("YAW   I"));
+		cursorlineMax = 8;
 		break;
 	default:
 		OSD.print(MenuPage);
@@ -449,6 +478,33 @@ void menuprintvalue() {
 		else if (OSD.videoSystem() == 2)
 			OSD.print(F("NTSC"));
 		break;
+	case 8:
+		//CapacitySite
+		OSD.setCursor(24, 2);
+		OSD.print(((float)KissSettingsPID.PID_P[0])/1000);
+		OSD.print(" ");
+		OSD.setCursor(24, 3);
+		OSD.print(((float)KissSettingsPID.PID_I[0]) / 1000);
+		OSD.print(" ");
+		OSD.setCursor(24, 4);
+		OSD.print(((float)KissSettingsPID.PID_D[0]) / 1000);
+		OSD.print(" ");
+		OSD.setCursor(24, 5);
+		OSD.print(((float)KissSettingsPID.PID_P[1]) / 1000);
+		OSD.print(" ");
+		OSD.setCursor(24, 6);
+		OSD.print(((float)KissSettingsPID.PID_I[1]) / 1000);
+		OSD.print(" ");
+		OSD.setCursor(24, 7);
+		OSD.print(((float)KissSettingsPID.PID_D[1]) / 1000);
+		OSD.print(" ");
+		OSD.setCursor(24, 8);
+		OSD.print(((float)KissSettingsPID.PID_P[2]) / 1000);
+		OSD.print(" ");
+		OSD.setCursor(24, 9);
+		OSD.print(((float)KissSettingsPID.PID_I[2]) / 1000);
+		OSD.print(" ");
+		break;
 	}
 
 }
@@ -594,6 +650,28 @@ void value(bool addsub)
 		break;
 	case 7:
 		//Info
+		break;
+	case 8:
+		//Other Settings
+		switch (cursorline)
+		{
+		case 1: changeval(addsub, 0, 67000, 5, &KissSettingsPID.PID_P[0]);
+			break;
+		case 2: changeval(addsub, 0, 67000, 5, &KissSettingsPID.PID_I[0]);
+			break;
+		case 3: changeval(addsub, 0, 67000, 5, &KissSettingsPID.PID_D[0]);
+			break;
+		case 4: changeval(addsub, 0, 67000, 5, &KissSettingsPID.PID_P[1]);
+			break;
+		case 5: changeval(addsub, 0, 67000, 5, &KissSettingsPID.PID_I[1]);
+			break;
+		case 6: changeval(addsub, 0, 67000, 5, &KissSettingsPID.PID_D[1]);
+			break;
+		case 7: changeval(addsub, 0, 67000, 5, &KissSettingsPID.PID_P[2]);
+			break;
+		case 8: changeval(addsub, 0, 67000, 5, &KissSettingsPID.PID_I[2]);
+			break;
+		}
 		break;
 	}
 	pause = 1;

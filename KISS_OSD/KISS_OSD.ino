@@ -132,7 +132,7 @@ void loop()
   {
 	  KissStatus.LastLoopTime = micros();
 
-    getSerialData();
+    getSerialData(0);
 	
 	switch (KissConnection)
 	{
