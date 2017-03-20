@@ -99,6 +99,7 @@ void print_time(unsigned long time, char *time_str)
 void getSerialData(uint8_t Mode)	//reading serial Data from FC - Mode0:Telemetrie | Mode1:PID Settings
 {
 	static uint8_t serialBuf[255];
+	static uint8_t serialBufSett[255];
 	static uint32_t tmpVoltage = 0;
 	static uint32_t voltDev = 0;
 	uint8_t minBytes = 100;
@@ -246,36 +247,36 @@ void getSerialData(uint8_t Mode)	//reading serial Data from FC - Mode0:Telemetri
 			}
 			else if(checksum == serialBuf[recBytes - 1] && Mode == 0)
 			{
-				KissSettingsPID.PID_P[0] = ((serialBuf[0 + STARTCOUNT] << 8) | serialBuf[1 + STARTCOUNT]);
-				KissSettingsPID.PID_P[1] = ((serialBuf[2 + STARTCOUNT] << 8) | serialBuf[3 + STARTCOUNT]);
-				KissSettingsPID.PID_P[2] = ((serialBuf[4 + STARTCOUNT] << 8) | serialBuf[5 + STARTCOUNT]);
+				KissSettingsPID.PID_P[0] = ((serialBufSett[0 + STARTCOUNT] << 8) | serialBufSett[1 + STARTCOUNT]);
+				KissSettingsPID.PID_P[1] = ((serialBufSett[2 + STARTCOUNT] << 8) | serialBufSett[3 + STARTCOUNT]);
+				KissSettingsPID.PID_P[2] = ((serialBufSett[4 + STARTCOUNT] << 8) | serialBufSett[5 + STARTCOUNT]);
 
-				KissSettingsPID.PID_I[0] = ((serialBuf[6 + STARTCOUNT] << 8) | serialBuf[7 + STARTCOUNT]);
-				KissSettingsPID.PID_I[1] = ((serialBuf[8 + STARTCOUNT] << 8) | serialBuf[9 + STARTCOUNT]);
-				KissSettingsPID.PID_I[2] = ((serialBuf[10 + STARTCOUNT] << 8) | serialBuf[11 + STARTCOUNT]);
+				KissSettingsPID.PID_I[0] = ((serialBufSett[6 + STARTCOUNT] << 8) | serialBufSett[7 + STARTCOUNT]);
+				KissSettingsPID.PID_I[1] = ((serialBufSett[8 + STARTCOUNT] << 8) | serialBufSett[9 + STARTCOUNT]);
+				KissSettingsPID.PID_I[2] = ((serialBufSett[10 + STARTCOUNT] << 8) | serialBufSett[11 + STARTCOUNT]);
 
-				KissSettingsPID.PID_D[0] = ((serialBuf[12 + STARTCOUNT] << 8) | serialBuf[13 + STARTCOUNT]);
-				KissSettingsPID.PID_D[1] = ((serialBuf[14 + STARTCOUNT] << 8) | serialBuf[15 + STARTCOUNT]);
-				KissSettingsPID.PID_D[2] = ((serialBuf[16 + STARTCOUNT] << 8) | serialBuf[17 + STARTCOUNT]);
+				KissSettingsPID.PID_D[0] = ((serialBufSett[12 + STARTCOUNT] << 8) | serialBufSett[13 + STARTCOUNT]);
+				KissSettingsPID.PID_D[1] = ((serialBufSett[14 + STARTCOUNT] << 8) | serialBufSett[15 + STARTCOUNT]);
+				KissSettingsPID.PID_D[2] = ((serialBufSett[16 + STARTCOUNT] << 8) | serialBufSett[17 + STARTCOUNT]);
 
-				KissSettingsPID.PID_A[0] = ((serialBuf[18 + STARTCOUNT] << 8) | serialBuf[19 + STARTCOUNT]);
-				KissSettingsPID.PID_A[1] = ((serialBuf[20 + STARTCOUNT] << 8) | serialBuf[21 + STARTCOUNT]);
-				KissSettingsPID.PID_A[2] = ((serialBuf[22 + STARTCOUNT] << 8) | serialBuf[23 + STARTCOUNT]);
+				KissSettingsPID.PID_A[0] = ((serialBufSett[18 + STARTCOUNT] << 8) | serialBufSett[19 + STARTCOUNT]);
+				KissSettingsPID.PID_A[1] = ((serialBufSett[20 + STARTCOUNT] << 8) | serialBufSett[21 + STARTCOUNT]);
+				KissSettingsPID.PID_A[2] = ((serialBufSett[22 + STARTCOUNT] << 8) | serialBufSett[23 + STARTCOUNT]);
 
-				KissSettingsPID.ACC_Trim[1] = ((serialBuf[24 + STARTCOUNT] << 8) | serialBuf[25 + STARTCOUNT]);
-				KissSettingsPID.ACC_Trim[2] = ((serialBuf[26 + STARTCOUNT] << 8) | serialBuf[27 + STARTCOUNT]);
+				KissSettingsPID.ACC_Trim[1] = ((serialBufSett[24 + STARTCOUNT] << 8) | serialBufSett[25 + STARTCOUNT]);
+				KissSettingsPID.ACC_Trim[2] = ((serialBufSett[26 + STARTCOUNT] << 8) | serialBufSett[27 + STARTCOUNT]);
 
-				KissSettingsPID.RC_Rate[0] = ((serialBuf[28 + STARTCOUNT] << 8) | serialBuf[29 + STARTCOUNT]);
-				KissSettingsPID.RC_Rate[1] = ((serialBuf[30 + STARTCOUNT] << 8) | serialBuf[31 + STARTCOUNT]);
-				KissSettingsPID.RC_Rate[2] = ((serialBuf[32 + STARTCOUNT] << 8) | serialBuf[33 + STARTCOUNT]);
+				KissSettingsPID.RC_Rate[0] = ((serialBufSett[28 + STARTCOUNT] << 8) | serialBufSett[29 + STARTCOUNT]);
+				KissSettingsPID.RC_Rate[1] = ((serialBufSett[30 + STARTCOUNT] << 8) | serialBufSett[31 + STARTCOUNT]);
+				KissSettingsPID.RC_Rate[2] = ((serialBufSett[32 + STARTCOUNT] << 8) | serialBufSett[33 + STARTCOUNT]);
 
-				KissSettingsPID.RPY_Expo[0] = ((serialBuf[34 + STARTCOUNT] << 8) | serialBuf[35 + STARTCOUNT]);
-				KissSettingsPID.RPY_Expo[1] = ((serialBuf[36 + STARTCOUNT] << 8) | serialBuf[37 + STARTCOUNT]);
-				KissSettingsPID.RPY_Expo[2] = ((serialBuf[38 + STARTCOUNT] << 8) | serialBuf[39 + STARTCOUNT]);
+				KissSettingsPID.RPY_Expo[0] = ((serialBufSett[34 + STARTCOUNT] << 8) | serialBufSett[35 + STARTCOUNT]);
+				KissSettingsPID.RPY_Expo[1] = ((serialBufSett[36 + STARTCOUNT] << 8) | serialBufSett[37 + STARTCOUNT]);
+				KissSettingsPID.RPY_Expo[2] = ((serialBufSett[38 + STARTCOUNT] << 8) | serialBufSett[39 + STARTCOUNT]);
 
-				KissSettingsPID.RPY_Curve[0] = ((serialBuf[40 + STARTCOUNT] << 8) | serialBuf[41 + STARTCOUNT]);
-				KissSettingsPID.RPY_Curve[1] = ((serialBuf[42 + STARTCOUNT] << 8) | serialBuf[43 + STARTCOUNT]);
-				KissSettingsPID.RPY_Curve[2] = ((serialBuf[44 + STARTCOUNT] << 8) | serialBuf[45 + STARTCOUNT]);
+				KissSettingsPID.RPY_Curve[0] = ((serialBufSett[40 + STARTCOUNT] << 8) | serialBufSett[41 + STARTCOUNT]);
+				KissSettingsPID.RPY_Curve[1] = ((serialBufSett[42 + STARTCOUNT] << 8) | serialBufSett[43 + STARTCOUNT]);
+				KissSettingsPID.RPY_Curve[2] = ((serialBufSett[44 + STARTCOUNT] << 8) | serialBufSett[45 + STARTCOUNT]);
 			}
 			exitreceiving = 1;
 
