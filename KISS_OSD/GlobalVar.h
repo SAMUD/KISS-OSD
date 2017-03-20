@@ -124,6 +124,10 @@ static uint16_t i = 0;
 static uint8_t TempCharPosition;
 static char TempCharConverted[30];
 
+
+static uint8_t serialBufSett[255];
+
+
 enum SerialStatus					//giving the status of the current serial connection to the Kiss FC
 {
 	unknown,

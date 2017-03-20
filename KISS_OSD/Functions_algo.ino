@@ -99,7 +99,7 @@ void print_time(unsigned long time, char *time_str)
 void getSerialData(uint8_t Mode)	//reading serial Data from FC - Mode0:Telemetrie | Mode1:PID Settings
 {
 	static uint8_t serialBuf[255];
-	static uint8_t serialBufSett[255];
+	
 	static uint32_t tmpVoltage = 0;
 	static uint32_t voltDev = 0;
 	uint8_t minBytes = 63;
@@ -111,8 +111,9 @@ void getSerialData(uint8_t Mode)	//reading serial Data from FC - Mode0:Telemetri
 		Serial.write(GET_TELEMETRY);	//request telemetrie
 	else if (Mode == 1)
 	{
-		Serial.write(GET_SETTINGS);		//request settings from FC
 		DebugFnc("REQ SETTINGS");
+		Serial.write(GET_SETTINGS);		//request settings from FC
+		
 	}
 	else
 		DebugFnc("WRONG REQUEST NBR");
@@ -148,7 +149,15 @@ void getSerialData(uint8_t Mode)	//reading serial Data from FC - Mode0:Telemetri
 		{
 			minBytes = serialBuf[1] + STARTCOUNT + 1; // got the transmission length
 			if (Mode == 1)
-				DebugFnc("CHECKED LENG");
+			{
+				OSD.setCursor(0, 10);
+				OSD.print(recBytes);
+				OSD.setCursor(0, 11);
+				OSD.print(minBytes);
+				OSD.setCursor(0, 12);
+				OSD.print((uint8_t)serialBuf[1]);
+			}
+				//DebugFnc("CHECKED LENG");
 		}
 			
 
@@ -275,17 +284,24 @@ void getSerialData(uint8_t Mode)	//reading serial Data from FC - Mode0:Telemetri
 				OSD.print(recBytes);
 				OSD.setCursor(0, 11);
 				OSD.print(minBytes);
-				OSD.setCursor(0, 12);
-				OSD.print((uint8_t)serialBuf[1]);
+				
 				DebugFnc("COPY SETTINGS");
-				for(int iii=0;i<255;i++)
+				for (i = 0; i < 255; i++)
+				{
 					serialBufSett[i] = serialBuf[i];
+				}
+
+				OSD.setCursor(0, 12);
+				OSD.print((uint8_t)serialBufSett[3]);
+				OSD.print("  ");
+				OSD.print((uint8_t)serialBufSett[4]);
+				OSD.print("  ");
 				
 
 				KissSettingsPID.PID_P[0] = ((serialBufSett[0 + STARTCOUNT] << 8) | serialBufSett[1 + STARTCOUNT]);
 				KissSettingsPID.PID_P[1] = ((serialBufSett[2 + STARTCOUNT] << 8) | serialBufSett[3 + STARTCOUNT]);
 				KissSettingsPID.PID_P[2] = ((serialBufSett[4 + STARTCOUNT] << 8) | serialBufSett[5 + STARTCOUNT]);
-
+				OSD.print(KissSettingsPID.PID_P[0]);
 				KissSettingsPID.PID_I[0] = ((serialBufSett[6 + STARTCOUNT] << 8) | serialBufSett[7 + STARTCOUNT]);
 				KissSettingsPID.PID_I[1] = ((serialBufSett[8 + STARTCOUNT] << 8) | serialBufSett[9 + STARTCOUNT]);
 				KissSettingsPID.PID_I[2] = ((serialBufSett[10 + STARTCOUNT] << 8) | serialBufSett[11 + STARTCOUNT]);
@@ -926,5 +942,14 @@ void DebugFnc(char Message[28])
 	OSD.print(Message);
 	delay(100);
 	OSD.videoBackground();
+
+}
+
+void Serialsend()
+{
+	Serial.write(SET_SETTINGS);
+	delay(10);
+	serialBufSett[3]++;
+	Serial.write(serialBufSett, sizeof(serialBufSett));
 
 }
