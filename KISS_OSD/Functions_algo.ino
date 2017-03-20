@@ -102,23 +102,32 @@ void getSerialData(uint8_t Mode)	//reading serial Data from FC - Mode0:Telemetri
 	static uint8_t serialBufSett[255];
 	static uint32_t tmpVoltage = 0;
 	static uint32_t voltDev = 0;
-	uint8_t minBytes = 100;
+	uint8_t minBytes = 63;
 	uint8_t recBytes = 0;
 	uint8_t exitreceiving = 0;
 
-	if(Mode==0)
+
+	if (Mode == 0)
 		Serial.write(GET_TELEMETRY);	//request telemetrie
-	if (Mode == 1)
+	else if (Mode == 1)
+	{
 		Serial.write(GET_SETTINGS);		//request settings from FC
+		DebugFnc("REQ SETTINGS");
+	}
+	else
+		DebugFnc("WRONG REQUEST NBR");
+		
 
 	//aquire serial data and write it to normal variables
 	while (exitreceiving==0)
 	{
+		
 		//Running already to long in this loop
-		if (micros() - KissStatus.LastLoopTime > 200000)
+		if (micros() - KissStatus.LastLoopTime > 750000)
 		{
 			KissConnection = LostConnection;
 			exitreceiving = 1;
+			DebugFnc("TO LONG WAIT");
 		}
 
 		//Copy all received data into buffer
@@ -130,12 +139,18 @@ void getSerialData(uint8_t Mode)	//reading serial Data from FC - Mode0:Telemetri
 		{
 			exitreceiving = 1;
 			KissConnection = LostConnection;
+			DebugFnc("START BYTE ERR");
 		}
 			
 
 		//Check for transmission length
 		if (recBytes == 2)
+		{
 			minBytes = serialBuf[1] + STARTCOUNT + 1; // got the transmission length
+			if (Mode == 1)
+				DebugFnc("CHECKED LENG");
+		}
+			
 
 		//All data is here
 		if (recBytes == minBytes)
@@ -144,11 +159,20 @@ void getSerialData(uint8_t Mode)	//reading serial Data from FC - Mode0:Telemetri
 			for (i = 2; i<minBytes; i++)
 			{
 				checksum += serialBuf[i];
+
 			}
 			checksum = (uint32_t)checksum / (minBytes - 3);
 
-			if (checksum == serialBuf[recBytes - 1] && Mode==0)
+			if (Mode==0)//checksum == serialBuf[recBytes - 1] && 
 			{
+				//DebugFnc("COPY TELMTRY");
+				OSD.setCursor(0, 10);
+				OSD.print(recBytes);
+				OSD.setCursor(0, 11);
+				OSD.print(minBytes);
+				OSD.setCursor(0, 12);
+				OSD.print((uint8_t)serialBuf[1]);
+				
 				//armed
 				KissData.armed = ((serialBuf[15 + STARTCOUNT] << 8) | serialBuf[16 + STARTCOUNT]);
 				//Lipo Voltage from FC
@@ -245,8 +269,19 @@ void getSerialData(uint8_t Mode)	//reading serial Data from FC - Mode0:Telemetri
 				KissData.current = (uint16_t)(KissData.motorCurrent[0] + KissData.motorCurrent[1] + KissData.motorCurrent[2] + KissData.motorCurrent[3]) / 10;
 				KissData.current += (((Settings.StandbyCurrent * 5) / KissData.LipoVoltage) / 100);
 			}
-			else if(checksum == serialBuf[recBytes - 1] && Mode == 0)
+			else	//checksum == serialBuf[recBytes - 1] && 
 			{
+				OSD.setCursor(0, 10);
+				OSD.print(recBytes);
+				OSD.setCursor(0, 11);
+				OSD.print(minBytes);
+				OSD.setCursor(0, 12);
+				OSD.print((uint8_t)serialBuf[1]);
+				DebugFnc("COPY SETTINGS");
+				for(int iii=0;i<255;i++)
+					serialBufSett[i] = serialBuf[i];
+				
+
 				KissSettingsPID.PID_P[0] = ((serialBufSett[0 + STARTCOUNT] << 8) | serialBufSett[1 + STARTCOUNT]);
 				KissSettingsPID.PID_P[1] = ((serialBufSett[2 + STARTCOUNT] << 8) | serialBufSett[3 + STARTCOUNT]);
 				KissSettingsPID.PID_P[2] = ((serialBufSett[4 + STARTCOUNT] << 8) | serialBufSett[5 + STARTCOUNT]);
@@ -278,6 +313,7 @@ void getSerialData(uint8_t Mode)	//reading serial Data from FC - Mode0:Telemetri
 				KissSettingsPID.RPY_Curve[1] = ((serialBufSett[42 + STARTCOUNT] << 8) | serialBufSett[43 + STARTCOUNT]);
 				KissSettingsPID.RPY_Curve[2] = ((serialBufSett[44 + STARTCOUNT] << 8) | serialBufSett[45 + STARTCOUNT]);
 			}
+
 			exitreceiving = 1;
 
 			if(KissConnection == LostConnection || KissConnection == WaitingForConn)
@@ -768,7 +804,7 @@ void FlightSummary()
 		OSD.setCursor(0, 4);
 		OSD.print(F("MAX POWER:"));
 		ClearTempCharConverted();
-		TempCharPosition = print_int16(KissStats.MAXWatt, TempCharConverted, 2, 1);
+		TempCharPosition = print_int16(KissStats.MAXWatt, TempCharConverted, 1, 1);
 		TempCharConverted[TempCharPosition++] = 'W';
 		OSD.setCursor(-TempCharPosition, 4);
 		OSD.print(TempCharConverted);
@@ -815,7 +851,7 @@ void FlightSummary()
 		TempCharConverted[TempCharPosition++] = 'R';
 		TempCharConverted[TempCharPosition++] = 'P';
 		TempCharConverted[TempCharPosition++] = 'M';
-		OSD.setCursor(-TempCharPosition, 9);
+		OSD.setCursor(-TempCharPosition, 10);
 		OSD.print(TempCharConverted);
 
 		KissStatus.lastMode = 4;
@@ -834,7 +870,7 @@ void FlightSummaryCalculate()
 	//FlightSummaryCalculateFnc(&KissStats.MAXESCTemp[0], &KissData.LipoVoltage, 0);
 
 	if (KissData.current*KissData.LipoVoltage > KissStats.MAXWatt)
-		KissStats.MAXWatt = KissData.current*KissData.LipoVoltage;
+		KissStats.MAXWatt = KissData.current*(KissData.LipoVoltage/10);
 	if (KissData.ESCTemps[0] > KissStats.MAXESCTemp)
 		KissStats.MAXESCTemp = KissData.ESCTemps[0];
 	if (KissData.ESCTemps[1] > KissStats.MAXESCTemp)
@@ -875,4 +911,20 @@ void FlightSummaryCalculateFnc(int16_t *Stat, int16_t *Value, uint8_t bigger)
 {
 	if ((bigger == 1 && *Value > *Stat) || bigger == 0 && *Value < *Stat)
 		*Stat = *Value;
+}
+
+void DebugFnc(char Message[28])
+{
+	static uint8_t line = 0;
+
+	line++;
+	if (line > 10)
+		line = 0;
+	
+	OSD.grayBackground();
+	OSD.setCursor(0, line);
+	OSD.print(Message);
+	delay(100);
+	OSD.videoBackground();
+
 }

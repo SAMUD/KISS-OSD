@@ -118,6 +118,7 @@ void setup() {
   EEPROMinit();
 
   KissConnection = WaitingForConn;
+
 }
 
 
@@ -158,7 +159,7 @@ void loop()
 		CalculateOSD();
 		FlightSummaryCalculate();
 
-		if (!KissData.armed && KissStatus.time > 45000)
+		if (!KissData.armed && KissStatus.time > TIMEOUT_FOR_STAT_SEC * 1000)
 			//if disarmed and flighttime>45sec --> show flight summary
 			FlightSummary();
 		else

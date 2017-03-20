@@ -32,13 +32,12 @@ void menumain()
 	OSD.setCursor(7, 10);
 	OSD.print(F("OR ON FACEBOOK"));
 	OSD.videoBackground();
-	delay(2000);
-
-
+	
 	Settings.stockSettings = 1;
 	KissData.StickChanVals[3] = 0;
 	getSerialData(1); //get the Settings from the FC
-	delay(250);
+
+	delay(2000);
 
 	while (!exitmenu)
 	{

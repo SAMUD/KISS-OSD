@@ -62,6 +62,8 @@
 #define osdChipSelect	6
 #define STARTCOUNT		2
 
+#define TIMEOUT_FOR_STAT_SEC 1
+
 #define GET_TELEMETRY	0x20
 #define GET_INFO		0x21
 #define	ESC_INFO		0x22
