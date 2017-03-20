@@ -131,6 +131,7 @@ struct Stats
 	uint16_t MAXmotorKERPM = 0;
 	uint16_t MAXmotorCurrent = 0;
 	uint16_t MAXESCTemp =  0;
+	uint16_t MAXWatt = 0;
 } static KissStats;
 
 

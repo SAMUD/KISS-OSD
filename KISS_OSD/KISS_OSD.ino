@@ -5,7 +5,7 @@ KISS FC OSD
 by Samuel Daurat (sdaurat@outlook.de)
 based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
-#define OSDVersion "6.0"
+#define OSDVersion "6.2"
 #define DMemoryVersion 6
 /*
 ***************************************************************************************************************************************************
@@ -51,7 +51,7 @@ For more information, please refer to <http://unlicense.org>
 //#define NTSC
 
 // Pilot-name
-const char Pilotname[] = " SAMUD";
+const char Pilotname[] = "SAMUD";
 
 // MAX7456 Charset
 #define USE_MAX7456_ASCII

@@ -727,41 +727,50 @@ void FlightSummary()
 		OSD.setCursor(-TempCharPosition, 3);
 		OSD.print(TempCharConverted);
 
-		//Consumption
+		//Voltage
 		OSD.setCursor(0, 4);
+		OSD.print(F("MAX POWER:"));
+		ClearTempCharConverted();
+		TempCharPosition = print_int16(KissStats.MAXWatt, TempCharConverted, 2, 1);
+		TempCharConverted[TempCharPosition++] = 'W';
+		OSD.setCursor(-TempCharPosition, 4);
+		OSD.print(TempCharConverted);
+
+		//Consumption
+		OSD.setCursor(0, 5);
 		OSD.print(F("CONSUMPTION:"));
 		ClearTempCharConverted();
 		TempCharPosition = print_int16(KissData.LipoMAH, TempCharConverted, 0, 1);
 		TempCharConverted[TempCharPosition++] = 'M';
 		TempCharConverted[TempCharPosition++] = 'A';
 		TempCharConverted[TempCharPosition++] = 'H';
-		OSD.setCursor(-TempCharPosition, 4);
+		OSD.setCursor(-TempCharPosition, 5);
 		OSD.print(TempCharConverted);
 
 		//Flight Time
-		OSD.setCursor(0, 5);
+		OSD.setCursor(0, 6);
 		OSD.print(F("FLIGHT TIME:"));
 		OSD.setCursor(-2, 5);
 		OSD.print(F("00"));
 		ClearTempCharConverted();
-		OSD.setCursor(24, 5);
+		OSD.setCursor(24, 6);
 		print_time(KissStatus.time, TempCharConverted);
 		OSD.print(TempCharConverted);
 
 		//ESC Data
-		OSD.setCursor(0, 8);
+		OSD.setCursor(0, 9);
 		OSD.grayBackground();
 		OSD.print(F("ESC DATA - MAX VALUES       "));
 		OSD.videoBackground();
 		ClearTempCharConverted();
 		TempCharPosition = print_int16(KissStats.MAXESCTemp, TempCharConverted, 0, 1);
 		TempCharConverted[TempCharPosition++] = SYM_TEMP_C;
-		OSD.setCursor(0, 9);
+		OSD.setCursor(0, 10);
 		OSD.print(TempCharConverted);
 		ClearTempCharConverted();
 		TempCharPosition = print_int16(KissStats.MAXmotorCurrent, TempCharConverted, 2, 1);
 		TempCharConverted[TempCharPosition++] = 'A';
-		OSD.setCursor(10, 9);
+		OSD.setCursor(10, 10);
 		OSD.print(TempCharConverted);
 		ClearTempCharConverted();
 		TempCharPosition = print_int16(KissStats.MAXmotorCurrent, TempCharConverted, 1, 1);
@@ -787,6 +796,8 @@ void FlightSummaryCalculate()
 		FlightSummaryCalculateFnc(&KissStats.MinVoltage, &KissData.LipoVoltage, 0);
 	//FlightSummaryCalculateFnc(&KissStats.MAXESCTemp[0], &KissData.LipoVoltage, 0);
 
+	if (KissData.current*KissData.LipoVoltage > KissStats.MAXWatt)
+		KissStats.MAXWatt = KissData.current*KissData.LipoVoltage;
 	if (KissData.ESCTemps[0] > KissStats.MAXESCTemp)
 		KissStats.MAXESCTemp = KissData.ESCTemps[0];
 	if (KissData.ESCTemps[1] > KissStats.MAXESCTemp)
