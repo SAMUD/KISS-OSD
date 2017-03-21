@@ -74,7 +74,13 @@
     <ProjectCapability Include="VisualMicro" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Display.ino">
+      <FileType>CppCode</FileType>
+    </None>
     <None Include="EEPROM_Handling.ino" />
+    <None Include="FlightSummary.ino">
+      <FileType>CppCode</FileType>
+    </None>
     <None Include="Functions_algo.ino">
       <FileType>CppCode</FileType>
     </None>
@@ -82,7 +88,13 @@
     <None Include="KISS_OSD.ino">
       <FileType>CppCode</FileType>
     </None>
-    <None Include="Menue.ino">
+    <None Include="MenueRight.ino">
+      <FileType>CppCode</FileType>
+    </None>
+    <None Include="MenuLeft.ino">
+      <FileType>CppCode</FileType>
+    </None>
+    <None Include="Serial.ino">
       <FileType>CppCode</FileType>
     </None>
   </ItemGroup>

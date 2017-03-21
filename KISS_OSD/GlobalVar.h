@@ -59,21 +59,29 @@
 #define DStandbyCurrent 1000					//*
 //*************************************************
 
-#define osdChipSelect	6
+#define OSD_CHIP_SELECT	6
 #define STARTCOUNT		2
 
-#define TIMEOUT_FOR_STAT_SEC 1
+#ifdef DEBUG
+	#define TIMEOUT_FOR_SUMMARY_SEC 1
+#else
+	#define TIMEOUT_FOR_SUMMARY_SEC 45
+#endif // DEBUG
 
-#define GET_TELEMETRY	0x20
+
+
+#define GET_TELEMETRY	0x20		//different bytes sent to the FC to initiate an action	
 #define GET_INFO		0x21
 #define	ESC_INFO		0x22
 #define	GET_SETTINGS	0x30
 #define	SET_SETTINGS	0x10
 #define	MOTOR_TEST		0x11
 
-MAX7456 OSD(osdChipSelect);
+MAX7456 OSD(OSD_CHIP_SELECT);
 
-struct SerialData
+
+//needed for serial stuff
+struct SerialData						//saving Telemetrie-Data
 {
 	uint16_t current = 0;
 	uint16_t LipoMAH = 0;
@@ -92,13 +100,39 @@ struct SerialData
 	uint8_t armed = 0;
 	uint8_t failsafe = 0;
 	uint16_t calibGyroDone = 0;
-} static KissData;
+} static KissTelemetrie;
+enum SerialStatus					//giving the status of the current serial connection to the Kiss FC
+{
+	unknown,
+	WaitingForConn,
+	ConnectionEtablished,
+	Connected,
+	LostConnection
+}static KissConnection;
+static uint8_t serialBufSett[255];	//RAW-values received with Settings 
+struct SerialSettings
+{
+	uint8_t  minBytesSettings = 0;
+	uint16_t PID_P[3];		//holds the P part for all three axis
+	uint16_t PID_I[3];		//holds the I part for all three axis
+	uint16_t PID_D[3];		//holds the D part for all three axis
+	uint16_t PID_A[3];		//holds PID for something called A???
+	int16_t ACC_Trim[2];	//Accelerometer trimm data, Pitch and Roll
+	int16_t RC_Rate[3];		//holds the RC-Rate
+	int16_t RPY_Expo[3];	//RPY_Expo??
+	int16_t RPY_Curve[3];	//RPY_Curve??
 
+							//there are a lot of other setting according to here: https://github.com/fedorcomander/kissfc-chrome-gui/blob/master/js/protocol.js
+							//for memory saving reasons there will be only this for now
+
+
+} KissSettings;
+
+//saving actual status-thing relatet to the current session
 struct Status
 {
 	uint8_t BatteryCells = 0;			//stores the number of cells recognized in the first run
-	boolean VoltageAlarm = false;		//works with the const defined in the beginning | Filters Voltage drops to avoid erratic voltage alarms
-	boolean VoltageAlarm2nd = false;	//2nd stage of voltage alarms
+	uint8_t VoltageAlarm = 0;			//0=no alarm | 1=1st alarm | 2=2nd alarm
 
 	uint8_t  reducedModeDisplay = 0;	//Actual Display-mode
 	uint8_t lastMode = 0;				//last Display-mode
@@ -109,8 +143,6 @@ struct Status
 	unsigned long time = 0;				//Current time to display
 	unsigned long total_time = 0;		//Total flight time
 
-	uint8_t firstarmed = 0;
-	unsigned long armedstarted = 0;
 
 	int configAdress = 0;				//EEPROM ConfigAdress
 	bool memValid = true;				//MemoryIsValid
@@ -119,25 +151,12 @@ struct Status
 
 } static KissStatus;
 
-static uint16_t i = 0;
+static uint16_t i = 0;				//global variable used for different purposes like for-counters | avoiding reallocate every-time
+static uint8_t TempCharPosition;	//used for print_int16-fnc
+static char TempCharConverted[30];	//used for print_int16-fnc
 
-static uint8_t TempCharPosition;
-static char TempCharConverted[30];
-
-
-static uint8_t serialBufSett[255];
-
-
-enum SerialStatus					//giving the status of the current serial connection to the Kiss FC
-{
-	unknown,
-	WaitingForConn,
-	ConnectionEtablished,
-	Connected,
-	LostConnection
-}static KissConnection;
-
-struct Stats
+//saving Stats for Summary-Page
+struct Stats						
 {
 	uint16_t MaxCurrentTotal = 0;
 	int16_t  MinVoltage = 32767;
@@ -147,8 +166,8 @@ struct Stats
 	uint16_t MAXWatt = 0;
 } static KissStats;
 
-
-struct StoreStruct {
+//saving actual status-thing relatet to the current session
+struct StoreStruct {				//saving all the OSD-Settings
 
 	uint16_t LowVoltage1st; //
 	uint16_t LowVoltage2nd; //
@@ -199,19 +218,3 @@ struct StoreStruct {
 	uint16_t StandbyCurrent;
 } static Settings;
 
-struct Settings
-{
-	uint16_t PID_P[3];		//holds the P part for all three axis
-	uint16_t PID_I[3];		//holds the I part for all three axis
-	uint16_t PID_D[3];		//holds the D part for all three axis
-	uint16_t PID_A[3];		//holds PID for something called A???
-	int16_t ACC_Trim[2];	//Accelerometer trimm data, Pitch and Roll
-	int16_t RC_Rate[3];		//holds the RC-Rate
-	int16_t RPY_Expo[3];	//RPY_Expo??
-	int16_t RPY_Curve[3];	//RPY_Curve??
-
-	//there are a lot of other setting according to here: https://github.com/fedorcomander/kissfc-chrome-gui/blob/master/js/protocol.js
-	//for memory saving reasons there will be only this for now
-
-
-} KissSettingsPID;

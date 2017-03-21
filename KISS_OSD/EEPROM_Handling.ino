@@ -19,7 +19,6 @@ void EEPROMinit()
 		delay(6000);
 		OSD.clear();
 		while (OSD.clearIsBusy()) {}
-
 	}
 }
 

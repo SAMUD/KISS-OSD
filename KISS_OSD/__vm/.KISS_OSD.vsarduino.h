@@ -66,7 +66,11 @@ typedef void *__builtin_va_list;
 #undef PSTR
 #define PSTR(string_literal) ((const PROGMEM char *)(string_literal))
 #include "KISS_OSD.ino"
+#include "Display.ino"
 #include "EEPROM_Handling.ino"
+#include "FlightSummary.ino"
 #include "Functions_algo.ino"
-#include "Menue.ino"
+#include "MenuLeft.ino"
+#include "MenueRight.ino"
+#include "Serial.ino"
 #endif

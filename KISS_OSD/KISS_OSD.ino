@@ -1,3 +1,8 @@
+// TODO Add a sanity data-check after receiving data --> ex LipoVoltage<100V and >1V
+
+
+
+
 /* 1. Information
 //=========================================================================================================================
 
@@ -7,6 +12,7 @@ based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
 #define OSDVersion "6.2"
 #define DMemoryVersion 6
+#define DEBUG
 /*
 ***************************************************************************************************************************************************
 Donations help A LOT during development, buying me a COFFE you will keep me awake at night so I can add more stuff:  https://paypal.me/SamuelDaurat
@@ -77,8 +83,8 @@ const char Pilotname[] = "SAMUD";
 void setup() {
 
   //turn on watchdog timer
-  wdt_enable(WDTO_8S);
-  wdt_reset();
+  //wdt_enable(WDTO_8S);
+  //wdt_reset();
 
   //start SPI
   SPI.begin();
@@ -106,11 +112,9 @@ void setup() {
   while (!OSD.notInVSync());
   OSD.clear();
   while (OSD.clearIsBusy());
-  //set blinktime
-  OSD.setBlinkingTime(2); //0-3
+  OSD.setBlinkingTime(2); //0-3				//set blinktime
   OSD.setBlinkingDuty(1); //0-3
-  //set the Offset
-  OSD.setTextOffset(Settings.OffsetX, Settings.OffsetY);
+  OSD.setTextOffset(Settings.OffsetX, Settings.OffsetY);  //set the Offset
  
   Serial.begin(115200);
 
@@ -118,7 +122,6 @@ void setup() {
   EEPROMinit();
 
   KissConnection = WaitingForConn;
-
 }
 
 
@@ -129,15 +132,17 @@ void loop()
 {
 
   //big if with all code
-  if (micros() - KissStatus.LastLoopTime > 100000) //limits the speed of the OSD to 20Hz
+  if (micros() - KissStatus.LastLoopTime > 100000) //limits the speed of the OSD to 10Hz
   {
-	  KissStatus.LastLoopTime = micros();
+	  KissStatus.LastLoopTime = micros();			//saving current time
 
-    getSerialData(0);
+    getSerialData(GET_TELEMETRY);					//requesting serial data
 	
 	switch (KissConnection)
 	{
 	case WaitingForConn:
+		WaitForKissFc();
+		break;
 	case LostConnection:
 		WaitForKissFc();
 		break;
@@ -146,35 +151,33 @@ void loop()
 		KissConnection = Connected;
 		break;
 	case Connected:
-		//open menu if yaw left and disarmed
-		if (KissData.armed == 0 && KissData.StickChanVals[3] > 500)
-		{
-			menumain();
-			OSD.clear();
-			EEPROMsave();
-			delay(1000);
-		}
+		
+		//open menu right if yaw right and disarmed
+		if (!KissTelemetrie.armed && KissTelemetrie.StickChanVals[3] > 800)
+			MenuRight_Main();
+
+		//open menu left if yaw left and disarmed
+		if (!KissTelemetrie.armed && KissTelemetrie.StickChanVals[3] < -800)
+			MenuLeft_Main();
 		
 		//calculate the datas
 		CalculateOSD();
 		FlightSummaryCalculate();
 
-		if (!KissData.armed && KissStatus.time > TIMEOUT_FOR_STAT_SEC * 1000)
-			//if disarmed and flighttime>45sec --> show flight summary
+		if (!KissTelemetrie.armed && KissStatus.time > TIMEOUT_FOR_SUMMARY_SEC * 1000)	//if disarmed and flighttime>45sec --> show flight summary
 			FlightSummary();
 		else
-			//Display the datas
-			DisplayOSD();
-
-		
+			DisplayOSD_Main();								//Display the datas
 		break;
 	default:
-		KissConnection = WaitingForConn;
+		KissConnection = WaitingForConn;				//When the enum gets in an unknown state - should not do normally
+		#ifdef DEBUG
+			Debug_Fnc("ENUM_KISCONE WRONG CASE");
+		#endif
 		break;
 	}
-    
 	//Reset wdt
-    wdt_reset();
+    //wdt_reset();
   }
 
 }

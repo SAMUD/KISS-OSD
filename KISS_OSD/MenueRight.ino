@@ -6,6 +6,7 @@ Fonctions needed for the settings-menu off the OSD.
 //=========================================================================================================================
 //START OF CODE
 */
+
 static uint8_t MenuPage = 1;
 static uint8_t OldMenuPage = 0;
 static uint8_t cursorlineMax = 0;
@@ -13,31 +14,10 @@ static uint8_t cursorline = 0;
 static uint8_t cursorlineOLD = 0;
 static uint8_t pause = 0; //makes a pause of multiples of 50ms
 
-void menumain()
+void MenuRight_Main()
 {
-	static uint32_t LastLoopTimeMenu;
-	static boolean exitmenu = false;
-	static uint8_t ii;
-
-
-	OSDmakegrey();
-	OSD.setCursor(9, 3);
-	OSD.print(F("SAMUD OSD"));
-	OSD.setCursor(6, 4);
-	OSD.print(F("CUSTOM KISS OSD"));
-	OSD.setCursor(1, 8);
-	OSD.print(F("MORE INFORMATION AND WIKI:"));
-	OSD.setCursor(1, 9);
-	OSD.print(F("GITHUB.COM/SAMUD/KISS-OSD"));
-	OSD.setCursor(7, 10);
-	OSD.print(F("OR ON FACEBOOK"));
-	OSD.videoBackground();
-	
-	Settings.stockSettings = 1;
-	KissData.StickChanVals[3] = 0;
-	getSerialData(1); //get the Settings from the FC
-
-	delay(2000);
+	boolean exitmenu = false;
+	Menuall_start(0);
 
 	while (!exitmenu)
 	{
@@ -45,62 +25,54 @@ void menumain()
 		if (micros() - KissStatus.LastLoopTime > 100000) //limits the speed of the OSD to 20Hz  millis() - LastLoopTimeMenu > 100
 		{
 			KissStatus.LastLoopTime = micros();
-
-			getSerialData(0);
+			getSerialData(GET_TELEMETRY);
 
 			//set cursor position
-			if (KissData.StickChanVals[2] < -800 && cursorline<cursorlineMax)
+			if (KissTelemetrie.StickChanVals[2] < -800 && cursorline<cursorlineMax)
 			{
 				cursorline++;
-				KissData.StickChanVals[2] = 0;
+				KissTelemetrie.StickChanVals[2] = 0;
 				pause = 5;
 			}
-			if (KissData.StickChanVals[2] > 800 && cursorline>1)
+			if (KissTelemetrie.StickChanVals[2] > 800 && cursorline>1)
 			{
 				cursorline--;
-				KissData.StickChanVals[2] = 0;
+				KissTelemetrie.StickChanVals[2] = 0;
 				pause = 5;
 			}
 
 			//changevalue
-			if (KissData.StickChanVals[1] > 800)
+			if (KissTelemetrie.StickChanVals[1] > 800)
 			{
 				value(true);
 			}
-			if (KissData.StickChanVals[1] < -800)
+			if (KissTelemetrie.StickChanVals[1] < -800)
 			{
 				value(false);
 			}
 
 			//changepage
-			if (KissData.StickChanVals[3] > 800)
+			if (KissTelemetrie.StickChanVals[3] > 800)
 			{
-				if (MenuPage<8)
+				if (MenuPage<7)
 				{
 					MenuPage++;
-					KissData.StickChanVals[3] = 0;
+					KissTelemetrie.StickChanVals[3] = 0;
 					pause = 5;
 				}
 				else
-				{
 					exitmenu = true;
-					//pause=10;
-				}
 			}
-			if (KissData.StickChanVals[3] < -800)
+			if (KissTelemetrie.StickChanVals[3] < -800)
 			{
 				if (MenuPage > 1)
 				{
 					MenuPage--;
-					KissData.StickChanVals[3] = 0;
+					KissTelemetrie.StickChanVals[3] = 0;
 					pause = 5;
 				}
 				else
-				{
 					exitmenu = true;
-					//pause=10;
-				}
-
 			}
 
 
@@ -117,10 +89,10 @@ void menumain()
 			//draw cursor position
 			if (cursorline != cursorlineOLD && MenuPage != 7)
 			{
-				OSD.setCursor(23, cursorlineOLD + 1);
-				OSD.print(" ");
-				OSD.setCursor(23, cursorline + 1);
-				OSD.print(">");
+				OSD.setCursor(22, cursorlineOLD + 1);
+				OSD.print(F(" "));
+				OSD.setCursor(22, cursorline + 1);
+				OSD.print(F(">"));
 				cursorlineOLD = cursorline;
 			}
 
@@ -131,29 +103,23 @@ void menumain()
 				pause--;
 			}
 
-
-			if (KissData.armed == 1)
-			{
+			if (KissTelemetrie.armed == 1)
 				exitmenu = true;
-			}
-
 		}
-
 		//reset wdt
-		wdt_reset();
+		//wdt_reset();
 	}
-	exitmenu = false;
-	MenuPage = 1;
-	OldMenuPage = 0;
-	KissData.StickChanVals[3] = 0;
-	KissStatus.lastMode = 5;
+
+	MenuAll_Exit(GET_TELEMETRY);
+	
 }
 
+//printing the actual menu page
 void menuprintsite() {
 
 	OSD.clear();
-	delay(100);
-	OSD.setCursor(0, 0);
+	while (OSD.clearIsBusy());
+	OSD.home();
 	cursorline = 1;
 	cursorlineOLD = 0;
 
@@ -162,49 +128,49 @@ void menuprintsite() {
 	case 1:
 		//VoltageSite
 		OSD.grayBackground();
-		OSD.print(F("SAMUD OSD - P1/8 VOLTAGE     "));
+		OSD.print(F("SAMUD OSD - P1/7 VOLTAGE     "));
 		OSD.setCursor(0, 14);
 		OSD.print(F(" <-YAW-> : PAGE / EXIT       "));
 		OSD.videoBackground();
 		OSD.setCursor(1, 2);
-		OSD.print(F("VOLTAGE 1ST V/CELL:"));
+		OSD.print(F("VOLTAGE 1ST"));
 		OSD.setCursor(1, 3);
-		OSD.print(F("VOLTAGE 2ND V/CELL:"));
+		OSD.print(F("VOLTAGE 2ND"));
 		OSD.setCursor(1, 4);
-		OSD.print(F("V-ALARM ON/OFF:"));
+		OSD.print(F("V-ALARM ON/OFF"));
 		OSD.setCursor(1, 5);
-		OSD.print(F("VOLTAGE OFFSET:"));
+		OSD.print(F("VOLTAGE OFFSET"));
 		OSD.setCursor(1, 6);
-		OSD.print(F("VOLT ALARM HYST/CELL:"));
+		OSD.print(F("VOLT ALARM HYST/CELL"));
 		cursorlineMax = 5;
 		break;
 	case 2:
 		//CapacitySite
 		OSD.grayBackground();
-		OSD.print(F("SAMUD OSD - P2/8 CAPACITY    "));
+		OSD.print(F("SAMUD OSD - P2/7 CAPACITY    "));
 		OSD.setCursor(0, 14);
 		OSD.print(F(" <-PITCH-> : MOVE UP/DOWN    "));
 		OSD.videoBackground();
 		OSD.setCursor(1, 2);
 		OSD.print(F("CAPACITY IN MAH"));
 		OSD.setCursor(1, 3);
-		OSD.print(F("1ST WARN AT % USED:"));
+		OSD.print(F("1ST WARN AT % USED"));
 		OSD.setCursor(1, 4);
-		OSD.print(F("2ND WARN AT % USED:"));
+		OSD.print(F("2ND WARN AT % USED"));
 		OSD.setCursor(1, 5);
-		OSD.print(F("STB CURRENT @5V:"));
+		OSD.print(F("STB CURRENT @5V"));
 		OSD.setCursor(1, 7);
-		OSD.print(F("1ST WARN AT MAH USED:"));
+		OSD.print(F("1ST WARN AT MAH USED"));
 		OSD.setCursor(1, 8);
-		OSD.print(F("2ND WARN AT MAH USED:"));
+		OSD.print(F("2ND WARN AT MAH USED"));
 		OSD.setCursor(1, 9);
-		OSD.print(F("STB CURRENT FROM BAT:"));
+		OSD.print(F("STB CURRENT FROM BAT"));
 		cursorlineMax = 4;
 		break;
 	case 3:
 		//Red1
 		OSD.grayBackground();
-		OSD.print(F("SAMUD OSD - P3/8 RED MODE 1  "));
+		OSD.print(F("SAMUD OSD - P3/7 RED MODE 1  "));
 		OSD.setCursor(0, 14);
 		OSD.print(F(" <-ROLL-> : CHANGE VALUE     "));
 		printRED();
@@ -212,7 +178,7 @@ void menuprintsite() {
 	case 4:
 		//CapacitySite
 		OSD.grayBackground();
-		OSD.print(F("SAMUD OSD - P4/8 RED MODE 2  "));
+		OSD.print(F("SAMUD OSD - P4/7 RED MODE 2  "));
 		OSD.setCursor(0, 14);
 		OSD.print(F("SEE PAG6 FOR RED-CHANNEL SELE"));
 		printRED();
@@ -220,7 +186,7 @@ void menuprintsite() {
 	case 5:
 		//CapacitySite
 		OSD.grayBackground();
-		OSD.print(F("SAMUD OSD - P5/8 RED MODE 3  "));
+		OSD.print(F("SAMUD OSD - P5/7 RED MODE 3  "));
 		OSD.setCursor(0, 14);
 		OSD.print(F("                             "));
 		printRED();
@@ -228,284 +194,234 @@ void menuprintsite() {
 	case 6:
 		//Other Settings
 		OSD.grayBackground();
-		OSD.print(F("SAMUD OSD - P6/8 VARIOUS    "));
+		OSD.print(F("SAMUD OSD - P6/7 VARIOUS    "));
 		OSD.setCursor(0, 14);
 		OSD.print(F("                             "));
 		OSD.videoBackground();
 		OSD.setCursor(1, 2);
-		OSD.print(F("MARGIN LAST ROW:"));
+		OSD.print(F("MARGIN LAST ROW"));
 		OSD.setCursor(1, 3);
-		OSD.print(F("MAGNETPOLECOUNT MOT:"));
+		OSD.print(F("MAGNETPOLECOUNT MOT"));
 		OSD.setCursor(1, 4);
-		OSD.print(F("ESC FILTER:"));
+		OSD.print(F("ESC FILTER"));
 		OSD.setCursor(1, 5);
-		OSD.print(F("RED MODE AUX CHANNEL:"));
+		OSD.print(F("RED MODE AUX CHANNEL"));
 		OSD.setCursor(1, 6);
-		OSD.print(F("SCREEN OFFSET ->RIGHT:"));
+		OSD.print(F("SCREEN OFFSET ->RIGHT"));
 		OSD.setCursor(15, 7);
-		OSD.print(F("->DOWN:"));
+		OSD.print(F("->DOWN"));
 		cursorlineMax = 6;
 		break;
 	case 7:
 		//Info
 		OSD.grayBackground();
-		OSD.print(F("SAMUD OSD - P7/8 INFO       "));
+		OSD.print(F("SAMUD OSD - P7/7 INFO       "));
 		OSD.setCursor(0, 14);
 		OSD.print(F("                             "));
 		OSD.videoBackground();
 		OSD.setCursor(1, 2);
-		OSD.print(F("FREE RAM:"));
+		OSD.print(F("FREE RAM"));
 		OSD.setCursor(1, 3);
-		OSD.print(F("OSD VERSION:"));
+		OSD.print(F("OSD VERSION"));
 		OSD.setCursor(1, 4);
-		OSD.print(F("MEMORY VERSION:"));
+		OSD.print(F("MEMORY VERSION"));
 		OSD.setCursor(1, 5);
-		OSD.print(F("VIDEOSYSTEM:"));
+		OSD.print(F("VIDEOSYSTEM"));
 		cursorlineMax = 0;
 		break;
-	case 8:
-		//Info
-		OSD.grayBackground();
-		OSD.print(F("SAMUD OSD - P8/8 PID-SETTINGS"));
-		OSD.setCursor(0, 14);
-		OSD.print(F("WARNING: EXPERIMENTAL PAGE   "));
-		OSD.videoBackground();
-		OSD.setCursor(1, 2);
-		OSD.print(F("PITCH P"));
-		OSD.setCursor(1, 3);
-		OSD.print(F("      I"));
-		OSD.setCursor(1, 4);
-		OSD.print(F("      D"));
-		OSD.setCursor(1, 5);
-		OSD.print(F("ROLL  P"));
-		OSD.setCursor(1, 6);
-		OSD.print(F("      I"));
-		OSD.setCursor(1, 7);
-		OSD.print(F("      D"));
-		OSD.setCursor(1, 8);
-		OSD.print(F("YAW   P"));
-		OSD.setCursor(1, 9);
-		OSD.print(F("YAW   I"));
-		cursorlineMax = 8;
-		break;
-	default:
-		OSD.print(MenuPage);
-		break;
 	}
-
 }
 
+//print the actual menu-value
 void menuprintvalue() {
-
-
 	switch (MenuPage)
 	{
 	case 1:
 		//VoltageSite
-		OSD.setCursor(24, 2);
-		OSD.print(Settings.LowVoltage1st);
-		OSD.print(" ");
-		OSD.setCursor(24, 3);
-		OSD.print(Settings.LowVoltage2nd);
-		OSD.print(" ");
-		OSD.setCursor(24, 4);
+		OSD.setCursor(23, 2);
+		ClearTempCharConverted();
+		TempCharPosition = print_int16(Settings.LowVoltage1st, TempCharConverted, 2, 1);
+		TempCharConverted[TempCharPosition++] = 'V';
+		OSD.print(TempCharConverted);
+		OSD.setCursor(23, 3);
+		ClearTempCharConverted();
+		TempCharPosition = print_int16(Settings.LowVoltage2nd, TempCharConverted, 2, 1);
+		TempCharConverted[TempCharPosition++] = 'V';
+		OSD.print(TempCharConverted);
+		OSD.setCursor(23, 4);
 		showONOFF(Settings.LowVoltageAllowed);
 		OSD.print(" ");
-		OSD.setCursor(24, 5);
+		OSD.setCursor(23, 5);
 		OSD.print(Settings.VoltageOffset);
-		OSD.print(" ");
-		OSD.setCursor(24, 6);
+		OSD.print("MV ");
+		OSD.setCursor(23, 6);
 		OSD.print(Settings.hysteresis);
-		OSD.print(" ");
+		OSD.print("MV ");
 		break;
 	case 2:
 		//CapacitySite
-		OSD.setCursor(24, 2);
+		OSD.setCursor(23, 2);
 		OSD.print(Settings.Capacity);
+		OSD.write(SYM_MAH);
 		OSD.print(" ");
-		OSD.setCursor(24, 3);
+		OSD.setCursor(23, 3);
 		OSD.print(Settings.Capacity1st);
 		OSD.print(" ");
-		OSD.setCursor(24, 4);
+		OSD.setCursor(23, 4);
 		OSD.print(Settings.Capacity2nd);
 		OSD.print(" ");
-		OSD.setCursor(24, 5);
-		OSD.print(Settings.StandbyCurrent);
-		OSD.print(" ");
-		OSD.setCursor(24, 7);
+		OSD.setCursor(23, 5);
+		ClearTempCharConverted();
+		TempCharPosition = print_int16(Settings.StandbyCurrent/10, TempCharConverted, 2, 1);
+		TempCharConverted[TempCharPosition++] = 'A';
+		OSD.print(TempCharConverted);
+		OSD.setCursor(23, 7);
 		OSD.print((Settings.Capacity * (float)Settings.Capacity1st)/100);
 		OSD.print(" ");
-		OSD.setCursor(24, 8);
+		//OSD.write(SYM_MAH);
+		OSD.setCursor(23, 8);
 		OSD.print((Settings.Capacity * (float)Settings.Capacity2nd) / 100);
+		//OSD.write(SYM_MAH);
 		OSD.print(" ");
-		OSD.setCursor(24, 9);
-		OSD.print((Settings.StandbyCurrent * 5) / KissData.LipoVoltage);
-		OSD.print(" ");
-		
+		OSD.setCursor(23, 9);
+		OSD.print((Settings.StandbyCurrent * 5) / KissTelemetrie.LipoVoltage);
+		OSD.print("MA ");
 		break;
 	case 3:
 		//RED1
-		OSD.setCursor(24, 2);
+		OSD.setCursor(23, 2);
 		showONOFF(Settings.DispRCThrottle1);
 		OSD.print(" ");
-		OSD.setCursor(24, 3);
+		OSD.setCursor(23, 3);
 		showONOFF(Settings.DispCombCurrent1);
 		OSD.print(" ");
-		OSD.setCursor(24, 4);
+		OSD.setCursor(23, 4);
 		showONOFF(Settings.DispLipoVoltage1);
 		OSD.print(" ");
-		OSD.setCursor(24, 5);
+		OSD.setCursor(23, 5);
 		showONOFF(Settings.DispMaConsumption1);
 		OSD.print(" ");
-		OSD.setCursor(24, 6);
+		OSD.setCursor(23, 6);
 		showONOFF(Settings.DispEscKrpm1);
 		OSD.print(" ");
-		OSD.setCursor(24, 7);
+		OSD.setCursor(23, 7);
 		showONOFF(Settings.DispEscCurrent1);
 		OSD.print(" ");
-		OSD.setCursor(24, 8);
+		OSD.setCursor(23, 8);
 		showONOFF(Settings.DispEscTemp1);
 		OSD.print(" ");
-		OSD.setCursor(24, 9);
+		OSD.setCursor(23, 9);
 		showONOFF(Settings.DispPilotname1);
 		OSD.print(" ");
-		OSD.setCursor(24, 10);
+		OSD.setCursor(23, 10);
 		showONOFF(Settings.DispTimer1);
 		OSD.print(" ");
-		OSD.setCursor(24, 11);
+		OSD.setCursor(23, 11);
 		showONOFF(Settings.DispAngle1);
 		OSD.print(" ");
 		break;
 	case 4:
 		//RED2
-		OSD.setCursor(24, 2);
+		OSD.setCursor(23, 2);
 		showONOFF(Settings.DispRCThrottle2);
 		OSD.print(" ");
-		OSD.setCursor(24, 3);
+		OSD.setCursor(23, 3);
 		showONOFF(Settings.DispCombCurrent2);
 		OSD.print(" ");
-		OSD.setCursor(24, 4);
+		OSD.setCursor(23, 4);
 		showONOFF(Settings.DispLipoVoltage2);
 		OSD.print(" ");
-		OSD.setCursor(24, 5);
+		OSD.setCursor(23, 5);
 		showONOFF(Settings.DispMaConsumption2);
 		OSD.print(" ");
-		OSD.setCursor(24, 6);
+		OSD.setCursor(23, 6);
 		showONOFF(Settings.DispEscKrpm2);
 		OSD.print(" ");
-		OSD.setCursor(24, 7);
+		OSD.setCursor(23, 7);
 		showONOFF(Settings.DispEscCurrent2);
 		OSD.print(" ");
-		OSD.setCursor(24, 8);
+		OSD.setCursor(23, 8);
 		showONOFF(Settings.DispEscTemp2);
 		OSD.print(" ");
-		OSD.setCursor(24, 9);
+		OSD.setCursor(23, 9);
 		showONOFF(Settings.DispPilotname2);
 		OSD.print(" ");
-		OSD.setCursor(24, 10);
+		OSD.setCursor(23, 10);
 		showONOFF(Settings.DispTimer2);
 		OSD.print(" ");
-		OSD.setCursor(24, 11);
+		OSD.setCursor(23, 11);
 		showONOFF(Settings.DispAngle2);
 		OSD.print(" ");
 		break;
 	case 5:
 		//RED1
-		OSD.setCursor(24, 2);
+		OSD.setCursor(23, 2);
 		showONOFF(Settings.DispRCThrottle3);
 		OSD.print(" ");
-		OSD.setCursor(24, 3);
+		OSD.setCursor(23, 3);
 		showONOFF(Settings.DispCombCurrent3);
 		OSD.print(" ");
-		OSD.setCursor(24, 4);
+		OSD.setCursor(23, 4);
 		showONOFF(Settings.DispLipoVoltage3);
 		OSD.print(" ");
-		OSD.setCursor(24, 5);
+		OSD.setCursor(23, 5);
 		showONOFF(Settings.DispMaConsumption3);
 		OSD.print(" ");
-		OSD.setCursor(24, 6);
+		OSD.setCursor(23, 6);
 		showONOFF(Settings.DispEscKrpm3);
 		OSD.print(" ");
-		OSD.setCursor(24, 7);
+		OSD.setCursor(23, 7);
 		showONOFF(Settings.DispEscCurrent3);
 		OSD.print(" ");
-		OSD.setCursor(24, 8);
+		OSD.setCursor(23, 8);
 		showONOFF(Settings.DispEscTemp3);
 		OSD.print(" ");
-		OSD.setCursor(24, 9);
+		OSD.setCursor(23, 9);
 		showONOFF(Settings.DispPilotname3);
 		OSD.print(" ");
-		OSD.setCursor(24, 10);
+		OSD.setCursor(23, 10);
 		showONOFF(Settings.DispTimer3);
 		OSD.print(" ");
-		OSD.setCursor(24, 11);
+		OSD.setCursor(23, 11);
 		showONOFF(Settings.DispAngle3);
 		OSD.print(" ");
 		break;
 	case 6:
 		//Other Settings
-		OSD.setCursor(24, 2);
+		OSD.setCursor(23, 2);
 		OSD.print(Settings.marginLastRow);
 		OSD.print(" ");
-		OSD.setCursor(24, 3);
+		OSD.setCursor(23, 3);
 		OSD.print(Settings.MAGNETPOLECOUNT);
 		OSD.print(" ");
-		OSD.setCursor(24, 4);
+		OSD.setCursor(23, 4);
 		OSD.print(Settings.ESC_FILTER);
 		OSD.print(" ");
-		OSD.setCursor(24, 5);
+		OSD.setCursor(23, 5);
 		OSD.print(Settings.RED_MODE_AUX_CHANNEL);
 		OSD.print(" ");
-		OSD.setCursor(24, 6);
+		OSD.setCursor(23, 6);
 		OSD.print(Settings.OffsetX);
-		OSD.print(" ");
-		OSD.setCursor(24, 7);
+		OSD.print(F("PX "));
+		OSD.setCursor(23, 7);
 		OSD.print(Settings.OffsetY);
-		OSD.print(" ");
+		OSD.print(F("PX "));
 		break;
 	case 7:
 		//Info
-		OSD.setCursor(24, 2);
+		OSD.setCursor(23, 2);
 		OSD.print(freeRam());
-		OSD.setCursor(22, 3);
+		OSD.setCursor(23, 3);
 		OSD.print(OSDVersion);
-		OSD.setCursor(22, 4);
+		OSD.setCursor(23, 4);
 		OSD.print(DMemoryVersion);
-		OSD.setCursor(22, 5);
+		OSD.setCursor(23, 5);
 		if(OSD.videoSystem() == 1)
 			OSD.print(F("PAL"));
 		else if (OSD.videoSystem() == 2)
 			OSD.print(F("NTSC"));
 		break;
-	case 8:
-		//CapacitySite
-		OSD.setCursor(24, 2);
-		OSD.print(((float)KissSettingsPID.PID_P[0])/1000);
-		OSD.print(" ");
-		OSD.setCursor(24, 3);
-		OSD.print(((float)KissSettingsPID.PID_I[0]) / 1000);
-		OSD.print(" ");
-		OSD.setCursor(24, 4);
-		OSD.print(((float)KissSettingsPID.PID_D[0]) / 1000);
-		OSD.print(" ");
-		OSD.setCursor(24, 5);
-		OSD.print(((float)KissSettingsPID.PID_P[1]) / 1000);
-		OSD.print(" ");
-		OSD.setCursor(24, 6);
-		OSD.print(((float)KissSettingsPID.PID_I[1]) / 1000);
-		OSD.print(" ");
-		OSD.setCursor(24, 7);
-		OSD.print(((float)KissSettingsPID.PID_D[1]) / 1000);
-		OSD.print(" ");
-		OSD.setCursor(24, 8);
-		OSD.print(((float)KissSettingsPID.PID_P[2]) / 1000);
-		OSD.print(" ");
-		OSD.setCursor(24, 9);
-		OSD.print(((float)KissSettingsPID.PID_I[2]) / 1000);
-		OSD.print(" ");
-		break;
 	}
-
 }
 
 void value(bool addsub)
@@ -546,7 +462,7 @@ void value(bool addsub)
 			if (Settings.Capacity2nd < Settings.Capacity1st)
 				Settings.Capacity1st = Settings.Capacity2nd;
 			break;
-		case 4: changeval(addsub, 0, 9999, 5, &Settings.StandbyCurrent);
+		case 4: changeval(addsub, 0, 9999, 10, &Settings.StandbyCurrent);
 		}
 		break;
 	case 3:
@@ -650,28 +566,6 @@ void value(bool addsub)
 	case 7:
 		//Info
 		break;
-	case 8:
-		//Other Settings
-		switch (cursorline)
-		{
-		case 1: changeval(addsub, 0, 67000, 5, &KissSettingsPID.PID_P[0]);
-			break;
-		case 2: changeval(addsub, 0, 67000, 5, &KissSettingsPID.PID_I[0]);
-			break;
-		case 3: changeval(addsub, 0, 67000, 5, &KissSettingsPID.PID_D[0]);
-			break;
-		case 4: changeval(addsub, 0, 67000, 5, &KissSettingsPID.PID_P[1]);
-			break;
-		case 5: changeval(addsub, 0, 67000, 5, &KissSettingsPID.PID_I[1]);
-			break;
-		case 6: changeval(addsub, 0, 67000, 5, &KissSettingsPID.PID_D[1]);
-			break;
-		case 7: changeval(addsub, 0, 67000, 5, &KissSettingsPID.PID_P[2]);
-			break;
-		case 8: changeval(addsub, 0, 67000, 5, &KissSettingsPID.PID_I[2]);
-			break;
-		}
-		break;
 	}
 	pause = 1;
 }
@@ -736,24 +630,71 @@ void printRED()
 {
 	OSD.videoBackground();
 	OSD.setCursor(1, 2);
-	OSD.print(F("RC THROTTLE:"));
+	OSD.print(F("RC THROTTLE"));
 	OSD.setCursor(1, 3);
-	OSD.print(F("COMBINED CURRENT:"));
+	OSD.print(F("COMBINED CURRENT"));
 	OSD.setCursor(1, 4);
-	OSD.print(F("LIPO VOLTAGE:"));
+	OSD.print(F("LIPO VOLTAGE"));
 	OSD.setCursor(1, 5);
-	OSD.print(F("CONSUMPTION MA:"));
+	OSD.print(F("CONSUMPTION MAH"));
 	OSD.setCursor(1, 6);
-	OSD.print(F("ESC KRPM *1000:"));
+	OSD.print(F("ESC KRPM *1000"));
 	OSD.setCursor(1, 7);
-	OSD.print(F("ESC CURRENT:"));
+	OSD.print(F("ESC CURRENT"));
 	OSD.setCursor(1, 8);
-	OSD.print(F("ESC TEMPERATURE:"));
+	OSD.print(F("ESC TEMPERATURE"));
 	OSD.setCursor(1, 9);
-	OSD.print(F("PILOTNAME:"));
+	OSD.print(F("PILOTNAME"));
 	OSD.setCursor(1, 10);
-	OSD.print(F("TIMER:"));
+	OSD.print(F("TIMER"));
 	OSD.setCursor(1, 11);
-	OSD.print(F("ANGLE PITCH:"));
+	OSD.print(F("ANGLE PITCH"));
 	cursorlineMax = 10;
+}
+
+void Menuall_start(uint8_t GetSettings)
+{
+	OSDmakegrey();
+	OSD.setCursor(9, 3);
+	OSD.print(F("SAMUD OSD"));
+	OSD.setCursor(6, 4);
+	OSD.print(F("CUSTOM KISS OSD"));
+	OSD.setCursor(1, 8);
+	OSD.print(F("MORE INFORMATION AND WIKI:"));
+	OSD.setCursor(1, 9);
+	OSD.print(F("GITHUB.COM/SAMUD/KISS-OSD"));
+	OSD.setCursor(7, 10);
+	OSD.print(F("OR ON FACEBOOK"));
+	OSD.videoBackground();
+
+	delay(500);
+
+	if (GetSettings == GET_SETTINGS)
+	{
+		getSerialData(GET_SETTINGS);						//get the Settings from the FC
+		#ifdef DEBUG
+		Debug_Fnc("AQUR SETT");
+		#endif // DEBUG	
+	}
+	else
+		Settings.stockSettings = 1;				//byte saving that I entered the Menu
+	
+	KissTelemetrie.StickChanVals[3] = 0;		//reset the current Stick to avoid changing Menu page diectly upon entering
+	
+	delay(500);								//delay for showing the message
+}
+
+void MenuAll_Exit(uint8_t GetSettings)
+{
+	MenuPage = 1;
+	OldMenuPage = 0;
+	KissTelemetrie.StickChanVals[3] = 0;
+	KissStatus.lastMode = 5;
+	OSD.clear();
+	if (GetSettings == GET_SETTINGS)
+		setSerialData();
+	else
+		EEPROMsave();
+	delay(250);
+
 }
