@@ -158,7 +158,7 @@ void getSerialData(uint8_t Mode)	//reading serial Data from FC - Mode0:Telemetri
 				KissTelemetrie.StickChanVals[3] = ((serialBuf[6 + STARTCOUNT] << 8) | serialBuf[7 + STARTCOUNT]);
 				
 			}
-			else if(/*checksum == serialBuf[recBytes - 1] && */Mode==GET_SETTINGS) 
+			else if(/*checksum == serialBuf[recBytes - 1] && */Mode==GET_SETTINGS) //TODO: Add checksum back
 			{
 				#ifdef DEBUG
 				OSD.setCursor(0, 10);
@@ -194,17 +194,17 @@ void getSerialData(uint8_t Mode)	//reading serial Data from FC - Mode0:Telemetri
 				//KissSettings.ACC_Trim[1] = ((serialBufSett[24 + STARTCOUNT] << 8) | serialBufSett[25 + STARTCOUNT]);
 				//KissSettings.ACC_Trim[2] = ((serialBufSett[26 + STARTCOUNT] << 8) | serialBufSett[27 + STARTCOUNT]);
 
-				//KissSettings.RC_Rate[0] = ((serialBufSett[28 + STARTCOUNT] << 8) | serialBufSett[29 + STARTCOUNT]);
-				//KissSettings.RC_Rate[1] = ((serialBufSett[30 + STARTCOUNT] << 8) | serialBufSett[31 + STARTCOUNT]);
-				//KissSettings.RC_Rate[2] = ((serialBufSett[32 + STARTCOUNT] << 8) | serialBufSett[33 + STARTCOUNT]);
+				KissSettings.RC_Rate[0] = ((serialBufSett[28 + STARTCOUNT] << 8) | serialBufSett[29 + STARTCOUNT]);
+				KissSettings.RC_Rate[1] = ((serialBufSett[30 + STARTCOUNT] << 8) | serialBufSett[31 + STARTCOUNT]);
+				KissSettings.RC_Rate[2] = ((serialBufSett[32 + STARTCOUNT] << 8) | serialBufSett[33 + STARTCOUNT]);
 
-				//KissSettings.RPY_Expo[0] = ((serialBufSett[34 + STARTCOUNT] << 8) | serialBufSett[35 + STARTCOUNT]);
-				//KissSettings.RPY_Expo[1] = ((serialBufSett[36 + STARTCOUNT] << 8) | serialBufSett[37 + STARTCOUNT]);
-				//KissSettings.RPY_Expo[2] = ((serialBufSett[38 + STARTCOUNT] << 8) | serialBufSett[39 + STARTCOUNT]);
+				KissSettings.Rate[0] = ((serialBufSett[34 + STARTCOUNT] << 8) | serialBufSett[35 + STARTCOUNT]);
+				KissSettings.Rate[1] = ((serialBufSett[36 + STARTCOUNT] << 8) | serialBufSett[37 + STARTCOUNT]);
+				KissSettings.Rate[2] = ((serialBufSett[38 + STARTCOUNT] << 8) | serialBufSett[39 + STARTCOUNT]);
 
-				//KissSettings.RPY_Curve[0] = ((serialBufSett[40 + STARTCOUNT] << 8) | serialBufSett[41 + STARTCOUNT]);
-				//KissSettings.RPY_Curve[1] = ((serialBufSett[42 + STARTCOUNT] << 8) | serialBufSett[43 + STARTCOUNT]);
-				//KissSettings.RPY_Curve[2] = ((serialBufSett[44 + STARTCOUNT] << 8) | serialBufSett[45 + STARTCOUNT]);
+				KissSettings.RC_Curve[0] = ((serialBufSett[40 + STARTCOUNT] << 8) | serialBufSett[41 + STARTCOUNT]);
+				KissSettings.RC_Curve[1] = ((serialBufSett[42 + STARTCOUNT] << 8) | serialBufSett[43 + STARTCOUNT]);
+				KissSettings.RC_Curve[2] = ((serialBufSett[44 + STARTCOUNT] << 8) | serialBufSett[45 + STARTCOUNT]);
 			}
 			#ifdef DEBUG
 			else
@@ -240,6 +240,27 @@ void setSerialData()
 	serialBufSett[STARTCOUNT + 15] = (byte)(KissSettings.PID_I[1] & 0x00FF);
 	serialBufSett[STARTCOUNT + 16] = (byte)((KissSettings.PID_I[2] & 0xFF00) >> 8);
 	serialBufSett[STARTCOUNT + 17] = (byte)(KissSettings.PID_I[2] & 0x00FF);
+
+	serialBufSett[STARTCOUNT + 28] = (byte)((KissSettings.RC_Rate[0] & 0xFF00) >> 8);
+	serialBufSett[STARTCOUNT + 29] = (byte)(KissSettings.RC_Rate[0] & 0x00FF);
+	serialBufSett[STARTCOUNT + 30] = (byte)((KissSettings.RC_Rate[1] & 0xFF00) >> 8);
+	serialBufSett[STARTCOUNT + 31] = (byte)(KissSettings.RC_Rate[1] & 0x00FF);
+	serialBufSett[STARTCOUNT + 32] = (byte)((KissSettings.RC_Rate[2] & 0xFF00) >> 8);
+	serialBufSett[STARTCOUNT + 33] = (byte)(KissSettings.RC_Rate[2] & 0x00FF);
+
+	serialBufSett[STARTCOUNT + 34] = (byte)((KissSettings.Rate[0] & 0xFF00) >> 8);
+	serialBufSett[STARTCOUNT + 35] = (byte)(KissSettings.Rate[0] & 0x00FF);
+	serialBufSett[STARTCOUNT + 36] = (byte)((KissSettings.Rate[1] & 0xFF00) >> 8);
+	serialBufSett[STARTCOUNT + 37] = (byte)(KissSettings.Rate[1] & 0x00FF);
+	serialBufSett[STARTCOUNT + 38] = (byte)((KissSettings.Rate[2] & 0xFF00) >> 8);
+	serialBufSett[STARTCOUNT + 39] = (byte)(KissSettings.Rate[2] & 0x00FF);
+
+	serialBufSett[STARTCOUNT + 40] = (byte)((KissSettings.RC_Curve[0] & 0xFF00) >> 8);
+	serialBufSett[STARTCOUNT + 41] = (byte)(KissSettings.RC_Curve[0] & 0x00FF);
+	serialBufSett[STARTCOUNT + 42] = (byte)((KissSettings.RC_Curve[1] & 0xFF00) >> 8);
+	serialBufSett[STARTCOUNT + 43] = (byte)(KissSettings.RC_Curve[1] & 0x00FF);
+	serialBufSett[STARTCOUNT + 44] = (byte)((KissSettings.RC_Curve[2] & 0xFF00) >> 8);
+	serialBufSett[STARTCOUNT + 45] = (byte)(KissSettings.RC_Curve[2] & 0x00FF);
 	
 	//calculate Checksum
 	double checksum = 0.0;

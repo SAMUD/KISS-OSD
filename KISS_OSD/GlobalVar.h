@@ -119,8 +119,8 @@ struct SerialSettings
 	uint16_t PID_A[3];		//holds PID for something called A???
 	int16_t ACC_Trim[2];	//Accelerometer trimm data, Pitch and Roll
 	int16_t RC_Rate[3];		//holds the RC-Rate
-	int16_t RPY_Expo[3];	//RPY_Expo??
-	int16_t RPY_Curve[3];	//RPY_Curve??
+	int16_t Rate[3];		//Rate
+	int16_t RC_Curve[3];	//RC_Curve
 
 							//there are a lot of other setting according to here: https://github.com/fedorcomander/kissfc-chrome-gui/blob/master/js/protocol.js
 							//for memory saving reasons there will be only this for now

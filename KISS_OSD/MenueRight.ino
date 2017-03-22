@@ -19,7 +19,7 @@ void MenuRight_Main()
 	boolean exitmenu = false;
 	Menuall_start(0);
 
-	while (!exitmenu)
+	while (!exitmenu && KissTelemetrie.armed==0)
 	{
 
 		if (micros() - KissStatus.LastLoopTime > 100000) //limits the speed of the OSD to 20Hz  millis() - LastLoopTimeMenu > 100
@@ -97,14 +97,11 @@ void MenuRight_Main()
 			}
 
 			//pause (multiples of 50ms)
-			while (pause > 0)
+			while (pause >0)
 			{
 				delay(50);
-				pause--;
+				PauseLeft--;
 			}
-
-			if (KissTelemetrie.armed == 1)
-				exitmenu = true;
 		}
 		//reset wdt
 		//wdt_reset();
