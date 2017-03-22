@@ -79,7 +79,7 @@
 
 MAX7456 OSD(OSD_CHIP_SELECT);
 
-
+static uint8_t serialBufSett[170];	//RAW-values received with Settings 
 //needed for serial stuff
 struct SerialData						//saving Telemetrie-Data
 {
@@ -109,7 +109,7 @@ enum SerialStatus					//giving the status of the current serial connection to th
 	Connected,
 	LostConnection
 }static KissConnection;
-static uint8_t serialBufSett[255];	//RAW-values received with Settings 
+
 struct SerialSettings
 {
 	uint8_t  minBytesSettings = 0;
@@ -142,7 +142,6 @@ struct Status
 	unsigned long start_time = 0;		//Time when armed
 	unsigned long time = 0;				//Current time to display
 	unsigned long total_time = 0;		//Total flight time
-
 
 	int configAdress = 0;				//EEPROM ConfigAdress
 	bool memValid = true;				//MemoryIsValid

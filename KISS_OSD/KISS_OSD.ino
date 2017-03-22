@@ -10,7 +10,8 @@ KISS FC OSD
 by Samuel Daurat (sdaurat@outlook.de)
 based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
-#define OSDVersion "6.9"
+
+#define OSDVersion "6.91"
 #define DMemoryVersion 6
 #define DEBUG
 /*
@@ -74,7 +75,7 @@ const char Pilotname[] = "SAMUD";
 #include "symbols.h"
 #include <EEPROMex.h>
 #include "GlobalVar.h"
-#include <avr/wdt.h>
+//#include <avr/wdt.h>
 
 
 
@@ -82,7 +83,10 @@ const char Pilotname[] = "SAMUD";
 //SETUP function
 void setup() {
 
-  //turn on watchdog timer
+	//SerialPort<0, 64, 0> NewSerial;
+	
+	
+	//turn on watchdog timer
   //wdt_enable(WDTO_8S);
   //wdt_reset();
 
@@ -164,7 +168,7 @@ void loop()
 		CalculateOSD();
 		FlightSummaryCalculate();
 
-		if (!KissTelemetrie.armed && KissStatus.time > TIMEOUT_FOR_SUMMARY_SEC * 1000)	//if disarmed and flighttime>45sec --> show flight summary
+		if (KissTelemetrie.armed==0 && KissStatus.time > (TIMEOUT_FOR_SUMMARY_SEC * 1000))	//if disarmed and flighttime>45sec --> show flight summary
 			FlightSummary();
 		else
 			DisplayOSD_Main();								//Display the datas

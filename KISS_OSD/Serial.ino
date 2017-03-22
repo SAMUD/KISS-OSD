@@ -2,7 +2,7 @@
 //Read serial data from FC and store in var
 void getSerialData(uint8_t Mode)	//reading serial Data from FC - Mode0:Telemetrie | Mode1:PID Settings
 {
-	static uint8_t serialBuf[255];
+	uint8_t serialBuf[170];
 	static uint32_t tmpVoltage = 0;
 	static uint8_t voltDev = 0;
 	static uint32_t windedupfilterdatas[8];
@@ -12,6 +12,8 @@ void getSerialData(uint8_t Mode)	//reading serial Data from FC - Mode0:Telemetri
 
 	serialBuf[0] = 0;
 	serialBuf[1] = 0;
+	serialBufSett[0] = 0;
+	//serialBufSett[1] = 0;
 
 	
 	Serial.write(Mode);	//request data from FC
@@ -37,10 +39,16 @@ void getSerialData(uint8_t Mode)	//reading serial Data from FC - Mode0:Telemetri
 
 		//Copy all received data into buffer
 		while (Serial.available())
-			serialBuf[recBytes++] = Serial.read();
+		{
+			if(Mode == GET_TELEMETRY)
+				serialBuf[recBytes++] = Serial.read();
+			else
+				serialBufSett[recBytes++] = Serial.read();
+		}
+			
 
 		//Check for start byte - if wrong exit 
-		if (recBytes == 1 && serialBuf[0] != 5)
+		if ( (recBytes == 1 && serialBuf[0] != 5 && Mode==GET_TELEMETRY)  || (recBytes == 1 && serialBufSett[0] != 5 && Mode == GET_SETTINGS) )
 		{
 			exitreceiving = 1;
 			KissConnection = LostConnection;
@@ -52,16 +60,30 @@ void getSerialData(uint8_t Mode)	//reading serial Data from FC - Mode0:Telemetri
 		//Check for transmission length
 		if (recBytes == 2)
 		{
-			minBytes = serialBuf[1] + STARTCOUNT + 1; // got the transmission length
+			if (Mode == GET_TELEMETRY)
+				minBytes = serialBuf[1] + STARTCOUNT + 1; // got the transmission length
+			else
+				minBytes = serialBufSett[1] + STARTCOUNT + 1; // got the transmission length
 		}
+			
 		
 
 		//All data is here
 		if (recBytes == minBytes)
 		{
 			uint32_t checksum = 0;
-			for (i = 2; i<minBytes; i++)
-				checksum += serialBuf[i];
+
+			if (Mode == GET_TELEMETRY)
+			{
+				for (i = 2; i<minBytes; i++)
+					checksum += serialBuf[i];
+			}
+			else
+			{
+				for (i = 2; i<minBytes; i++)
+					checksum += serialBufSett[i];
+			}
+			
 
 			checksum = (uint32_t)checksum / (minBytes - 3);
 
@@ -158,7 +180,7 @@ void getSerialData(uint8_t Mode)	//reading serial Data from FC - Mode0:Telemetri
 				KissTelemetrie.StickChanVals[3] = ((serialBuf[6 + STARTCOUNT] << 8) | serialBuf[7 + STARTCOUNT]);
 				
 			}
-			else if(/*checksum == serialBuf[recBytes - 1] && */Mode==GET_SETTINGS) //TODO: Add checksum back
+			else if(/*checksum == serialBufSett[recBytes - 1] &&*/ Mode==GET_SETTINGS) 
 			{
 				#ifdef DEBUG
 				OSD.setCursor(0, 10);
@@ -173,12 +195,15 @@ void getSerialData(uint8_t Mode)	//reading serial Data from FC - Mode0:Telemetri
 				KissSettings.minBytesSettings = minBytes;
 				
 				//Copy data into this static array, because we need to send this back with only the changed values
-				memcpy(serialBufSett, serialBuf, 255);
+				//memcpy(serialBufSett, serialBuf, recBytes);
+				#ifdef DEBUG
+				Debug_Fnc("MEMCOPY");
+				#endif
 
 				KissSettings.PID_P[0] = ((serialBufSett[0 + STARTCOUNT] << 8) | serialBufSett[1 + STARTCOUNT]);
 				KissSettings.PID_P[1] = ((serialBufSett[2 + STARTCOUNT] << 8) | serialBufSett[3 + STARTCOUNT]);
 				KissSettings.PID_P[2] = ((serialBufSett[4 + STARTCOUNT] << 8) | serialBufSett[5 + STARTCOUNT]);
-				OSD.print(KissSettings.PID_P[0]);
+
 				KissSettings.PID_I[0] = ((serialBufSett[6 + STARTCOUNT] << 8) | serialBufSett[7 + STARTCOUNT]);
 				KissSettings.PID_I[1] = ((serialBufSett[8 + STARTCOUNT] << 8) | serialBufSett[9 + STARTCOUNT]);
 				KissSettings.PID_I[2] = ((serialBufSett[10 + STARTCOUNT] << 8) | serialBufSett[11 + STARTCOUNT]);
@@ -187,12 +212,12 @@ void getSerialData(uint8_t Mode)	//reading serial Data from FC - Mode0:Telemetri
 				KissSettings.PID_D[1] = ((serialBufSett[14 + STARTCOUNT] << 8) | serialBufSett[15 + STARTCOUNT]);
 				KissSettings.PID_D[2] = ((serialBufSett[16 + STARTCOUNT] << 8) | serialBufSett[17 + STARTCOUNT]);
 
-				//KissSettings.PID_A[0] = ((serialBufSett[18 + STARTCOUNT] << 8) | serialBufSett[19 + STARTCOUNT]);
-				//KissSettings.PID_A[1] = ((serialBufSett[20 + STARTCOUNT] << 8) | serialBufSett[21 + STARTCOUNT]);
-				//KissSettings.PID_A[2] = ((serialBufSett[22 + STARTCOUNT] << 8) | serialBufSett[23 + STARTCOUNT]);
+				KissSettings.PID_A[0] = ((serialBufSett[18 + STARTCOUNT] << 8) | serialBufSett[19 + STARTCOUNT]);
+				KissSettings.PID_A[1] = ((serialBufSett[20 + STARTCOUNT] << 8) | serialBufSett[21 + STARTCOUNT]);
+				KissSettings.PID_A[2] = ((serialBufSett[22 + STARTCOUNT] << 8) | serialBufSett[23 + STARTCOUNT]);
 
-				//KissSettings.ACC_Trim[1] = ((serialBufSett[24 + STARTCOUNT] << 8) | serialBufSett[25 + STARTCOUNT]);
-				//KissSettings.ACC_Trim[2] = ((serialBufSett[26 + STARTCOUNT] << 8) | serialBufSett[27 + STARTCOUNT]);
+				KissSettings.ACC_Trim[1] = ((serialBufSett[24 + STARTCOUNT] << 8) | serialBufSett[25 + STARTCOUNT]);
+				KissSettings.ACC_Trim[2] = ((serialBufSett[26 + STARTCOUNT] << 8) | serialBufSett[27 + STARTCOUNT]);
 
 				KissSettings.RC_Rate[0] = ((serialBufSett[28 + STARTCOUNT] << 8) | serialBufSett[29 + STARTCOUNT]);
 				KissSettings.RC_Rate[1] = ((serialBufSett[30 + STARTCOUNT] << 8) | serialBufSett[31 + STARTCOUNT]);
@@ -207,8 +232,10 @@ void getSerialData(uint8_t Mode)	//reading serial Data from FC - Mode0:Telemetri
 				KissSettings.RC_Curve[2] = ((serialBufSett[44 + STARTCOUNT] << 8) | serialBufSett[45 + STARTCOUNT]);
 			}
 			#ifdef DEBUG
-			else
-				Debug_Fnc("CHKSM ERR");
+			else if (Mode==GET_SETTINGS)
+				Debug_Fnc("SETT ERR");
+			else if (Mode == GET_TELEMETRY)
+				Debug_Fnc("TELM ERR");
 			#endif // DEBUG
 
 			exitreceiving = 1;
@@ -221,6 +248,13 @@ void getSerialData(uint8_t Mode)	//reading serial Data from FC - Mode0:Telemetri
 
 void setSerialData()
 {
+	OSD.clear();
+	while (OSD.clearIsBusy());
+	OSD.home();
+	OSD.print(F("SENDING TO FC..."));
+	getSerialData(GET_SETTINGS);
+	delay(250);
+	
 	//save the new values in the serialBufSett-Array
 	serialBufSett[STARTCOUNT + 0] = (byte)((KissSettings.PID_P[0] & 0xFF00) >> 8);
 	serialBufSett[STARTCOUNT + 1] = (byte)(KissSettings.PID_P[0] & 0x00FF);
@@ -273,15 +307,28 @@ void setSerialData()
 	checksum = checksum / dataCount;
 	serialBufSett[KissSettings.minBytesSettings - 1] = floor(checksum);
 
+	OSD.setCursor(0, 10);
+	OSD.print(KissSettings.minBytesSettings);
+	OSD.setCursor(0, 11);
+	OSD.print(serialBufSett[1]);
+	//serialBufSett[1] = KissSettings.minBytesSettings - STARTCOUNT - 1;
+	
 	Serial.write(SET_SETTINGS);
-	delay(10);
-	serialBufSett[3]++;
-	Serial.write(serialBufSett, sizeof(serialBufSett));
+	Serial.flush();
+	//delay(25);
+	
+	//Serial.write(serialBufSett, sizeof(serialBufSett));
 
 	//Alternative Mode:
-	//for (i = 0; i<KissSettings.minBytesSettings; i++)
-	//{
-	//	Serial.write(serialBufSett[i]);
-	//}
+	for (i = 0; i<KissSettings.minBytesSettings; i++)
+	{
+		
+		
+		Serial.write(serialBufSett[i]);
+		//Serial.flush();
+		//delay(1);
+	}
+
+	delay(250);
 
 }

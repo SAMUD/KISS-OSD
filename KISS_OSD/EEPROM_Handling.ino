@@ -89,5 +89,8 @@ void EEPROMsaveDefaultValues()
 
 void EEPROMsave()
 {
+	#ifdef DEBUG
+	Debug_Fnc("EEPROM SAVE");
+	#endif
 	EEPROM.updateBlock(KissStatus.configAdress, Settings);
 }

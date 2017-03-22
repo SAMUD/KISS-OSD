@@ -7,6 +7,7 @@ Fonctions needed for the settings-menu off the OSD.
 //START OF CODE
 */
 
+// TODO Add the following declarations as non-static into the while if possible
 static uint8_t MenuPage = 1;
 static uint8_t OldMenuPage = 0;
 static uint8_t cursorlineMax = 0;
@@ -100,7 +101,7 @@ void MenuRight_Main()
 			while (pause >0)
 			{
 				delay(50);
-				PauseLeft--;
+				pause--;
 			}
 		}
 		//reset wdt
@@ -579,7 +580,7 @@ void changeval(bool addsub, int16_t min_value, int16_t max_value, uint16_t incre
 	}
 }
 
-void changeval(bool addsub, int16_t min_value, int16_t max_value, uint16_t increment, uint8_t *variable)
+void changeval(bool addsub, int32_t min_value, int32_t max_value, uint16_t increment, uint8_t *variable)
 {
 	if (addsub && *variable<max_value)     // && *variable<max_value
 	{
@@ -591,7 +592,7 @@ void changeval(bool addsub, int16_t min_value, int16_t max_value, uint16_t incre
 	}
 }
 
-void changeval(bool addsub, int16_t min_value, int16_t max_value, uint16_t increment, int8_t *variable)
+void changeval(bool addsub, int32_t min_value, int32_t max_value, uint16_t increment, int8_t *variable)
 {
 	if (addsub && *variable<max_value)     // && *variable<max_value
 	{
@@ -603,7 +604,7 @@ void changeval(bool addsub, int16_t min_value, int16_t max_value, uint16_t incre
 	}
 }
 
-void changeval(bool addsub, int16_t min_value, int16_t max_value, uint16_t increment, float *variable)
+void changeval(bool addsub, int32_t min_value, int32_t max_value, uint16_t increment, float *variable)
 {
 	if (addsub && *variable<max_value)     // && *variable<max_value
 	{
@@ -678,13 +679,17 @@ void Menuall_start(uint8_t GetSettings)
 	
 	KissTelemetrie.StickChanVals[3] = 0;		//reset the current Stick to avoid changing Menu page diectly upon entering
 	
-	delay(500);								//delay for showing the message
+	delay(500);									//delay for showing the message
+	OSD.clear();
+	while (OSD.clearIsBusy());
 }
 
 void MenuAll_Exit(uint8_t GetSettings)
 {
 	MenuPage = 1;
+	MenuPageLeft = 1;
 	OldMenuPage = 0;
+	OldMenuPageLeft = 0;
 	KissTelemetrie.StickChanVals[3] = 0;
 	KissStatus.lastMode = 5;
 	OSD.clear();
@@ -692,6 +697,6 @@ void MenuAll_Exit(uint8_t GetSettings)
 		setSerialData();
 	else
 		EEPROMsave();
-	delay(250);
+	delay(400);
 
 }
