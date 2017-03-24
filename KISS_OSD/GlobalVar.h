@@ -59,7 +59,6 @@
 #define DStandbyCurrent 1000					//*
 //*************************************************
 
-#define OSD_CHIP_SELECT	6
 #define STARTCOUNT		2
 
 #ifdef DEBUG
@@ -67,6 +66,16 @@
 #else
 	#define TIMEOUT_FOR_SUMMARY_SEC 30
 #endif // DEBUG
+
+#ifdef IMPULSERC_VTX
+	# define MAX7456RESET  9         // RESET
+#endif
+
+#ifdef IMPULSERC_VTX
+	#define OSD_CHIP_SELECT 10;
+#else
+	#define OSD_CHIP_SELECT 6;
+#endif
 
 
 
