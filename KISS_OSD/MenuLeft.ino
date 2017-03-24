@@ -411,11 +411,11 @@ void MenuLeft_Valie(bool addsub)
 		//PID
 		switch (CursorlineLeft)
 		{
-		case 1: changeval(addsub, 2, 255, 2, &KissSettings.RGB[0]);
+		case 1: changeval(addsub, 2, 254, 2, &KissSettings.RGB[0]);
 			break;
-		case 2: changeval(addsub, 2, 255, 2, &KissSettings.RGB[1]);
+		case 2: changeval(addsub, 2, 254, 2, &KissSettings.RGB[1]);
 			break;
-		case 3: changeval(addsub, 2, 255, 2, &KissSettings.RGB[2]);
+		case 3: changeval(addsub, 2, 254, 2, &KissSettings.RGB[2]);
 			break;
 		case 4: changeval(addsub, 2, 26000, 2, &KissSettings.VbatAlarm);
 			break;
