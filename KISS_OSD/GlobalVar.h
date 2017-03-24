@@ -79,7 +79,7 @@
 
 MAX7456 OSD(OSD_CHIP_SELECT);
 
-static uint8_t serialBufSett[170];	//RAW-values received with Settings 
+static uint8_t serialBuf[256];	//RAW-values received with Settings 
 //needed for serial stuff
 struct SerialData						//saving Telemetrie-Data
 {

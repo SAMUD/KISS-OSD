@@ -216,7 +216,7 @@ void MenuLeft_PrintValue() {
 		OSD.print(((float)KissSettings.Rate[2]) / 1000);
 		OSD.print(" ");
 		OSD.setCursor(24, 10);
-		OSD.print(((float)KissSettings.RC_Curve[2]) / 1000);
+		OSD.print(((float)KissSettings.RC_Curve[2]) / 10);
 		OSD.print(" ");
 		break;	
 	}
