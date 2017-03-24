@@ -231,17 +231,29 @@ bool getSerialData(uint8_t Mode)	//reading serial Data from FC - Mode0:Telemetri
 	} //end of aquiring telemetry data
 }
 
-void setSerialData()
+bool setSerialData()
 {
+	//Clear OSd and show a saving message
 	OSD.clear();
 	while (OSD.clearIsBusy());
 	OSD.home();
 	OSD.print(F("SENDING TO FC..."));
-	while (!getSerialData(GET_SETTINGS))
-		delay(500);
 
-	
-	//save the new values in the serialBuf-Array
+	//Re-aquire settings from FC
+	i = 0;
+	while (!getSerialData(GET_SETTINGS))
+	{
+		delay(500);
+		i++;
+		if (i > 10)								//Unable to re-aquire data
+		{
+			KissConnection = LostConnection;
+			return false;		
+		}	
+	}
+		
+
+	//save the changed settings in the serialBuf-Array
 	serialBuf[STARTCOUNT + 0] = (byte)((KissSettings.PID_P[0] & 0xFF00) >> 8);
 	serialBuf[STARTCOUNT + 1] = (byte)(KissSettings.PID_P[0] & 0x00FF);
 	serialBuf[STARTCOUNT + 2] = (byte)((KissSettings.PID_P[1] & 0xFF00) >> 8);
@@ -296,6 +308,9 @@ void setSerialData()
 	{
 		serialBuf[STARTCOUNT + i - 10] = serialBuf[STARTCOUNT + i]; // skipped obj.isActive = data.getUint8(102);
 	}
+
+	//and here we could save again our Settings
+
 	
 	//calculate Checksum
 	double checksum = 0.0;
@@ -316,20 +331,17 @@ void setSerialData()
 	
 	Serial.write(SET_SETTINGS);
 	Serial.flush();
-	//delay(25);
 	
-	//Serial.write(serialBuf, sizeof(serialBuf));
-
+	Serial.write(serialBuf, sizeof(serialBuf));
 	//Alternative Mode:
-	for (i = 0; i<KissSettings.minBytesSettings; i++)
+	/*for (i = 0; i<KissSettings.minBytesSettings; i++)
 	{
-		
-		
 		Serial.write(serialBuf[i]);
 		//Serial.flush();
 		//delay(1);
-	}
+	}*/
 
+	//wait a small amount of time
 	delay(250);
 
 }

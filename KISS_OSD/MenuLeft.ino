@@ -17,7 +17,8 @@ static uint8_t PauseLeft = 0; //makes a PauseLeft of multiples of 50ms
 void MenuLeft_Main()
 {
 	boolean exitmenu = false;
-	Menuall_start(GET_SETTINGS);
+	if (!Menuall_start(GET_SETTINGS))
+		return;
 
 	while (!exitmenu && KissTelemetrie.armed == 0)
 	{

@@ -93,51 +93,39 @@ void FlightSummary()
 
 void FlightSummaryCalculate()
 {
-	
-	//TODO Do this instead with if's with calling the fnc
-	FlightSummaryCalculateFnc(&KissStats.MaxCurrentTotal, &KissTelemetrie.current, 1);
-	if (KissTelemetrie.LipoVoltage>100)
-		FlightSummaryCalculateFnc(&KissStats.MinVoltage, &KissTelemetrie.LipoVoltage, 0);
-	//FlightSummaryCalculateFnc(&KissStats.MAXESCTemp[0], &KissTelemetrie.LipoVoltage, 0);
-
-	if (KissTelemetrie.current*KissTelemetrie.LipoVoltage > KissStats.MAXWatt)
-		KissStats.MAXWatt = KissTelemetrie.current*(KissTelemetrie.LipoVoltage / 10);
-	if (KissTelemetrie.ESCTemps[0] > KissStats.MAXESCTemp)
-		KissStats.MAXESCTemp = KissTelemetrie.ESCTemps[0];
-	if (KissTelemetrie.ESCTemps[1] > KissStats.MAXESCTemp)
-		KissStats.MAXESCTemp = KissTelemetrie.ESCTemps[1];
-	if (KissTelemetrie.ESCTemps[2] > KissStats.MAXESCTemp)
-		KissStats.MAXESCTemp = KissTelemetrie.ESCTemps[2];
-	if (KissTelemetrie.ESCTemps[3] > KissStats.MAXESCTemp)
-		KissStats.MAXESCTemp = KissTelemetrie.ESCTemps[3];
-
-	if (KissTelemetrie.motorCurrent[0] > KissStats.MAXmotorCurrent)
-		KissStats.MAXmotorCurrent = KissTelemetrie.motorCurrent[0];
-	if (KissTelemetrie.motorCurrent[1] > KissStats.MAXmotorCurrent)
-		KissStats.MAXmotorCurrent = KissTelemetrie.motorCurrent[1];
-	if (KissTelemetrie.motorCurrent[2] > KissStats.MAXmotorCurrent)
-		KissStats.MAXmotorCurrent = KissTelemetrie.motorCurrent[2];
-	if (KissTelemetrie.motorCurrent[3] > KissStats.MAXmotorCurrent)
-		KissStats.MAXmotorCurrent = KissTelemetrie.motorCurrent[3];
-
-	if (KissTelemetrie.motorKERPM[0] > KissStats.MAXmotorKERPM)
-		KissStats.MAXmotorKERPM = KissTelemetrie.motorKERPM[0];
-	if (KissTelemetrie.motorKERPM[1] > KissStats.MAXmotorKERPM)
-		KissStats.MAXmotorKERPM = KissTelemetrie.motorKERPM[1];
-	if (KissTelemetrie.motorKERPM[2] > KissStats.MAXmotorKERPM)
-		KissStats.MAXmotorKERPM = KissTelemetrie.motorKERPM[2];
-	if (KissTelemetrie.motorKERPM[3] > KissStats.MAXmotorKERPM)
-		KissStats.MAXmotorKERPM = KissTelemetrie.motorKERPM[3];
+	//save the maimum value at each iteration
+	KissStats.MaxCurrentTotal  = FlightSummaryMax(KissStats.MaxCurrentTotal, KissTelemetrie.current);
+	KissStats.MinVoltage = FlightSummaryMin(KissStats.MinVoltage, KissTelemetrie.LipoVoltage);
+	KissStats.MAXWatt = FlightSummaryMax(KissStats.MAXWatt, KissTelemetrie.current*(KissTelemetrie.LipoVoltage / 10));
+	KissStats.MAXESCTemp = FlightSummaryMaxArr(KissStats.MAXESCTemp, KissTelemetrie.ESCTemps, 4);
+	KissStats.MAXmotorCurrent = FlightSummaryMaxArr(KissStats.MAXmotorCurrent, KissTelemetrie.motorCurrent, 4);
+	KissStats.MAXmotorKERPM = FlightSummaryMaxArr(KissStats.MAXmotorKERPM, KissTelemetrie.motorKERPM, 4);
 }
 
-void FlightSummaryCalculateFnc(uint16_t *Stat, uint16_t *Value, uint8_t bigger)
+uint16_t FlightSummaryMaxArr(uint16_t maxV, uint16_t *values, uint8_t length)
 {
-	if ((bigger == 1 && *Value > *Stat) || bigger == 0 && *Value < *Stat)
-		*Stat = *Value;
+	for (uint8_t i = 0; i < length; i++)
+	{
+		if (values[i] > maxV)
+		{
+			maxV = values[i];
+		}
+	}
+	return maxV;
 }
 
-void FlightSummaryCalculateFnc(int16_t *Stat, int16_t *Value, uint8_t bigger)
+int16_t FlightSummaryMax(int16_t maxV, int16_t newVal)
 {
-	if ((bigger == 1 && *Value > *Stat) || bigger == 0 && *Value < *Stat)
-		*Stat = *Value;
+	if (newVal > maxV) {
+		return newVal;
+	}
+	return maxV;
+}
+
+int16_t FlightSummaryMin(int16_t minV, int16_t newVal)
+{
+	if (newVal < minV) {
+		return newVal;
+	}
+	return minV;
 }

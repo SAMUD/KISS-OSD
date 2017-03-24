@@ -650,7 +650,7 @@ void printRED()
 	cursorlineMax = 10;
 }
 
-void Menuall_start(uint8_t GetSettings)
+bool Menuall_start(uint8_t GetSettings)
 {
 	OSDmakegrey();
 	OSD.setCursor(9, 3);
@@ -669,6 +669,18 @@ void Menuall_start(uint8_t GetSettings)
 
 	if (GetSettings == GET_SETTINGS)
 	{
+		//aquire settings from FC
+		i = 0;
+		while (!getSerialData(GET_SETTINGS))
+		{
+			delay(500);
+			i++;
+			if (i > 10)								//Unable to re-aquire data
+			{
+				KissConnection = LostConnection;
+				return false;
+			}
+		}
 		getSerialData(GET_SETTINGS);						//get the Settings from the FC
 		#ifdef DEBUG
 		Debug_Fnc("AQUR SETT");
