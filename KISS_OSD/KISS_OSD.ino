@@ -11,9 +11,9 @@ by Samuel Daurat (sdaurat@outlook.de)
 based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
 
-#define OSDVersion "6.91"
+#define OSDVersion "6.92"
 #define DMemoryVersion 6
-#define DEBUG
+//#define DEBUG
 /*
 ***************************************************************************************************************************************************
 Donations help A LOT during development, buying me a COFFE you will keep me awake at night so I can add more stuff:  https://paypal.me/SamuelDaurat
@@ -140,7 +140,7 @@ void loop()
   {
 	  KissStatus.LastLoopTime = micros();			//saving current time
 
-    getSerialData(GET_TELEMETRY);					//requesting serial data
+    getSerialData(GET_TELEMETRY,true);					//requesting serial data
 	
 	switch (KissConnection)
 	{

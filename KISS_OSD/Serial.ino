@@ -1,6 +1,6 @@
 //=========================================
 //Read serial data from FC and store in var
-bool getSerialData(uint8_t Mode)	//reading serial Data from FC - Mode0:Telemetrie | Mode1:PID Settings
+bool getSerialData(uint8_t Mode,bool CopyBuffToSett)	//reading serial Data from FC - Mode0:Telemetrie | Mode1:PID Settings
 {
 	static uint32_t tmpVoltage = 0;
 	static uint8_t voltDev = 0;
@@ -180,36 +180,60 @@ bool getSerialData(uint8_t Mode)	//reading serial Data from FC - Mode0:Telemetri
 				Debug_Fnc("MEMCOPY");
 				#endif
 
-				KissSettings.PID_P[0] = ((serialBuf[0 + STARTCOUNT] << 8) | serialBuf[1 + STARTCOUNT]);
-				KissSettings.PID_P[1] = ((serialBuf[2 + STARTCOUNT] << 8) | serialBuf[3 + STARTCOUNT]);
-				KissSettings.PID_P[2] = ((serialBuf[4 + STARTCOUNT] << 8) | serialBuf[5 + STARTCOUNT]);
+				if (CopyBuffToSett)
+				{
+					KissSettings.PID_P[0] = ((serialBuf[0 + STARTCOUNT] << 8) | serialBuf[1 + STARTCOUNT]);
+					KissSettings.PID_P[1] = ((serialBuf[2 + STARTCOUNT] << 8) | serialBuf[3 + STARTCOUNT]);
+					KissSettings.PID_P[2] = ((serialBuf[4 + STARTCOUNT] << 8) | serialBuf[5 + STARTCOUNT]);
 
-				KissSettings.PID_I[0] = ((serialBuf[6 + STARTCOUNT] << 8) | serialBuf[7 + STARTCOUNT]);
-				KissSettings.PID_I[1] = ((serialBuf[8 + STARTCOUNT] << 8) | serialBuf[9 + STARTCOUNT]);
-				KissSettings.PID_I[2] = ((serialBuf[10 + STARTCOUNT] << 8) | serialBuf[11 + STARTCOUNT]);
+					KissSettings.PID_I[0] = ((serialBuf[6 + STARTCOUNT] << 8) | serialBuf[7 + STARTCOUNT]);
+					KissSettings.PID_I[1] = ((serialBuf[8 + STARTCOUNT] << 8) | serialBuf[9 + STARTCOUNT]);
+					KissSettings.PID_I[2] = ((serialBuf[10 + STARTCOUNT] << 8) | serialBuf[11 + STARTCOUNT]);
 
-				KissSettings.PID_D[0] = ((serialBuf[12 + STARTCOUNT] << 8) | serialBuf[13 + STARTCOUNT]);
-				KissSettings.PID_D[1] = ((serialBuf[14 + STARTCOUNT] << 8) | serialBuf[15 + STARTCOUNT]);
-				KissSettings.PID_D[2] = ((serialBuf[16 + STARTCOUNT] << 8) | serialBuf[17 + STARTCOUNT]);
+					KissSettings.PID_D[0] = ((serialBuf[12 + STARTCOUNT] << 8) | serialBuf[13 + STARTCOUNT]);
+					KissSettings.PID_D[1] = ((serialBuf[14 + STARTCOUNT] << 8) | serialBuf[15 + STARTCOUNT]);
+					KissSettings.PID_D[2] = ((serialBuf[16 + STARTCOUNT] << 8) | serialBuf[17 + STARTCOUNT]);
 
-				KissSettings.PID_A[0] = ((serialBuf[18 + STARTCOUNT] << 8) | serialBuf[19 + STARTCOUNT]);
-				KissSettings.PID_A[1] = ((serialBuf[20 + STARTCOUNT] << 8) | serialBuf[21 + STARTCOUNT]);
-				KissSettings.PID_A[2] = ((serialBuf[22 + STARTCOUNT] << 8) | serialBuf[23 + STARTCOUNT]);
+					KissSettings.PID_A[0] = ((serialBuf[18 + STARTCOUNT] << 8) | serialBuf[19 + STARTCOUNT]);
+					KissSettings.PID_A[1] = ((serialBuf[20 + STARTCOUNT] << 8) | serialBuf[21 + STARTCOUNT]);
+					KissSettings.PID_A[2] = ((serialBuf[22 + STARTCOUNT] << 8) | serialBuf[23 + STARTCOUNT]);
 
-				KissSettings.ACC_Trim[1] = ((serialBuf[24 + STARTCOUNT] << 8) | serialBuf[25 + STARTCOUNT]);
-				KissSettings.ACC_Trim[2] = ((serialBuf[26 + STARTCOUNT] << 8) | serialBuf[27 + STARTCOUNT]);
+					KissSettings.ACC_Trim[1] = ((serialBuf[24 + STARTCOUNT] << 8) | serialBuf[25 + STARTCOUNT]);
+					KissSettings.ACC_Trim[2] = ((serialBuf[26 + STARTCOUNT] << 8) | serialBuf[27 + STARTCOUNT]);
 
-				KissSettings.RC_Rate[0] = ((serialBuf[28 + STARTCOUNT] << 8) | serialBuf[29 + STARTCOUNT]);
-				KissSettings.RC_Rate[1] = ((serialBuf[30 + STARTCOUNT] << 8) | serialBuf[31 + STARTCOUNT]);
-				KissSettings.RC_Rate[2] = ((serialBuf[32 + STARTCOUNT] << 8) | serialBuf[33 + STARTCOUNT]);
+					KissSettings.RC_Rate[0] = ((serialBuf[28 + STARTCOUNT] << 8) | serialBuf[29 + STARTCOUNT]);
+					KissSettings.RC_Rate[1] = ((serialBuf[30 + STARTCOUNT] << 8) | serialBuf[31 + STARTCOUNT]);
+					KissSettings.RC_Rate[2] = ((serialBuf[32 + STARTCOUNT] << 8) | serialBuf[33 + STARTCOUNT]);
 
-				KissSettings.Rate[0] = ((serialBuf[34 + STARTCOUNT] << 8) | serialBuf[35 + STARTCOUNT]);
-				KissSettings.Rate[1] = ((serialBuf[36 + STARTCOUNT] << 8) | serialBuf[37 + STARTCOUNT]);
-				KissSettings.Rate[2] = ((serialBuf[38 + STARTCOUNT] << 8) | serialBuf[39 + STARTCOUNT]);
+					KissSettings.Rate[0] = ((serialBuf[34 + STARTCOUNT] << 8) | serialBuf[35 + STARTCOUNT]);
+					KissSettings.Rate[1] = ((serialBuf[36 + STARTCOUNT] << 8) | serialBuf[37 + STARTCOUNT]);
+					KissSettings.Rate[2] = ((serialBuf[38 + STARTCOUNT] << 8) | serialBuf[39 + STARTCOUNT]);
 
-				KissSettings.RC_Curve[0] = ((serialBuf[40 + STARTCOUNT] << 8) | serialBuf[41 + STARTCOUNT]);
-				KissSettings.RC_Curve[1] = ((serialBuf[42 + STARTCOUNT] << 8) | serialBuf[43 + STARTCOUNT]);
-				KissSettings.RC_Curve[2] = ((serialBuf[125 + STARTCOUNT] << 8) | serialBuf[126 + STARTCOUNT]);
+					KissSettings.RC_Curve[0] = ((serialBuf[40 + STARTCOUNT] << 8) | serialBuf[41 + STARTCOUNT]);
+					KissSettings.RC_Curve[1] = ((serialBuf[42 + STARTCOUNT] << 8) | serialBuf[43 + STARTCOUNT]);
+					KissSettings.RC_Curve[2] = ((serialBuf[44 + STARTCOUNT] << 8) | serialBuf[45 + STARTCOUNT]);
+
+					KissSettings.MaxAngle = ((serialBuf[77 + STARTCOUNT] << 8) | serialBuf[78 + STARTCOUNT]);
+
+					KissSettings.Version = serialBuf[92 + STARTCOUNT];
+
+					KissSettings.TPA[0] = ((serialBuf[93 + STARTCOUNT] << 8) | serialBuf[94 + STARTCOUNT]);
+					KissSettings.TPA[1] = ((serialBuf[95 + STARTCOUNT] << 8) | serialBuf[96 + STARTCOUNT]);
+					KissSettings.TPA[2] = ((serialBuf[97 + STARTCOUNT] << 8) | serialBuf[98 + STARTCOUNT]);
+
+					KissSettings.RGB[0] = serialBuf[122 + STARTCOUNT];
+					KissSettings.RGB[1] = serialBuf[123 + STARTCOUNT];
+					KissSettings.RGB[2] = serialBuf[124 + STARTCOUNT];
+					KissSettings.VbatAlarm = ((serialBuf[125 + STARTCOUNT] << 8) | serialBuf[126 + STARTCOUNT]);
+
+					KissSettings.LapTimerID = ((serialBuf[135 + STARTCOUNT] << 8) | serialBuf[136 + STARTCOUNT]);
+
+					KissSettings.YawFilter = serialBuf[148 + STARTCOUNT];
+
+					KissSettings.CapacityAlarm = ((serialBuf[157 + STARTCOUNT] << 8) | serialBuf[158 + STARTCOUNT]);
+
+				}
+				
 			}
 			#ifdef DEBUG
 			else if (Mode == GET_SETTINGS)
@@ -221,8 +245,6 @@ bool getSerialData(uint8_t Mode)	//reading serial Data from FC - Mode0:Telemetri
 			else if (Mode == GET_TELEMETRY)
 				Debug_Fnc("TELM ERR");
 			#endif // DEBUG
-
-			
 
 			if (KissConnection == LostConnection || KissConnection == WaitingForConn)
 				KissConnection = ConnectionEtablished;
@@ -241,7 +263,7 @@ bool setSerialData()
 
 	//Re-aquire settings from FC
 	i = 0;
-	while (!getSerialData(GET_SETTINGS))
+	while (!getSerialData(GET_SETTINGS,false))
 	{
 		delay(500);
 		i++;
@@ -267,32 +289,42 @@ bool setSerialData()
 	serialBuf[STARTCOUNT + 10] = (byte)((KissSettings.PID_I[2] & 0xFF00) >> 8);
 	serialBuf[STARTCOUNT + 11] = (byte)(KissSettings.PID_I[2] & 0x00FF);
 	serialBuf[STARTCOUNT + 12] = (byte)((KissSettings.PID_D[0] & 0xFF00) >> 8);
-	serialBuf[STARTCOUNT + 13] = (byte)(KissSettings.PID_I[0] & 0x00FF);
-	serialBuf[STARTCOUNT + 14] = (byte)((KissSettings.PID_I[1] & 0xFF00) >> 8);
-	serialBuf[STARTCOUNT + 15] = (byte)(KissSettings.PID_I[1] & 0x00FF);
-	serialBuf[STARTCOUNT + 16] = (byte)((KissSettings.PID_I[2] & 0xFF00) >> 8);
-	serialBuf[STARTCOUNT + 17] = (byte)(KissSettings.PID_I[2] & 0x00FF);
-
+	serialBuf[STARTCOUNT + 13] = (byte)(KissSettings.PID_D[0] & 0x00FF);
+	serialBuf[STARTCOUNT + 14] = (byte)((KissSettings.PID_D[1] & 0xFF00) >> 8);
+	serialBuf[STARTCOUNT + 15] = (byte)(KissSettings.PID_D[1] & 0x00FF);
+	serialBuf[STARTCOUNT + 16] = (byte)((KissSettings.PID_D[2] & 0xFF00) >> 8);
+	serialBuf[STARTCOUNT + 17] = (byte)(KissSettings.PID_D[2] & 0x00FF);
+	serialBuf[STARTCOUNT + 18] = (byte)((KissSettings.PID_A[0] & 0xFF00) >> 8);
+	serialBuf[STARTCOUNT + 19] = (byte)(KissSettings.PID_A[0] & 0x00FF);
+	serialBuf[STARTCOUNT + 20] = (byte)((KissSettings.PID_A[1] & 0xFF00) >> 8);
+	serialBuf[STARTCOUNT + 21] = (byte)(KissSettings.PID_A[1] & 0x00FF);
+	serialBuf[STARTCOUNT + 22] = (byte)((KissSettings.PID_A[2] & 0xFF00) >> 8);
+	serialBuf[STARTCOUNT + 23] = (byte)(KissSettings.PID_A[2] & 0x00FF);
+	serialBuf[STARTCOUNT + 24] = (byte)((KissSettings.ACC_Trim[0] & 0xFF00) >> 8);
+	serialBuf[STARTCOUNT + 25] = (byte)(KissSettings.ACC_Trim[0] & 0x00FF);
+	serialBuf[STARTCOUNT + 26] = (byte)((KissSettings.ACC_Trim[1] & 0xFF00) >> 8);
+	serialBuf[STARTCOUNT + 27] = (byte)(KissSettings.ACC_Trim[1] & 0x00FF);
 	serialBuf[STARTCOUNT + 28] = (byte)((KissSettings.RC_Rate[0] & 0xFF00) >> 8);
 	serialBuf[STARTCOUNT + 29] = (byte)(KissSettings.RC_Rate[0] & 0x00FF);
 	serialBuf[STARTCOUNT + 30] = (byte)((KissSettings.RC_Rate[1] & 0xFF00) >> 8);
 	serialBuf[STARTCOUNT + 31] = (byte)(KissSettings.RC_Rate[1] & 0x00FF);
 	serialBuf[STARTCOUNT + 32] = (byte)((KissSettings.RC_Rate[2] & 0xFF00) >> 8);
 	serialBuf[STARTCOUNT + 33] = (byte)(KissSettings.RC_Rate[2] & 0x00FF);
-
 	serialBuf[STARTCOUNT + 34] = (byte)((KissSettings.Rate[0] & 0xFF00) >> 8);
 	serialBuf[STARTCOUNT + 35] = (byte)(KissSettings.Rate[0] & 0x00FF);
 	serialBuf[STARTCOUNT + 36] = (byte)((KissSettings.Rate[1] & 0xFF00) >> 8);
 	serialBuf[STARTCOUNT + 37] = (byte)(KissSettings.Rate[1] & 0x00FF);
 	serialBuf[STARTCOUNT + 38] = (byte)((KissSettings.Rate[2] & 0xFF00) >> 8);
 	serialBuf[STARTCOUNT + 39] = (byte)(KissSettings.Rate[2] & 0x00FF);
-
 	serialBuf[STARTCOUNT + 40] = (byte)((KissSettings.RC_Curve[0] & 0xFF00) >> 8);
 	serialBuf[STARTCOUNT + 41] = (byte)(KissSettings.RC_Curve[0] & 0x00FF);
 	serialBuf[STARTCOUNT + 42] = (byte)((KissSettings.RC_Curve[1] & 0xFF00) >> 8);
 	serialBuf[STARTCOUNT + 43] = (byte)(KissSettings.RC_Curve[1] & 0x00FF);
 	serialBuf[STARTCOUNT + 44] = (byte)((KissSettings.RC_Curve[2] & 0xFF00) >> 8);
 	serialBuf[STARTCOUNT + 45] = (byte)(KissSettings.RC_Curve[2] & 0x00FF);
+
+	serialBuf[STARTCOUNT + 77] = (byte)((KissSettings.MaxAngle & 0xFF00) >> 8);
+	serialBuf[STARTCOUNT + 78] = (byte)(KissSettings.MaxAngle & 0x00FF);
 
 	//now we need to shift other settings forward, because we do not want to send the serial number to the FC
 	for (i = 93; i < 101; i++)
@@ -310,25 +342,39 @@ bool setSerialData()
 	}
 
 	//and here we could save again our Settings
+	serialBuf[STARTCOUNT + 80] = (byte)((KissSettings.TPA[0] & 0xFF00) >> 8);
+	serialBuf[STARTCOUNT + 81] = (byte)(KissSettings.TPA[0] & 0x00FF);
+	serialBuf[STARTCOUNT + 82] = (byte)((KissSettings.TPA[1] & 0xFF00) >> 8);
+	serialBuf[STARTCOUNT + 83] = (byte)(KissSettings.TPA[1] & 0x00FF);
+	serialBuf[STARTCOUNT + 84] = (byte)((KissSettings.TPA[2] & 0xFF00) >> 8);
+	serialBuf[STARTCOUNT + 85] = (byte)(KissSettings.TPA[2] & 0x00FF);
 
-	
+	serialBuf[STARTCOUNT + 112] = KissSettings.RGB[0];
+	serialBuf[STARTCOUNT + 113] = KissSettings.RGB[1];
+	serialBuf[STARTCOUNT + 114] = KissSettings.RGB[2];
+	serialBuf[STARTCOUNT + 115] = (byte)((KissSettings.VbatAlarm & 0xFF00) >> 8);
+	serialBuf[STARTCOUNT + 116] = (byte)(KissSettings.VbatAlarm & 0x00FF);
+
+	serialBuf[STARTCOUNT + 125] = (byte)((KissSettings.LapTimerID & 0xFF00) >> 8);
+	serialBuf[STARTCOUNT + 126] = (byte)(KissSettings.LapTimerID & 0x00FF);
+
+	serialBuf[STARTCOUNT + 138] = (byte)(KissSettings.YawFilter);
+
+	serialBuf[STARTCOUNT + 147] = (byte)((KissSettings.CapacityAlarm& 0xFF00) >> 8);
+	serialBuf[STARTCOUNT + 148] = (byte)(KissSettings.CapacityAlarm & 0x00FF);
+
+
 	//calculate Checksum
-	double checksum = 0.0;
+	double checksumcalc = 0.0;
 	double dataCount = 0.0;	// TODO: remove dataCount --> use i-3 in the for-loop below
 	for (i = 2; i<KissSettings.minBytesSettings; i++)
 	{
-		checksum += serialBuf[i];
+		checksumcalc += serialBuf[i];
 		dataCount++;
 	}
-	checksum = checksum / dataCount;
-	serialBuf[KissSettings.minBytesSettings - 1] = floor(checksum);
+	checksumcalc = checksumcalc / dataCount;
+	serialBuf[KissSettings.minBytesSettings - 1] = floor(checksumcalc);
 
-	OSD.setCursor(0, 10);
-	OSD.print(KissSettings.minBytesSettings);
-	OSD.setCursor(0, 11);
-	OSD.print(serialBuf[1]);
-	//serialBuf[1] = KissSettings.minBytesSettings - STARTCOUNT - 1;
-	
 	Serial.write(SET_SETTINGS);
 	Serial.flush();
 	
@@ -342,6 +388,6 @@ bool setSerialData()
 	}*/
 
 	//wait a small amount of time
-	delay(250);
+	delay(500);
 
 }

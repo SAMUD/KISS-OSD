@@ -116,11 +116,21 @@ struct SerialSettings
 	uint16_t PID_P[3];		//holds the P part for all three axis
 	uint16_t PID_I[3];		//holds the I part for all three axis
 	uint16_t PID_D[3];		//holds the D part for all three axis
-	uint16_t PID_A[3];		//holds PID for something called A???
+	uint16_t PID_A[3];		//PID in Level-Mode 
 	int16_t ACC_Trim[2];	//Accelerometer trimm data, Pitch and Roll
 	int16_t RC_Rate[3];		//holds the RC-Rate
 	int16_t Rate[3];		//Rate
 	int16_t RC_Curve[3];	//RC_Curve
+	uint8_t RGB[3];			//RGB value for LEDs
+	uint16_t VbatAlarm;		//alarm-tension
+	uint16_t CapacityAlarm;	//Capacity Alarm
+	uint8_t Version;		//KissFc-Version
+	uint16_t MaxAngle;		//max allowed angle in Level mode
+	uint16_t LapTimerID;	//Lap timer transponder ID
+	uint16_t TPA[3];		//TPA-values
+	uint8_t YawFilter;		//Yaw-Filter
+
+
 
 							//there are a lot of other setting according to here: https://github.com/fedorcomander/kissfc-chrome-gui/blob/master/js/protocol.js
 							//for memory saving reasons there will be only this for now

@@ -26,7 +26,7 @@ void MenuRight_Main()
 		if (micros() - KissStatus.LastLoopTime > 100000) //limits the speed of the OSD to 20Hz  millis() - LastLoopTimeMenu > 100
 		{
 			KissStatus.LastLoopTime = micros();
-			getSerialData(GET_TELEMETRY);
+			getSerialData(GET_TELEMETRY,true);
 
 			//set cursor position
 			if (KissTelemetrie.StickChanVals[2] < -800 && cursorline<cursorlineMax)
@@ -671,7 +671,7 @@ bool Menuall_start(uint8_t GetSettings)
 	{
 		//aquire settings from FC
 		i = 0;
-		while (!getSerialData(GET_SETTINGS))
+		while (!getSerialData(GET_SETTINGS,true))
 		{
 			delay(500);
 			i++;
@@ -681,7 +681,7 @@ bool Menuall_start(uint8_t GetSettings)
 				return false;
 			}
 		}
-		getSerialData(GET_SETTINGS);						//get the Settings from the FC
+		getSerialData(GET_SETTINGS,true);						//get the Settings from the FC
 		#ifdef DEBUG
 		Debug_Fnc("AQUR SETT");
 		#endif // DEBUG	
