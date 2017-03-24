@@ -65,7 +65,7 @@
 #ifdef DEBUG
 	#define TIMEOUT_FOR_SUMMARY_SEC 1
 #else
-	#define TIMEOUT_FOR_SUMMARY_SEC 45
+	#define TIMEOUT_FOR_SUMMARY_SEC 30
 #endif // DEBUG
 
 

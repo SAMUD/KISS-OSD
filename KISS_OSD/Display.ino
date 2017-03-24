@@ -52,6 +52,7 @@ void DisplayOSD_Main()
 		TempCharConverted[TempCharPosition++] = 'T';
 		OSD.setCursor(-TempCharPosition, 0);
 		OSD.print(TempCharConverted);
+		ESCmarginTop = 1;
 	}
 
 	if (KissStatus.reducedModeDisplay == 0 && Settings.DispLipoVoltage1 || KissStatus.reducedModeDisplay == 1 && Settings.DispLipoVoltage2 || KissStatus.reducedModeDisplay == 2 && Settings.DispLipoVoltage3)
