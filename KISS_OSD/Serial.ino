@@ -218,9 +218,9 @@ bool getSerialData(uint8_t Mode,bool CopyBuffToSett)	//reading serial Data from 
 					KissSettings.TPA[1] = ((serialBuf[95 + STARTCOUNT] << 8) | serialBuf[96 + STARTCOUNT]);
 					KissSettings.TPA[2] = ((serialBuf[97 + STARTCOUNT] << 8) | serialBuf[98 + STARTCOUNT]);
 
-					KissSettings.RGB[0] = serialBuf[122 + STARTCOUNT];
-					KissSettings.RGB[1] = serialBuf[123 + STARTCOUNT];
-					KissSettings.RGB[2] = serialBuf[124 + STARTCOUNT];
+					KissSettings.RGB[0] = 100.0 * (serialBuf[122 + STARTCOUNT]/255.0);
+					KissSettings.RGB[1] = 100.0 * (serialBuf[123 + STARTCOUNT] / 255.0);
+					KissSettings.RGB[2] = 100.0 * (serialBuf[124 + STARTCOUNT] / 255.0);
 					KissSettings.VbatAlarm = ((serialBuf[125 + STARTCOUNT] << 8) | serialBuf[126 + STARTCOUNT]);
 
 					KissSettings.LapTimerID = ((serialBuf[135 + STARTCOUNT] << 8) | serialBuf[136 + STARTCOUNT]);
@@ -352,9 +352,9 @@ bool setSerialData()
 	serialBuf[STARTCOUNT + 84] = (byte)((KissSettings.TPA[2] & 0xFF00) >> 8);
 	serialBuf[STARTCOUNT + 85] = (byte)(KissSettings.TPA[2] & 0x00FF);
 
-	serialBuf[STARTCOUNT + 112] = KissSettings.RGB[0];
-	serialBuf[STARTCOUNT + 113] = KissSettings.RGB[1];
-	serialBuf[STARTCOUNT + 114] = KissSettings.RGB[2];
+	serialBuf[STARTCOUNT + 112] = (KissSettings.RGB[0] * 255.0)/100;
+	serialBuf[STARTCOUNT + 113] = (KissSettings.RGB[1] * 255.0) / 100;
+	serialBuf[STARTCOUNT + 114] = (KissSettings.RGB[2] * 255.0) / 100;
 	serialBuf[STARTCOUNT + 115] = (byte)((KissSettings.VbatAlarm & 0xFF00) >> 8);
 	serialBuf[STARTCOUNT + 116] = (byte)(KissSettings.VbatAlarm & 0x00FF);
 
