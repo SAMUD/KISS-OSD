@@ -130,15 +130,15 @@ void menuprintsite() {
 		OSD.setCursor(0, 14);
 		OSD.print(F(" <-YAW-> : PAGE / EXIT       "));
 		OSD.videoBackground();
-		OSD.setCursor(1, 2);
+		OSD.setCursor(0, 2);
 		OSD.print(F("VOLTAGE 1ST"));
-		OSD.setCursor(1, 3);
+		OSD.setCursor(0, 3);
 		OSD.print(F("VOLTAGE 2ND"));
-		OSD.setCursor(1, 4);
+		OSD.setCursor(0, 4);
 		OSD.print(F("V-ALARM ON/OFF"));
-		OSD.setCursor(1, 5);
+		OSD.setCursor(0, 5);
 		OSD.print(F("VOLTAGE OFFSET"));
-		OSD.setCursor(1, 6);
+		OSD.setCursor(0, 6);
 		OSD.print(F("VOLT ALARM HYST/CELL"));
 		cursorlineMax = 5;
 		break;
@@ -149,19 +149,19 @@ void menuprintsite() {
 		OSD.setCursor(0, 14);
 		OSD.print(F(" <-PITCH-> : MOVE UP/DOWN    "));
 		OSD.videoBackground();
-		OSD.setCursor(1, 2);
+		OSD.setCursor(0, 2);
 		OSD.print(F("CAPACITY IN MAH"));
-		OSD.setCursor(1, 3);
+		OSD.setCursor(0, 3);
 		OSD.print(F("1ST WARN AT % USED"));
-		OSD.setCursor(1, 4);
+		OSD.setCursor(0, 4);
 		OSD.print(F("2ND WARN AT % USED"));
-		OSD.setCursor(1, 5);
+		OSD.setCursor(0, 5);
 		OSD.print(F("STB CURRENT @5V"));
-		OSD.setCursor(1, 7);
+		OSD.setCursor(0, 7);
 		OSD.print(F("1ST WARN AT MAH USED"));
-		OSD.setCursor(1, 8);
+		OSD.setCursor(0, 8);
 		OSD.print(F("2ND WARN AT MAH USED"));
-		OSD.setCursor(1, 9);
+		OSD.setCursor(0, 9);
 		OSD.print(F("STB CURRENT FROM BAT"));
 		cursorlineMax = 4;
 		break;
@@ -196,17 +196,17 @@ void menuprintsite() {
 		OSD.setCursor(0, 14);
 		OSD.print(F("                             "));
 		OSD.videoBackground();
-		OSD.setCursor(1, 2);
+		OSD.setCursor(0, 2);
 		OSD.print(F("MARGIN LAST ROW"));
-		OSD.setCursor(1, 3);
+		OSD.setCursor(0, 3);
 		OSD.print(F("MAGNETPOLECOUNT MOT"));
-		OSD.setCursor(1, 4);
+		OSD.setCursor(0, 4);
 		OSD.print(F("ESC FILTER"));
-		OSD.setCursor(1, 5);
+		OSD.setCursor(0, 5);
 		OSD.print(F("RED MODE AUX CHANNEL"));
-		OSD.setCursor(1, 6);
+		OSD.setCursor(0, 6);
 		OSD.print(F("SCREEN OFFSET ->RIGHT"));
-		OSD.setCursor(15, 7);
+		OSD.setCursor(14, 7);
 		OSD.print(F("->DOWN"));
 		cursorlineMax = 6;
 		break;
@@ -217,13 +217,13 @@ void menuprintsite() {
 		OSD.setCursor(0, 14);
 		OSD.print(F("                             "));
 		OSD.videoBackground();
-		OSD.setCursor(1, 2);
+		OSD.setCursor(0, 2);
 		OSD.print(F("FREE RAM"));
-		OSD.setCursor(1, 3);
+		OSD.setCursor(0, 3);
 		OSD.print(F("OSD VERSION"));
-		OSD.setCursor(1, 4);
+		OSD.setCursor(0, 4);
 		OSD.print(F("MEMORY VERSION"));
-		OSD.setCursor(1, 5);
+		OSD.setCursor(0, 5);
 		OSD.print(F("VIDEOSYSTEM"));
 		cursorlineMax = 0;
 		break;
@@ -547,7 +547,7 @@ void value(bool addsub)
 		{
 		case 1: changeval(addsub, 0, 6, 1, &Settings.marginLastRow);
 			break;
-		case 2: changeval(addsub, 4, 24, 2, &Settings.MAGNETPOLECOUNT);
+		case 2: changeval(addsub, 4, 28, 2, &Settings.MAGNETPOLECOUNT);
 			break;
 		case 3: changeval(addsub, 0, 20, 1, &Settings.ESC_FILTER);
 			break;
@@ -629,23 +629,23 @@ void printRED()
 	OSD.videoBackground();
 	OSD.setCursor(1, 2);
 	OSD.print(F("RC THROTTLE"));
-	OSD.setCursor(1, 3);
+	OSD.setCursor(0, 3);
 	OSD.print(F("COMBINED CURRENT"));
-	OSD.setCursor(1, 4);
+	OSD.setCursor(0, 4);
 	OSD.print(F("LIPO VOLTAGE"));
-	OSD.setCursor(1, 5);
+	OSD.setCursor(0, 5);
 	OSD.print(F("CONSUMPTION MAH"));
-	OSD.setCursor(1, 6);
+	OSD.setCursor(0, 6);
 	OSD.print(F("ESC KRPM *1000"));
-	OSD.setCursor(1, 7);
+	OSD.setCursor(0, 7);
 	OSD.print(F("ESC CURRENT"));
-	OSD.setCursor(1, 8);
+	OSD.setCursor(0, 8);
 	OSD.print(F("ESC TEMPERATURE"));
-	OSD.setCursor(1, 9);
+	OSD.setCursor(0, 9);
 	OSD.print(F("PILOTNAME"));
-	OSD.setCursor(1, 10);
+	OSD.setCursor(0, 10);
 	OSD.print(F("TIMER"));
-	OSD.setCursor(1, 11);
+	OSD.setCursor(0, 11);
 	OSD.print(F("ANGLE PITCH"));
 	cursorlineMax = 10;
 }
@@ -706,9 +706,28 @@ void MenuAll_Exit(uint8_t GetSettings)
 	KissStatus.lastMode = 5;
 	OSD.clear();
 	if (GetSettings == GET_SETTINGS)
-		setSerialData();
+	{
+		/*i = 0;
+		bool exit = false;
+		while (!exit)
+		{
+			i++;
+			exit = setSerialData();
+			OSD.setCursor(1, 1);
+			OSD.print(i);
+			delay(200);
+		}*/
+		if (setSerialData())
+			OSD.print(F("FINISHED"));
+		else
+			OSD.print(F("UNKNWN ANSW. FAIL"));
+		//We need to reboot the serial connection, because sometimes it gets stuck here.
+		Serial.end();
+		delay(750);	
+		Serial.begin(115200);
+		delay(250);
+	}
 	else
 		EEPROMsave();
-	delay(400);
 
 }

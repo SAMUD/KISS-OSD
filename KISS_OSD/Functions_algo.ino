@@ -187,16 +187,10 @@ void WaitForKissFc()
 	OSD.print(F("SAMUD OSD"));
 	OSD.setCursor(6, 1);
 	OSD.print(F("CUSTOM KISS OSD"));
-
+	OSD.setCursor(5, 2);
+	OSD.print(F("ENJOY YOUR FLIGHT"));
 	OSD.setCursor(0, 14);
-	if (KissConnection == WaitingForConn)
-	{
-		OSD.print(F("WAITING FOR KISS FC...  "));
-		OSD.setCursor(5, 2);
-		OSD.print(F("ENJOY YOUR FLIGHT"));
-	}
-	else
-		OSD.print(F("LOST COMMUNICATION WITH FC...  "));
+	OSD.print(F("NO ANSWER FROM KISS FC "));
 }
 
 

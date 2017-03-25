@@ -72,9 +72,9 @@
 #endif
 
 #ifdef IMPULSERC_VTX
-	#define OSD_CHIP_SELECT 10;
+	#define OSD_CHIP_SELECT 10
 #else
-	#define OSD_CHIP_SELECT 6;
+	#define OSD_CHIP_SELECT 6
 #endif
 
 
@@ -87,6 +87,14 @@
 #define	MOTOR_TEST		0x11
 
 MAX7456 OSD(OSD_CHIP_SELECT);
+
+
+struct NotchFilter
+{
+	uint8_t Enabled;
+	uint16_t CenterfFreq;
+	uint16_t CutoffFreq;
+};
 
 static uint8_t serialBuf[256];	//RAW-values received with Settings 
 //needed for serial stuff
@@ -138,7 +146,8 @@ struct SerialSettings
 	uint16_t LapTimerID;	//Lap timer transponder ID
 	uint16_t TPA[3];		//TPA-values
 	uint8_t YawFilter;		//Yaw-Filter
-	int16_t ACC_Trim[2];	//Accelerometer trimm data, Pitch and Roll
+	NotchFilter NotchRoll;	//Notch-Filter on Roll
+	NotchFilter NotchPitch;	//Notch-Filter on Pitch
 
 
 
@@ -236,4 +245,6 @@ struct StoreStruct {				//saving all the OSD-Settings
 	int8_t OffsetX;
 	uint16_t StandbyCurrent;
 } static Settings;
+
+
 

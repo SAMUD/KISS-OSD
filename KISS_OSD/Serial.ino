@@ -12,7 +12,6 @@ bool getSerialData(uint8_t Mode,bool CopyBuffToSett)	//reading serial Data from 
 	serialBuf[0] = 0;
 	serialBuf[1] = 0;
 
-	
 	Serial.write(Mode);	//request data from FC
 	
 	//aquire serial data and write it to normal variables
@@ -36,9 +35,7 @@ bool getSerialData(uint8_t Mode,bool CopyBuffToSett)	//reading serial Data from 
 
 		//Copy all received data into buffer
 		while (Serial.available())
-		{
 			serialBuf[recBytes++] = Serial.read();
-		}
 			
 
 		//Check for start byte - if wrong exit 
@@ -228,6 +225,12 @@ bool getSerialData(uint8_t Mode,bool CopyBuffToSett)	//reading serial Data from 
 
 					KissSettings.LapTimerID = ((serialBuf[135 + STARTCOUNT] << 8) | serialBuf[136 + STARTCOUNT]);
 
+					KissSettings.NotchRoll.Enabled = serialBuf[138 + STARTCOUNT];
+					KissSettings.NotchRoll.CenterfFreq = ((serialBuf[139 + STARTCOUNT] << 8) | serialBuf[140 + STARTCOUNT]);
+					KissSettings.NotchRoll.CutoffFreq = ((serialBuf[141 + STARTCOUNT] << 8) | serialBuf[142 + STARTCOUNT]);
+					KissSettings.NotchPitch.Enabled = serialBuf[143 + STARTCOUNT];
+					KissSettings.NotchPitch.CenterfFreq = ((serialBuf[144 + STARTCOUNT] << 8) | serialBuf[145 + STARTCOUNT]);
+					KissSettings.NotchPitch.CutoffFreq = ((serialBuf[146 + STARTCOUNT] << 8) | serialBuf[147 + STARTCOUNT]);
 					KissSettings.YawFilter = serialBuf[148 + STARTCOUNT];
 
 					KissSettings.CapacityAlarm = ((serialBuf[157 + STARTCOUNT] << 8) | serialBuf[158 + STARTCOUNT]);
@@ -265,7 +268,7 @@ bool setSerialData()
 	i = 0;
 	while (!getSerialData(GET_SETTINGS,false))
 	{
-		delay(500);
+		delay(100);
 		i++;
 		if (i > 10)								//Unable to re-aquire data
 		{
@@ -358,27 +361,29 @@ bool setSerialData()
 	serialBuf[STARTCOUNT + 125] = (byte)((KissSettings.LapTimerID & 0xFF00) >> 8);
 	serialBuf[STARTCOUNT + 126] = (byte)(KissSettings.LapTimerID & 0x00FF);
 
+	serialBuf[STARTCOUNT + 128] = KissSettings.NotchRoll.Enabled;
+	serialBuf[STARTCOUNT + 129] = (byte)((KissSettings.NotchRoll.CenterfFreq & 0xFF00) >> 8);
+	serialBuf[STARTCOUNT + 130] = (byte)(KissSettings.NotchRoll.CenterfFreq & 0x00FF);
+	serialBuf[STARTCOUNT + 131] = (byte)((KissSettings.NotchRoll.CutoffFreq & 0xFF00) >> 8);
+	serialBuf[STARTCOUNT + 132] = (byte)(KissSettings.NotchRoll.CutoffFreq & 0x00FF);
+	serialBuf[STARTCOUNT + 133] = KissSettings.NotchPitch.Enabled;
+	serialBuf[STARTCOUNT + 134] = (byte)((KissSettings.NotchPitch.CenterfFreq & 0xFF00) >> 8);
+	serialBuf[STARTCOUNT + 135] = (byte)(KissSettings.NotchPitch.CenterfFreq & 0x00FF);
+	serialBuf[STARTCOUNT + 136] = (byte)((KissSettings.NotchPitch.CutoffFreq & 0xFF00) >> 8);
+	serialBuf[STARTCOUNT + 137] = (byte)(KissSettings.NotchPitch.CutoffFreq & 0x00FF);
 	serialBuf[STARTCOUNT + 138] = (byte)(KissSettings.YawFilter);
 
 	serialBuf[STARTCOUNT + 147] = (byte)((KissSettings.CapacityAlarm& 0xFF00) >> 8);
 	serialBuf[STARTCOUNT + 148] = (byte)(KissSettings.CapacityAlarm & 0x00FF);
 
-
 	//calculate Checksum
-	double checksumcalc = 0.0;
-	double dataCount = 0.0;	// TODO: remove dataCount --> use i-3 in the for-loop below
+	uint32_t checksumcalc = 0;
 	for (i = 2; i<KissSettings.minBytesSettings; i++)
-	{
 		checksumcalc += serialBuf[i];
-		dataCount++;
-	}
-	checksumcalc = checksumcalc / dataCount;
+
+	checksumcalc = (uint32_t)(checksumcalc / (KissSettings.minBytesSettings-3));
 	serialBuf[KissSettings.minBytesSettings - 1] = floor(checksumcalc);
 
-	Serial.write(SET_SETTINGS);
-	Serial.flush();
-	
-	Serial.write(serialBuf, sizeof(serialBuf));
 	//Alternative Mode:
 	/*for (i = 0; i<KissSettings.minBytesSettings; i++)
 	{
@@ -387,7 +392,24 @@ bool setSerialData()
 		//delay(1);
 	}*/
 
-	//wait a small amount of time
-	delay(500);
+	i = 0;
+	uint8_t serialBuf2[10] = { 0 };
 
+	Serial.write(SET_SETTINGS);
+	delay(2);
+
+	Serial.write(serialBuf, sizeof(serialBuf));
+	Serial.flush();
+	delay(50);
+
+	while (Serial.available() && i<10)
+	{
+		serialBuf2[i] = Serial.read();
+		i++;
+	}
+
+	if (serialBuf2[0] == 5 && serialBuf2[1] == 1 && serialBuf2[2] == 06 && serialBuf2[3] == 06)
+		return true;
+	else
+		return false;
 }

@@ -130,7 +130,7 @@ void MenuLeft_PrintSite() {
 		OSD.setCursor(9, 2);
 		OSD.print(F("P   "));
 		OSD.setCursor(16, 2);
-		OSD.print(F("I    "));
+		OSD.print(F("I   "));
 		OSD.setCursor(24, 2);
 		OSD.print(F("D   "));
 		OSD.setCursor(8, 7);
@@ -141,17 +141,17 @@ void MenuLeft_PrintSite() {
 		OSD.print(F("EXPO"));
 		OSD.videoBackground();
 
-		OSD.setCursor(1, 3);
+		OSD.setCursor(0, 3);
 		OSD.print(F("ROLL"));
-		OSD.setCursor(1, 4);
+		OSD.setCursor(0, 4);
 		OSD.print(F("PITCH"));
-		OSD.setCursor(1, 5);
+		OSD.setCursor(0, 5);
 		OSD.print(F("YAW"));
-		OSD.setCursor(1, 8);
+		OSD.setCursor(0, 8);
 		OSD.print(F("ROLL"));
-		OSD.setCursor(1, 9);
+		OSD.setCursor(0, 9);
 		OSD.print(F("PITCH"));
-		OSD.setCursor(1, 10);
+		OSD.setCursor(0, 10);
 		OSD.print(F("YAW"));
 		CursorlineMaxLeft = 18;
 		break;
@@ -164,26 +164,32 @@ void MenuLeft_PrintSite() {
 		OSD.setCursor(9, 2);
 		OSD.print(F("P   "));
 		OSD.setCursor(16, 2);
-		OSD.print(F("I    "));
+		OSD.print(F("I   "));
 		OSD.setCursor(24, 2);
 		OSD.print(F("D   "));
-		OSD.setCursor(16, 8);
+		OSD.setCursor(16, 7);
 		OSD.print(F("PITCH"));
-		OSD.setCursor(24, 8);
+		OSD.setCursor(24, 7);
 		OSD.print(F("ROLL"));
 		OSD.videoBackground();
 
-		OSD.setCursor(1, 3);
+		OSD.setCursor(0, 3);
 		OSD.print(F("TPA"));
-		OSD.setCursor(1, 5);
+		OSD.setCursor(0, 4);
 		OSD.print(F("LEVEL"));
-		OSD.setCursor(1, 6);
+		OSD.setCursor(1, 5);
 		OSD.print(F("MAX ANGLE"));
-		OSD.setCursor(1, 9);
+		OSD.setCursor(0, 8);
 		OSD.print(F("ACC-TRIM"));
+		OSD.setCursor(0, 9);
+		OSD.print(F("NOTCH FILTER"));
 		OSD.setCursor(1, 10);
+		OSD.print(F("CENTER FREQ"));
+		OSD.setCursor(1, 11);
+		OSD.print(F("CUTOFF FREQ"));
+		OSD.setCursor(0, 12);
 		OSD.print(F("YAW-FILTER"));
-		CursorlineMaxLeft = 10;
+		CursorlineMaxLeft = 16;
 		break;
 	case 3:
 		//PID
@@ -199,13 +205,13 @@ void MenuLeft_PrintSite() {
 		OSD.print(F("BLUE"));
 		OSD.videoBackground();
 
-		OSD.setCursor(1, 3);
+		OSD.setCursor(0, 3);
 		OSD.print(F("LED"));
-		OSD.setCursor(1, 5);
+		OSD.setCursor(0, 5);
 		OSD.print(F("VBAT ALARM"));
-		OSD.setCursor(1, 6);
+		OSD.setCursor(0, 6);
 		OSD.print(F("MAH ALARM"));
-		OSD.setCursor(1, 7);
+		OSD.setCursor(0, 7);
 		OSD.print(F("LAP TRANSPONDER ID"));
 		CursorlineMaxLeft = 6;
 		break;
@@ -222,8 +228,9 @@ void MenuLeft_PrintValue() {
 		OSD.print(((float)KissSettings.PID_P[0]) / 1000);
 		OSD.print(" ");
 		OSD.setCursor(16, 3);
-		OSD.print(((float)KissSettings.PID_I[0]) / 1000);
-		OSD.print(" ");
+		ClearTempCharConverted();
+		print_int16(KissSettings.PID_I[0], TempCharConverted, 3, 1);
+		OSD.print(TempCharConverted);
 		OSD.setCursor(24, 3);
 		OSD.print(((float)KissSettings.PID_D[0]) / 1000);
 		OSD.print(" ");
@@ -231,8 +238,9 @@ void MenuLeft_PrintValue() {
 		OSD.print(((float)KissSettings.PID_P[1]) / 1000);
 		OSD.print(" ");
 		OSD.setCursor(16, 4);
-		OSD.print(((float)KissSettings.PID_I[1]) / 1000);
-		OSD.print(" ");
+		ClearTempCharConverted();
+		print_int16(KissSettings.PID_I[1], TempCharConverted, 3, 1);
+		OSD.print(TempCharConverted);
 		OSD.setCursor(24, 4);
 		OSD.print(((float)KissSettings.PID_D[1]) / 1000);
 		OSD.print(" ");
@@ -240,8 +248,9 @@ void MenuLeft_PrintValue() {
 		OSD.print(((float)KissSettings.PID_P[2]) / 1000);
 		OSD.print(" ");
 		OSD.setCursor(16, 5);
-		OSD.print(((float)KissSettings.PID_I[2]) / 1000);
-		OSD.print(" ");
+		ClearTempCharConverted();
+		print_int16(KissSettings.PID_I[2], TempCharConverted, 3, 1);
+		OSD.print(TempCharConverted);
 		OSD.setCursor(24, 5);
 		OSD.print(((float)KissSettings.PID_D[2]) / 1000);
 		OSD.print(" ");
@@ -285,25 +294,41 @@ void MenuLeft_PrintValue() {
 		OSD.setCursor(24, 3);
 		OSD.print(((float)KissSettings.TPA[2]) / 1000);
 		OSD.print(" ");
-		OSD.setCursor(9, 5);
+		OSD.setCursor(9, 4);
 		OSD.print(((float)KissSettings.PID_A[0]) / 1000);
 		OSD.print(" ");
-		OSD.setCursor(16, 5);
+		OSD.setCursor(16, 4);
 		OSD.print(((float)KissSettings.PID_A[1]) / 1000);
 		OSD.print(" ");
-		OSD.setCursor(24, 5);
+		OSD.setCursor(24, 4);
 		OSD.print(((float)KissSettings.PID_A[2]) / 1000);
 		OSD.print(" ");
-		OSD.setCursor(24, 6);
+		OSD.setCursor(24, 5);
 		OSD.print(KissSettings.MaxAngle/14.3);
 		OSD.print("° ");
-		OSD.setCursor(16, 9);
+		OSD.setCursor(16, 8);
 		OSD.print(((float)KissSettings.ACC_Trim[0]) / 1000);
 		OSD.print(" ");
-		OSD.setCursor(24, 9);
+		OSD.setCursor(24, 8);
 		OSD.print(((float)KissSettings.ACC_Trim[1]) / 1000);
 		OSD.print(" ");
+		OSD.setCursor(16, 9);
+		showONOFF(KissSettings.NotchPitch.Enabled);
+		OSD.setCursor(24, 9);
+		showONOFF(KissSettings.NotchRoll.Enabled);
+		OSD.setCursor(16, 10);
+		OSD.print(KissSettings.NotchPitch.CenterfFreq);
+		OSD.print("HZ");
 		OSD.setCursor(24, 10);
+		OSD.print(KissSettings.NotchRoll.CenterfFreq);
+		OSD.print("HZ");
+		OSD.setCursor(16, 11);
+		OSD.print(KissSettings.NotchPitch.CutoffFreq);
+		OSD.print("HZ");
+		OSD.setCursor(24, 11);
+		OSD.print(KissSettings.NotchRoll.CutoffFreq);
+		OSD.print("HZ");
+		OSD.setCursor(24, 12);
 		OSD.print(KissSettings.YawFilter);
 		OSD.print(" ");
 		break;
@@ -344,19 +369,19 @@ void MenuLeft_Valie(bool addsub)
 		{
 		case 1: changeval(addsub, 50, 65000, 50, &KissSettings.PID_P[0]);
 			break;
-		case 2: changeval(addsub, 10, 65000, 10, &KissSettings.PID_I[0]);
+		case 2: changeval(addsub, 10, 65000, 1, &KissSettings.PID_I[0]);
 			break;
 		case 3: changeval(addsub, 100, 65000, 100, &KissSettings.PID_D[0]);
 			break;
 		case 4: changeval(addsub, 50, 65000, 50, &KissSettings.PID_P[1]);
 			break;
-		case 5: changeval(addsub, 10, 65000, 10, &KissSettings.PID_I[1]);
+		case 5: changeval(addsub, 10, 65000, 1, &KissSettings.PID_I[1]);
 			break;
 		case 6: changeval(addsub, 100, 65000, 100, &KissSettings.PID_D[1]);
 			break;
 		case 7: changeval(addsub, 50, 65000, 50, &KissSettings.PID_P[2]);
 			break;
-		case 8: changeval(addsub, 10, 65000, 10, &KissSettings.PID_I[2]);
+		case 8: changeval(addsub, 10, 65000, 1, &KissSettings.PID_I[2]);
 			break;
 		case 9: changeval(addsub, 100, 65000, 100, &KissSettings.PID_D[2]);
 			break;
@@ -403,7 +428,19 @@ void MenuLeft_Valie(bool addsub)
 			break;
 		case 9: changeval(addsub, -30000, 30000, 100, &KissSettings.ACC_Trim[1]);
 			break;
-		case 10: changeval(addsub, 0, 250, 1, &KissSettings.YawFilter);
+		case 10: changeval(addsub, 0, 1, 1, &KissSettings.NotchPitch.Enabled);
+			break;
+		case 11: changeval(addsub, 0, 1, 1, &KissSettings.NotchRoll.Enabled);
+			break;
+		case 12: changeval(addsub, 4, 486, 5, &KissSettings.NotchPitch.CenterfFreq);
+			break;
+		case 13: changeval(addsub, 4, 486, 5, &KissSettings.NotchRoll.CenterfFreq);
+			break;
+		case 14: changeval(addsub, 4, 486, 5, &KissSettings.NotchPitch.CutoffFreq);
+			break;
+		case 15: changeval(addsub, 4, 486, 5, &KissSettings.NotchRoll.CutoffFreq);
+			break;
+		case 16: changeval(addsub, 0, 250, 1, &KissSettings.YawFilter);
 			break;
 		}
 		break;
@@ -459,38 +496,48 @@ void MenuLeft_Marker(bool addMarker, uint8_t MarkerLine, uint8_t CurrentPage)
 		break;
 	case 2:
 		//TPA-Level Page
+		i = 0;
 		if (MarkerLine < 7)
 		{
+			if (MarkerLine > 3)
+				i = 1;
+			MarkerLine = MarkerLine - (i * 3);
 			switch (MarkerLine)
 			{
 			case 1:
-				OSD.setCursor(8, 3);
+				OSD.setCursor(8, 3 + i);
 				break;
 			case 2:
-				OSD.setCursor(15, 3);
+				OSD.setCursor(15, 3 + i);
 				break;
 			case 3:
-				OSD.setCursor(23, 3);
-				break;
-			case 4:
-				OSD.setCursor(8, 5);
-				break;
-			case 5:
-				OSD.setCursor(15, 5);
-				break;
-			case 6:
-				OSD.setCursor(23, 5);
+				OSD.setCursor(23, 3 + i);
 				break;
 			}
 		}
-		else if(MarkerLine==7)
-			OSD.setCursor(23, 6);
-		else if (MarkerLine == 8)
-			OSD.setCursor(15, 9);
-		else if (MarkerLine == 9)
-			OSD.setCursor(23, 9);
+		else if (MarkerLine == 7)
+			OSD.setCursor(23, 5);
+		else if (MarkerLine < 16)
+		{
+			if (MarkerLine > 13)
+				i = 3;
+			else if (MarkerLine > 11)
+				i = 2;
+			else if (MarkerLine > 9)
+				i = 1;
+			MarkerLine = MarkerLine - (i * 2);
+			switch (MarkerLine - 7)
+			{
+			case 1:
+				OSD.setCursor(15, 8 + i);
+				break;
+			case 2:
+				OSD.setCursor(23, 8 + i);
+				break;
+			}
+		}
 		else
-			OSD.setCursor(23, 10);
+			OSD.setCursor(23, 12);
 		break;
 	case 3:
 		//Various
