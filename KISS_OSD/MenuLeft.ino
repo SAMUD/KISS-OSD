@@ -199,9 +199,9 @@ void MenuLeft_PrintSite() {
 		OSD.print(F("EXIT = SAVING SETTINGS      "));
 		OSD.setCursor(9, 2);
 		OSD.print(F("RED"));
-		OSD.setCursor(16, 2);
+		OSD.setCursor(15, 2);
 		OSD.print(F("GREEN"));
-		OSD.setCursor(24, 2);
+		OSD.setCursor(23, 2);
 		OSD.print(F("BLUE"));
 		OSD.videoBackground();
 
@@ -338,22 +338,22 @@ void MenuLeft_PrintValue() {
 		OSD.setCursor(9, 3);
 		OSD.print(KissSettings.RGB[0]);
 		OSD.print(" ");
-		OSD.setCursor(16, 3);
+		OSD.setCursor(15, 3);
 		OSD.print(KissSettings.RGB[1]);
 		OSD.print(" ");
-		OSD.setCursor(24, 3);
+		OSD.setCursor(23, 3);
 		OSD.print(KissSettings.RGB[2]);
 		OSD.print(" ");
-		OSD.setCursor(24, 5);
+		OSD.setCursor(23, 5);
 		ClearTempCharConverted();
 		TempCharPosition = print_int16(KissSettings.VbatAlarm, TempCharConverted, 1, 1);
 		TempCharConverted[TempCharPosition++] = 'V';
 		OSD.print(TempCharConverted);
-		OSD.setCursor(24, 6);
+		OSD.setCursor(23, 6);
 		OSD.print(KissSettings.CapacityAlarm);
 		OSD.write(SYM_MAH);
 		OSD.print(" ");
-		OSD.setCursor(24, 7);
+		OSD.setCursor(23, 7);
 		OSD.print(KissSettings.LapTimerID);
 		OSD.print(" ");
 		break;
@@ -550,19 +550,19 @@ void MenuLeft_Marker(bool addMarker, uint8_t MarkerLine, uint8_t CurrentPage)
 				OSD.setCursor(8, 3);
 				break;
 			case 2:
-				OSD.setCursor(15, 3);
+				OSD.setCursor(14, 3);
 				break;
 			case 3:
-				OSD.setCursor(23, 3);
+				OSD.setCursor(22, 3);
 				break;
 			}
 		}
 		else if (MarkerLine == 4)
-			OSD.setCursor(23, 5);
+			OSD.setCursor(22, 5);
 		else if (MarkerLine == 5)
-			OSD.setCursor(23, 6);
+			OSD.setCursor(22, 6);
 		else
-			OSD.setCursor(23, 7);
+			OSD.setCursor(22, 7);
 		break;
 	}
 
