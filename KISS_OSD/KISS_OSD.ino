@@ -11,7 +11,7 @@ by Samuel Daurat (sdaurat@outlook.de)
 based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
 
-#define OSDVersion "6.94"
+#define OSDVersion "7RC1"
 #define DMemoryVersion 6
 //#define IMPULSERC_VTX
 //#define DEBUG
@@ -126,7 +126,7 @@ void setup() {
   //init memory
   EEPROMinit();
 
-  KissConnection = WaitingForConn;
+  KissConnection = LostConnection;
 }
 
 
@@ -141,13 +141,10 @@ void loop()
   {
 	  KissStatus.LastLoopTime = micros();			//saving current time
 
-    getSerialData(GET_TELEMETRY,true);					//requesting serial data
+    getSerialData(GET_TELEMETRY,true);				//requesting serial data
 	
 	switch (KissConnection)
 	{
-	case WaitingForConn:
-		WaitForKissFc();
-		break;
 	case LostConnection:
 		WaitForKissFc();
 		break;
@@ -173,12 +170,6 @@ void loop()
 			FlightSummary();
 		else
 			DisplayOSD_Main();								//Display the datas
-		break;
-	default:
-		KissConnection = WaitingForConn;				//When the enum gets in an unknown state - should not do normally
-		#ifdef DEBUG
-			Debug_Fnc("ENUM_KISCONE WRONG CASE");
-		#endif
 		break;
 	}
 	//Reset wdt

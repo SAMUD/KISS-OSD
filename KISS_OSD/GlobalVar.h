@@ -120,8 +120,6 @@ struct SerialData						//saving Telemetrie-Data
 } static KissTelemetrie;
 enum SerialStatus					//giving the status of the current serial connection to the Kiss FC
 {
-	unknown,
-	WaitingForConn,
 	ConnectionEtablished,
 	Connected,
 	LostConnection

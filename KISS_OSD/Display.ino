@@ -314,3 +314,8 @@ void DisplayOSD_Main()
 
 	}
 #endif
+
+void DisplaySpace()
+{
+	OSD.print(F(" "));
+}

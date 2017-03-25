@@ -43,13 +43,10 @@ void MenuLeft_Main()
 
 			//changevalue
 			if (KissTelemetrie.StickChanVals[1] > 800)
-			{
 				MenuLeft_Valie(true);
-			}
+
 			if (KissTelemetrie.StickChanVals[1] < -800)
-			{
 				MenuLeft_Valie(false);
-			}
 
 			//changepage
 			if (KissTelemetrie.StickChanVals[3] > 800)
@@ -194,7 +191,7 @@ void MenuLeft_PrintSite() {
 	case 3:
 		//PID
 		OSD.grayBackground();
-		OSD.print(F("SAMUD OSD - P1/8 VARIOUS    "));
+		OSD.print(F("SAMUD OSD - P3/3 VARIOUS    "));
 		OSD.setCursor(0, 14);
 		OSD.print(F("EXIT = SAVING SETTINGS      "));
 		OSD.setCursor(9, 2);
@@ -226,79 +223,79 @@ void MenuLeft_PrintValue() {
 		//PID
 		OSD.setCursor(9, 3);
 		OSD.print(((float)KissSettings.PID_P[0]) / 1000);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(16, 3);
 		ClearTempCharConverted();
 		print_int16(KissSettings.PID_I[0], TempCharConverted, 3, 1);
 		OSD.print(TempCharConverted);
 		OSD.setCursor(24, 3);
 		OSD.print(((float)KissSettings.PID_D[0]) / 1000);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(9, 4);
 		OSD.print(((float)KissSettings.PID_P[1]) / 1000);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(16, 4);
 		ClearTempCharConverted();
 		print_int16(KissSettings.PID_I[1], TempCharConverted, 3, 1);
 		OSD.print(TempCharConverted);
 		OSD.setCursor(24, 4);
 		OSD.print(((float)KissSettings.PID_D[1]) / 1000);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(9, 5);
 		OSD.print(((float)KissSettings.PID_P[2]) / 1000);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(16, 5);
 		ClearTempCharConverted();
 		print_int16(KissSettings.PID_I[2], TempCharConverted, 3, 1);
 		OSD.print(TempCharConverted);
 		OSD.setCursor(24, 5);
 		OSD.print(((float)KissSettings.PID_D[2]) / 1000);
-		OSD.print(" ");
+		DisplaySpace();
 
 		OSD.setCursor(9, 8);
 		OSD.print(((float)KissSettings.RC_Rate[0]) / 1000);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(16, 8);
 		OSD.print(((float)KissSettings.Rate[0]) / 1000);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(24, 8);
 		OSD.print(((float)KissSettings.RC_Curve[0]) / 1000);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(9, 9);
 		OSD.print(((float)KissSettings.RC_Rate[1]) / 1000);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(16, 9);
 		OSD.print(((float)KissSettings.Rate[1]) / 1000);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(24, 9);
 		OSD.print(((float)KissSettings.RC_Curve[1]) / 1000);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(9, 10);
 		OSD.print(((float)KissSettings.RC_Rate[2]) / 1000);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(16, 10);
 		OSD.print(((float)KissSettings.Rate[2]) / 1000);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(24, 10);
 		OSD.print(((float)KissSettings.RC_Curve[2]) / 10);
-		OSD.print(" ");
+		DisplaySpace();
 		break;
 	case 2:
 		//PID
 		OSD.setCursor(9, 3);
 		OSD.print(((float)KissSettings.TPA[0]) / 1000);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(16, 3);
 		OSD.print(((float)KissSettings.TPA[1]) / 1000);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(24, 3);
 		OSD.print(((float)KissSettings.TPA[2]) / 1000);
 		OSD.setCursor(9, 4);
 		OSD.print(((float)KissSettings.PID_A[0]) / 1000);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(16, 4);
 		OSD.print(((float)KissSettings.PID_A[1]) / 1000);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(24, 4);
 		OSD.print(((float)KissSettings.PID_A[2]) / 1000);
 		OSD.setCursor(24, 5);
@@ -307,10 +304,10 @@ void MenuLeft_PrintValue() {
 		OSD.print(" °");
 		OSD.setCursor(16, 8);
 		OSD.print(((float)KissSettings.ACC_Trim[0]) / 1000);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(24, 8);
 		OSD.print(((float)KissSettings.ACC_Trim[1]) / 1000);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(16, 9);
 		showONOFF(KissSettings.NotchPitch.Enabled);
 		OSD.setCursor(24, 9);
@@ -318,32 +315,32 @@ void MenuLeft_PrintValue() {
 		OSD.setCursor(16, 10);
 		OSD.print(KissSettings.NotchPitch.CenterfFreq);
 		OSD.print("HZ");
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(24, 10);
 		OSD.print(KissSettings.NotchRoll.CenterfFreq);
 		OSD.print("HZ");
 		OSD.setCursor(16, 11);
 		OSD.print(KissSettings.NotchPitch.CutoffFreq);
 		OSD.print("HZ");
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(24, 11);
 		OSD.print(KissSettings.NotchRoll.CutoffFreq);
 		OSD.print("HZ");
 		OSD.setCursor(24, 12);
 		OSD.print(KissSettings.YawFilter);
-		OSD.print(" ");
+		DisplaySpace();
 		break;
 	case 3:
 		//PID
 		OSD.setCursor(9, 3);
 		OSD.print(KissSettings.RGB[0]);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(15, 3);
 		OSD.print(KissSettings.RGB[1]);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 3);
 		OSD.print(KissSettings.RGB[2]);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 5);
 		ClearTempCharConverted();
 		TempCharPosition = print_int16(KissSettings.VbatAlarm, TempCharConverted, 1, 1);
@@ -352,10 +349,10 @@ void MenuLeft_PrintValue() {
 		OSD.setCursor(23, 6);
 		OSD.print(KissSettings.CapacityAlarm);
 		OSD.write(SYM_MAH);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 7);
 		OSD.print(KissSettings.LapTimerID);
-		OSD.print(" ");
+		DisplaySpace();
 		break;
 	}
 }
@@ -425,7 +422,7 @@ void MenuLeft_Valie(bool addsub)
 			break;
 		case 7: changeval(addsub, 15, 2574, 14, &KissSettings.MaxAngle);
 			break;
-		case 8: changeval(addsub, -30000,30000, 5, &KissSettings.ACC_Trim[0]);
+		case 8: changeval(addsub, -30000,30000, 100, &KissSettings.ACC_Trim[0]);
 			break;
 		case 9: changeval(addsub, -30000, 30000, 100, &KissSettings.ACC_Trim[1]);
 			break;

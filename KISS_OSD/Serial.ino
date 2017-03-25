@@ -249,7 +249,7 @@ bool getSerialData(uint8_t Mode,bool CopyBuffToSett)	//reading serial Data from 
 				Debug_Fnc("TELM ERR");
 			#endif // DEBUG
 
-			if (KissConnection == LostConnection || KissConnection == WaitingForConn)
+			if (KissConnection == LostConnection)
 				KissConnection = ConnectionEtablished;
 			return true;
 		}

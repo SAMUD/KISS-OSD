@@ -98,7 +98,7 @@ void print_time(unsigned long time, char *time_str)
 void CalculateOSD()
 {
 	//calculate Battery-Cells
-	if (KissStatus.BatteryCells == 0)											
+	if (KissStatus.BatteryCells == 0 && KissTelemetrie.LipoVoltage>400 && KissTelemetrie.LipoVoltage<3000)											
 	{
 		KissStatus.BatteryCells = 1;
 		while (KissTelemetrie.LipoVoltage > KissStatus.BatteryCells * 440)
@@ -108,9 +108,9 @@ void CalculateOSD()
 	//Voltage Alarm 1 and 2
 	if ((KissTelemetrie.LipoVoltage / KissStatus.BatteryCells)<Settings.LowVoltage1st && Settings.LowVoltageAllowed == 1)
 		KissStatus.VoltageAlarm = 1;			//1st state
-	if ((KissTelemetrie.LipoVoltage / KissStatus.BatteryCells)<Settings.LowVoltage2nd && KissStatus.VoltageAlarm == true)
+	if ((KissTelemetrie.LipoVoltage / KissStatus.BatteryCells)<Settings.LowVoltage2nd && Settings.LowVoltageAllowed == 1)
 		KissStatus.VoltageAlarm = 2;			//2nd state
-	if ((KissTelemetrie.LipoVoltage / KissStatus.BatteryCells)> (Settings.LowVoltage1st + Settings.hysteresis) && KissStatus.VoltageAlarm == true)
+	if ((KissTelemetrie.LipoVoltage / KissStatus.BatteryCells)> (Settings.LowVoltage1st + Settings.hysteresis))
 		KissStatus.VoltageAlarm = 0;			//no Voltage Alarm
 	
 	//Calculate Timer
@@ -173,10 +173,8 @@ void OSDmakegrey() {
 
 void ClearTempCharConverted()
 {
-	for (uint8_t i = 0; i < 30; i++)
-	{
+	for (i = 0; i < 30; i++)
 		TempCharConverted[i] = ' ';
-	}
 }
 
 void WaitForKissFc()
@@ -189,7 +187,7 @@ void WaitForKissFc()
 	OSD.print(F("CUSTOM KISS OSD"));
 	OSD.setCursor(5, 2);
 	OSD.print(F("ENJOY YOUR FLIGHT"));
-	OSD.setCursor(0, 14);
+	OSD.setCursor(1, 14);
 	OSD.print(F("NO ANSWER FROM KISS FC "));
 }
 

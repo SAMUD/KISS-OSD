@@ -44,13 +44,9 @@ void MenuRight_Main()
 
 			//changevalue
 			if (KissTelemetrie.StickChanVals[1] > 800)
-			{
 				value(true);
-			}
 			if (KissTelemetrie.StickChanVals[1] < -800)
-			{
 				value(false);
-			}
 
 			//changepage
 			if (KissTelemetrie.StickChanVals[3] > 800)
@@ -248,7 +244,7 @@ void menuprintvalue() {
 		OSD.print(TempCharConverted);
 		OSD.setCursor(23, 4);
 		showONOFF(Settings.LowVoltageAllowed);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 5);
 		OSD.print(Settings.VoltageOffset);
 		OSD.print("MV ");
@@ -261,13 +257,13 @@ void menuprintvalue() {
 		OSD.setCursor(23, 2);
 		OSD.print(Settings.Capacity);
 		OSD.write(SYM_MAH);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 3);
 		OSD.print(Settings.Capacity1st);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 4);
 		OSD.print(Settings.Capacity2nd);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 5);
 		ClearTempCharConverted();
 		TempCharPosition = print_int16(Settings.StandbyCurrent/10, TempCharConverted, 2, 1);
@@ -275,12 +271,12 @@ void menuprintvalue() {
 		OSD.print(TempCharConverted);
 		OSD.setCursor(23, 7);
 		OSD.print((Settings.Capacity * (float)Settings.Capacity1st)/100);
-		OSD.print(" ");
+		DisplaySpace();
 		//OSD.write(SYM_MAH);
 		OSD.setCursor(23, 8);
 		OSD.print((Settings.Capacity * (float)Settings.Capacity2nd) / 100);
 		//OSD.write(SYM_MAH);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 9);
 		OSD.print((Settings.StandbyCurrent * 5) / KissTelemetrie.LipoVoltage);
 		OSD.print("MA ");
@@ -289,115 +285,115 @@ void menuprintvalue() {
 		//RED1
 		OSD.setCursor(23, 2);
 		showONOFF(Settings.DispRCThrottle1);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 3);
 		showONOFF(Settings.DispCombCurrent1);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 4);
 		showONOFF(Settings.DispLipoVoltage1);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 5);
 		showONOFF(Settings.DispMaConsumption1);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 6);
 		showONOFF(Settings.DispEscKrpm1);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 7);
 		showONOFF(Settings.DispEscCurrent1);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 8);
 		showONOFF(Settings.DispEscTemp1);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 9);
 		showONOFF(Settings.DispPilotname1);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 10);
 		showONOFF(Settings.DispTimer1);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 11);
 		showONOFF(Settings.DispAngle1);
-		OSD.print(" ");
+		DisplaySpace();
 		break;
 	case 4:
 		//RED2
 		OSD.setCursor(23, 2);
 		showONOFF(Settings.DispRCThrottle2);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 3);
 		showONOFF(Settings.DispCombCurrent2);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 4);
 		showONOFF(Settings.DispLipoVoltage2);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 5);
 		showONOFF(Settings.DispMaConsumption2);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 6);
 		showONOFF(Settings.DispEscKrpm2);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 7);
 		showONOFF(Settings.DispEscCurrent2);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 8);
 		showONOFF(Settings.DispEscTemp2);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 9);
 		showONOFF(Settings.DispPilotname2);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 10);
 		showONOFF(Settings.DispTimer2);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 11);
 		showONOFF(Settings.DispAngle2);
-		OSD.print(" ");
+		DisplaySpace();
 		break;
 	case 5:
 		//RED1
 		OSD.setCursor(23, 2);
 		showONOFF(Settings.DispRCThrottle3);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 3);
 		showONOFF(Settings.DispCombCurrent3);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 4);
 		showONOFF(Settings.DispLipoVoltage3);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 5);
 		showONOFF(Settings.DispMaConsumption3);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 6);
 		showONOFF(Settings.DispEscKrpm3);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 7);
 		showONOFF(Settings.DispEscCurrent3);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 8);
 		showONOFF(Settings.DispEscTemp3);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 9);
 		showONOFF(Settings.DispPilotname3);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 10);
 		showONOFF(Settings.DispTimer3);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 11);
 		showONOFF(Settings.DispAngle3);
-		OSD.print(" ");
+		DisplaySpace();
 		break;
 	case 6:
 		//Other Settings
 		OSD.setCursor(23, 2);
 		OSD.print(Settings.marginLastRow);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 3);
 		OSD.print(Settings.MAGNETPOLECOUNT);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 4);
 		OSD.print(Settings.ESC_FILTER);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 5);
 		OSD.print(Settings.RED_MODE_AUX_CHANNEL);
-		OSD.print(" ");
+		DisplaySpace();
 		OSD.setCursor(23, 6);
 		OSD.print(Settings.OffsetX);
 		OSD.print(F("PX "));
@@ -627,10 +623,10 @@ void showONOFF(uint8_t val)
 void printRED()
 {
 	OSD.videoBackground();
-	OSD.setCursor(1, 2);
+	OSD.setCursor(0, 2);
 	OSD.print(F("RC THROTTLE"));
 	OSD.setCursor(0, 3);
-	OSD.print(F("COMBINED CURRENT"));
+	OSD.print(F("TOTAL CURRENT"));
 	OSD.setCursor(0, 4);
 	OSD.print(F("LIPO VOLTAGE"));
 	OSD.setCursor(0, 5);
@@ -707,20 +703,11 @@ void MenuAll_Exit(uint8_t GetSettings)
 	OSD.clear();
 	if (GetSettings == GET_SETTINGS)
 	{
-		/*i = 0;
-		bool exit = false;
-		while (!exit)
-		{
-			i++;
-			exit = setSerialData();
-			OSD.setCursor(1, 1);
-			OSD.print(i);
-			delay(200);
-		}*/
 		if (setSerialData())
 			OSD.print(F("FINISHED"));
 		else
 			OSD.print(F("UNKNWN ANSW. FAIL"));
+
 		//We need to reboot the serial connection, because sometimes it gets stuck here.
 		Serial.end();
 		delay(750);	
