@@ -130,7 +130,7 @@ void MenuLeft_PrintSite() {
 		OSD.setCursor(9, 2);
 		OSD.print(F("P   "));
 		OSD.setCursor(16, 2);
-		OSD.print(F("I    "));
+		OSD.print(F("I   "));
 		OSD.setCursor(24, 2);
 		OSD.print(F("D   "));
 		OSD.setCursor(8, 7);
@@ -164,7 +164,7 @@ void MenuLeft_PrintSite() {
 		OSD.setCursor(9, 2);
 		OSD.print(F("P   "));
 		OSD.setCursor(16, 2);
-		OSD.print(F("I    "));
+		OSD.print(F("I   "));
 		OSD.setCursor(24, 2);
 		OSD.print(F("D   "));
 		OSD.videoBackground();
@@ -390,7 +390,7 @@ void MenuLeft_Valie(bool addsub)
 			break;
 		case 7: changeval(addsub, 15, 2574, 14, &KissSettings.MaxAngle);
 			break;
-		case 8: changeval(addsub, 0, 250, 1, &KissSettings.YawFilter);
+		case 8: changeval(addsub, 0, 100, 1, &KissSettings.YawFilter);
 			break;
 		}
 		break;

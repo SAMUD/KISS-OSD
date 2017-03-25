@@ -137,6 +137,7 @@ struct SerialSettings
 	uint16_t LapTimerID;	//Lap timer transponder ID
 	uint16_t TPA[3];		//TPA-values
 	uint8_t YawFilter;		//Yaw-Filter
+	int16_t ACC_Trim[2];	//Accelerometer trimm data, Pitch and Roll
 
 
 
