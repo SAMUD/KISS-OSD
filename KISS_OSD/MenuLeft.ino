@@ -293,7 +293,6 @@ void MenuLeft_PrintValue() {
 		OSD.print(" ");
 		OSD.setCursor(24, 3);
 		OSD.print(((float)KissSettings.TPA[2]) / 1000);
-		OSD.print(" ");
 		OSD.setCursor(9, 4);
 		OSD.print(((float)KissSettings.PID_A[0]) / 1000);
 		OSD.print(" ");
@@ -302,10 +301,10 @@ void MenuLeft_PrintValue() {
 		OSD.print(" ");
 		OSD.setCursor(24, 4);
 		OSD.print(((float)KissSettings.PID_A[2]) / 1000);
-		OSD.print(" ");
 		OSD.setCursor(24, 5);
 		OSD.print(KissSettings.MaxAngle/14.3);
-		OSD.print("° ");
+		OSD.setCursor(26, 5);
+		OSD.print(" °");
 		OSD.setCursor(16, 8);
 		OSD.print(((float)KissSettings.ACC_Trim[0]) / 1000);
 		OSD.print(" ");
@@ -319,12 +318,14 @@ void MenuLeft_PrintValue() {
 		OSD.setCursor(16, 10);
 		OSD.print(KissSettings.NotchPitch.CenterfFreq);
 		OSD.print("HZ");
+		OSD.print(" ");
 		OSD.setCursor(24, 10);
 		OSD.print(KissSettings.NotchRoll.CenterfFreq);
 		OSD.print("HZ");
 		OSD.setCursor(16, 11);
 		OSD.print(KissSettings.NotchPitch.CutoffFreq);
 		OSD.print("HZ");
+		OSD.print(" ");
 		OSD.setCursor(24, 11);
 		OSD.print(KissSettings.NotchRoll.CutoffFreq);
 		OSD.print("HZ");
