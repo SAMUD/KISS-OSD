@@ -72,9 +72,9 @@
 #endif
 
 #ifdef IMPULSERC_VTX
-	#define OSD_CHIP_SELECT 10
+	#define OSD_CHIP_SELECT 10;
 #else
-	#define OSD_CHIP_SELECT 6
+	#define OSD_CHIP_SELECT 6;
 #endif
 
 
@@ -126,6 +126,7 @@ struct SerialSettings
 	uint16_t PID_I[3];		//holds the I part for all three axis
 	uint16_t PID_D[3];		//holds the D part for all three axis
 	uint16_t PID_A[3];		//PID in Level-Mode 
+	int16_t ACC_Trim[2];	//Accelerometer trimm data, Pitch and Roll
 	int16_t RC_Rate[3];		//holds the RC-Rate
 	int16_t Rate[3];		//Rate
 	int16_t RC_Curve[3];	//RC_Curve
