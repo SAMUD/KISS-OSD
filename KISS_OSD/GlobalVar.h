@@ -146,6 +146,7 @@ struct SerialSettings
 	uint8_t YawFilter;		//Yaw-Filter
 	NotchFilter NotchRoll;	//Notch-Filter on Roll
 	NotchFilter NotchPitch;	//Notch-Filter on Pitch
+	uint8_t MotorBuzzer;	//turn on or off the Motor-Buzzer
 
 
 

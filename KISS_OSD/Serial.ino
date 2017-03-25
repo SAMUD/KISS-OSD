@@ -235,6 +235,8 @@ bool getSerialData(uint8_t Mode,bool CopyBuffToSett)	//reading serial Data from 
 
 					KissSettings.CapacityAlarm = ((serialBuf[157 + STARTCOUNT] << 8) | serialBuf[158 + STARTCOUNT]);
 
+					KissSettings.MotorBuzzer = serialBuf[163 + STARTCOUNT];
+
 				}
 				
 			}
@@ -375,6 +377,9 @@ bool setSerialData()
 
 	serialBuf[STARTCOUNT + 147] = (byte)((KissSettings.CapacityAlarm& 0xFF00) >> 8);
 	serialBuf[STARTCOUNT + 148] = (byte)(KissSettings.CapacityAlarm & 0x00FF);
+
+	serialBuf[STARTCOUNT + 152] = KissSettings.MotorBuzzer;
+
 
 	//calculate Checksum
 	uint32_t checksumcalc = 0;
