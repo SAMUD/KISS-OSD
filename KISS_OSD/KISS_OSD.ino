@@ -11,7 +11,7 @@ by Samuel Daurat (sdaurat@outlook.de)
 based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
 
-#define OSDVersion "6.92"
+#define OSDVersion "6.93"
 #define DMemoryVersion 6
 //#define IMPULSERC_VTX
 //#define DEBUG

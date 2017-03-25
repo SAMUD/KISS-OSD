@@ -547,7 +547,7 @@ void value(bool addsub)
 		{
 		case 1: changeval(addsub, 0, 6, 1, &Settings.marginLastRow);
 			break;
-		case 2: changeval(addsub, 2, 20, 1, &Settings.MAGNETPOLECOUNT);
+		case 2: changeval(addsub, 4, 24, 2, &Settings.MAGNETPOLECOUNT);
 			break;
 		case 3: changeval(addsub, 0, 20, 1, &Settings.ESC_FILTER);
 			break;
