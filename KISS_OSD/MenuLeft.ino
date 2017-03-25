@@ -216,8 +216,9 @@ void MenuLeft_PrintValue() {
 		OSD.print(((float)KissSettings.PID_P[0]) / 1000);
 		OSD.print(" ");
 		OSD.setCursor(16, 3);
-		OSD.print(((float)KissSettings.PID_I[0]) / 1000);
-		OSD.print(" ");
+		ClearTempCharConverted();
+		print_int16(KissSettings.PID_I[0], TempCharConverted, 3, 1);
+		OSD.print(TempCharConverted);
 		OSD.setCursor(24, 3);
 		OSD.print(((float)KissSettings.PID_D[0]) / 1000);
 		OSD.print(" ");
@@ -225,8 +226,9 @@ void MenuLeft_PrintValue() {
 		OSD.print(((float)KissSettings.PID_P[1]) / 1000);
 		OSD.print(" ");
 		OSD.setCursor(16, 4);
-		OSD.print(((float)KissSettings.PID_I[1]) / 1000);
-		OSD.print(" ");
+		ClearTempCharConverted();
+		print_int16(KissSettings.PID_I[1], TempCharConverted, 3, 1);
+		OSD.print(TempCharConverted);
 		OSD.setCursor(24, 4);
 		OSD.print(((float)KissSettings.PID_D[1]) / 1000);
 		OSD.print(" ");
@@ -234,8 +236,9 @@ void MenuLeft_PrintValue() {
 		OSD.print(((float)KissSettings.PID_P[2]) / 1000);
 		OSD.print(" ");
 		OSD.setCursor(16, 5);
-		OSD.print(((float)KissSettings.PID_I[2]) / 1000);
-		OSD.print(" ");
+		ClearTempCharConverted();
+		print_int16(KissSettings.PID_I[2], TempCharConverted, 3, 1);
+		OSD.print(TempCharConverted);
 		OSD.setCursor(24, 5);
 		OSD.print(((float)KissSettings.PID_D[2]) / 1000);
 		OSD.print(" ");
@@ -332,19 +335,19 @@ void MenuLeft_Valie(bool addsub)
 		{
 		case 1: changeval(addsub, 50, 65000, 50, &KissSettings.PID_P[0]);
 			break;
-		case 2: changeval(addsub, 10, 65000, 10, &KissSettings.PID_I[0]);
+		case 2: changeval(addsub, 10, 65000, 1, &KissSettings.PID_I[0]);
 			break;
 		case 3: changeval(addsub, 100, 65000, 100, &KissSettings.PID_D[0]);
 			break;
 		case 4: changeval(addsub, 50, 65000, 50, &KissSettings.PID_P[1]);
 			break;
-		case 5: changeval(addsub, 10, 65000, 10, &KissSettings.PID_I[1]);
+		case 5: changeval(addsub, 10, 65000, 1, &KissSettings.PID_I[1]);
 			break;
 		case 6: changeval(addsub, 100, 65000, 100, &KissSettings.PID_D[1]);
 			break;
 		case 7: changeval(addsub, 50, 65000, 50, &KissSettings.PID_P[2]);
 			break;
-		case 8: changeval(addsub, 10, 65000, 10, &KissSettings.PID_I[2]);
+		case 8: changeval(addsub, 10, 65000, 1, &KissSettings.PID_I[2]);
 			break;
 		case 9: changeval(addsub, 100, 65000, 100, &KissSettings.PID_D[2]);
 			break;
