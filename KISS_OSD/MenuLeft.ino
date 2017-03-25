@@ -167,10 +167,6 @@ void MenuLeft_PrintSite() {
 		OSD.print(F("I    "));
 		OSD.setCursor(24, 2);
 		OSD.print(F("D   "));
-		OSD.setCursor(16, 8);
-		OSD.print(F("PITCH"));
-		OSD.setCursor(24, 8);
-		OSD.print(F("ROLL"));
 		OSD.videoBackground();
 
 		OSD.setCursor(1, 3);
@@ -179,11 +175,9 @@ void MenuLeft_PrintSite() {
 		OSD.print(F("LEVEL"));
 		OSD.setCursor(1, 6);
 		OSD.print(F("MAX ANGLE"));
-		OSD.setCursor(1, 9);
-		OSD.print(F("ACC-TRIM"));
-		OSD.setCursor(1, 10);
+		OSD.setCursor(1, 8);
 		OSD.print(F("YAW-FILTER"));
-		CursorlineMaxLeft = 10;
+		CursorlineMaxLeft = 8;
 		break;
 	case 3:
 		//PID
@@ -297,13 +291,7 @@ void MenuLeft_PrintValue() {
 		OSD.setCursor(24, 6);
 		OSD.print(KissSettings.MaxAngle/14.3);
 		OSD.print("° ");
-		OSD.setCursor(16, 9);
-		OSD.print(((float)KissSettings.ACC_Trim[0]) / 1000);
-		OSD.print(" ");
-		OSD.setCursor(24, 9);
-		OSD.print(((float)KissSettings.ACC_Trim[1]) / 1000);
-		OSD.print(" ");
-		OSD.setCursor(24, 10);
+		OSD.setCursor(24, 8);
 		OSD.print(KissSettings.YawFilter);
 		OSD.print(" ");
 		break;
@@ -399,11 +387,7 @@ void MenuLeft_Valie(bool addsub)
 			break;
 		case 7: changeval(addsub, 15, 2574, 14, &KissSettings.MaxAngle);
 			break;
-		case 8: changeval(addsub, -30000,30000, 5, &KissSettings.ACC_Trim[0]);
-			break;
-		case 9: changeval(addsub, -30000, 30000, 100, &KissSettings.ACC_Trim[1]);
-			break;
-		case 10: changeval(addsub, 0, 250, 1, &KissSettings.YawFilter);
+		case 8: changeval(addsub, 0, 250, 1, &KissSettings.YawFilter);
 			break;
 		}
 		break;
@@ -483,14 +467,10 @@ void MenuLeft_Marker(bool addMarker, uint8_t MarkerLine, uint8_t CurrentPage)
 				break;
 			}
 		}
-		else if(MarkerLine==7)
+		else if (MarkerLine == 7)
 			OSD.setCursor(23, 6);
-		else if (MarkerLine == 8)
-			OSD.setCursor(15, 9);
-		else if (MarkerLine == 9)
-			OSD.setCursor(23, 9);
 		else
-			OSD.setCursor(23, 10);
+			OSD.setCursor(23, 8);
 		break;
 	case 3:
 		//Various

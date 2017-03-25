@@ -198,9 +198,6 @@ bool getSerialData(uint8_t Mode,bool CopyBuffToSett)	//reading serial Data from 
 					KissSettings.PID_A[1] = ((serialBuf[20 + STARTCOUNT] << 8) | serialBuf[21 + STARTCOUNT]);
 					KissSettings.PID_A[2] = ((serialBuf[22 + STARTCOUNT] << 8) | serialBuf[23 + STARTCOUNT]);
 
-					KissSettings.ACC_Trim[1] = ((serialBuf[24 + STARTCOUNT] << 8) | serialBuf[25 + STARTCOUNT]);
-					KissSettings.ACC_Trim[2] = ((serialBuf[26 + STARTCOUNT] << 8) | serialBuf[27 + STARTCOUNT]);
-
 					KissSettings.RC_Rate[0] = ((serialBuf[28 + STARTCOUNT] << 8) | serialBuf[29 + STARTCOUNT]);
 					KissSettings.RC_Rate[1] = ((serialBuf[30 + STARTCOUNT] << 8) | serialBuf[31 + STARTCOUNT]);
 					KissSettings.RC_Rate[2] = ((serialBuf[32 + STARTCOUNT] << 8) | serialBuf[33 + STARTCOUNT]);
@@ -300,10 +297,7 @@ bool setSerialData()
 	serialBuf[STARTCOUNT + 21] = (byte)(KissSettings.PID_A[1] & 0x00FF);
 	serialBuf[STARTCOUNT + 22] = (byte)((KissSettings.PID_A[2] & 0xFF00) >> 8);
 	serialBuf[STARTCOUNT + 23] = (byte)(KissSettings.PID_A[2] & 0x00FF);
-	serialBuf[STARTCOUNT + 24] = (byte)((KissSettings.ACC_Trim[0] & 0xFF00) >> 8);
-	serialBuf[STARTCOUNT + 25] = (byte)(KissSettings.ACC_Trim[0] & 0x00FF);
-	serialBuf[STARTCOUNT + 26] = (byte)((KissSettings.ACC_Trim[1] & 0xFF00) >> 8);
-	serialBuf[STARTCOUNT + 27] = (byte)(KissSettings.ACC_Trim[1] & 0x00FF);
+
 	serialBuf[STARTCOUNT + 28] = (byte)((KissSettings.RC_Rate[0] & 0xFF00) >> 8);
 	serialBuf[STARTCOUNT + 29] = (byte)(KissSettings.RC_Rate[0] & 0x00FF);
 	serialBuf[STARTCOUNT + 30] = (byte)((KissSettings.RC_Rate[1] & 0xFF00) >> 8);
