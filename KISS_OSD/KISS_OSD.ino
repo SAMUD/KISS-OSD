@@ -113,6 +113,9 @@ void setup() {
   OSD.setCharEncoding(MAX7456_MAXIM);
 #endif
 
+  //init memory
+  EEPROMinit();
+
   OSD.display();							//enable OSD output
   while (!OSD.notInVSync());
   OSD.clear();
@@ -123,8 +126,7 @@ void setup() {
  
   Serial.begin(115200);
 
-  //init memory
-  EEPROMinit();
+  
 
   KissConnection = LostConnection;
 }
