@@ -11,7 +11,7 @@ by Samuel Daurat (sdaurat@outlook.de)
 based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
 
-#define OSDVersion "7RC1"
+#define OSDVersion "7RC2"
 #define DMemoryVersion 6
 //#define IMPULSERC_VTX
 //#define DEBUG
