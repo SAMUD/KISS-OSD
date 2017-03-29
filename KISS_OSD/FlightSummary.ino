@@ -79,7 +79,7 @@ void FlightSummary()
 		OSD.setCursor(10, 10);
 		OSD.print(TempCharConverted);
 		ClearTempCharConverted();
-		TempCharPosition = print_int16(KissStats.MAXmotorCurrent, TempCharConverted, 1, 1);
+		TempCharPosition = print_int16(KissStats.MAXmotorKERPM, TempCharConverted, 1, 1);
 		TempCharConverted[TempCharPosition++] = 'K';
 		TempCharConverted[TempCharPosition++] = 'R';
 		TempCharConverted[TempCharPosition++] = 'P';
