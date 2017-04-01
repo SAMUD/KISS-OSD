@@ -237,7 +237,10 @@ void MenuLeft_PrintValue() {
 		OSD.setCursor(16, 4);
 		ClearTempCharConverted();
 		print_int16(KissSettings.PID_I[1], TempCharConverted, 3, 1);
-		OSD.print(TempCharConverted);
+		OSD.print(TempCharConverted[0]);
+		OSD.print(TempCharConverted[1]);
+		OSD.print(TempCharConverted[2]);
+		OSD.print(TempCharConverted[3]);
 		OSD.setCursor(24, 4);
 		OSD.print(((float)KissSettings.PID_D[1]) / 1000);
 		DisplaySpace();
