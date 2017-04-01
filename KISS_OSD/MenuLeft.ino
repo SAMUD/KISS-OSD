@@ -84,13 +84,10 @@ void MenuLeft_Main()
 			MenuLeft_PrintValue();
 
 			//draw cursor position
-			if (CursorlineLeft != CursorlineOldLeft)
-			{
-				//there are not only normal rows here. so we need to place the cursor marker freely on the screen
-				MenuLeft_Marker(false,CursorlineOldLeft,MenuPageLeft);		//clear the marker
-				MenuLeft_Marker(true,CursorlineLeft,MenuPageLeft);			//set the new marker
-				CursorlineOldLeft = CursorlineLeft;
-			}
+			//there are not only normal rows here. so we need to place the cursor marker freely on the screen
+			MenuLeft_Marker(false, CursorlineOldLeft, MenuPageLeft);		//clear the marker
+			MenuLeft_Marker(true, CursorlineLeft, MenuPageLeft);			//set the new marker
+			CursorlineOldLeft = CursorlineLeft;
 
 			//PauseLeft (multiples of 50ms)
 			while (PauseLeft >0)
@@ -237,10 +234,7 @@ void MenuLeft_PrintValue() {
 		OSD.setCursor(16, 4);
 		ClearTempCharConverted();
 		print_int16(KissSettings.PID_I[1], TempCharConverted, 3, 1);
-		OSD.print(TempCharConverted[0]);
-		OSD.print(TempCharConverted[1]);
-		OSD.print(TempCharConverted[2]);
-		OSD.print(TempCharConverted[3]);
+		OSD.print(TempCharConverted);
 		OSD.setCursor(24, 4);
 		OSD.print(((float)KissSettings.PID_D[1]) / 1000);
 		DisplaySpace();
