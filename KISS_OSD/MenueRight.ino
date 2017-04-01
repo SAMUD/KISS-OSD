@@ -180,7 +180,7 @@ void menuprintsite() {
 	case 3:
 		//Red1
 		OSD.grayBackground();
-		OSD.print(F("SAMUD OSD - P3/7 RED MODE 1  "));
+		OSD.print(F("SAMUD OSD - P3/7 MODE 1  "));
 		OSD.setCursor(0, 14);
 		OSD.print(F(" <-ROLL-> : CHANGE VALUE     "));
 		printRED();
@@ -188,7 +188,7 @@ void menuprintsite() {
 	case 4:
 		//CapacitySite
 		OSD.grayBackground();
-		OSD.print(F("SAMUD OSD - P4/7 RED MODE 2  "));
+		OSD.print(F("SAMUD OSD - P4/7 MODE 2  "));
 		OSD.setCursor(0, 14);
 		OSD.print(F("SEE PAG6 FOR RED-CHANNEL SELE"));
 		printRED();
@@ -196,7 +196,7 @@ void menuprintsite() {
 	case 5:
 		//CapacitySite
 		OSD.grayBackground();
-		OSD.print(F("SAMUD OSD - P5/7 RED MODE 3  "));
+		OSD.print(F("SAMUD OSD - P5/7 MODE 3  "));
 		OSD.setCursor(0, 14);
 		OSD.print(F("                             "));
 		printRED();
@@ -215,7 +215,7 @@ void menuprintsite() {
 		OSD.setCursor(0, 4);
 		OSD.print(F("ESC FILTER"));
 		OSD.setCursor(0, 5);
-		OSD.print(F("RED MODE AUX CHANNEL"));
+		OSD.print(F("MODE CHANNEL"));
 		OSD.setCursor(0, 6);
 		OSD.print(F("SCREEN OFFSET ->RIGHT"));
 		OSD.setCursor(14, 7);
@@ -564,7 +564,7 @@ void value(bool addsub)
 		{
 		case 1: changeval(addsub, 0, 6, 1, &Settings.marginLastRow);
 			break;
-		case 2: changeval(addsub, 4, 28, 2, &Settings.MAGNETPOLECOUNT);
+		case 2: changeval(addsub, 2, 28, 2, &Settings.MAGNETPOLECOUNT);
 			break;
 		case 3: changeval(addsub, 0, 20, 1, &Settings.ESC_FILTER);
 			break;
