@@ -1,6 +1,5 @@
 /*
   MAX7456.cpp - MAX7456 On Screen Display Library for Arduino 
-  Copyright (c) 2013 F. Robert Honeyman.  All right reserved.
   
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -17,6 +16,7 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
   
   Version 1.0 - 2013.01.31 - by F. Robert Honeyman <www.coldcoredesign.com>
+  Version 1.1 - 2017.03.19 - by Samuel Daurat      <github.com/SAMUD>
 */
 
 
@@ -348,7 +348,7 @@
   // operate at more than 1MHz, but less than 10MHz.
   bool MAX7456::begin() 
   {
-    return begin( NULL, NULL );                 // Default to Actionsafe NTSC.
+    return begin( 0, 0, 0, NULL );                 // Default to Actionsafe NTSC.
   }
   bool MAX7456::begin( 
                     uint8_t    cols, 
@@ -986,11 +986,11 @@
   uint8_t MAX7456::videoSystem() 
   {
     
-    if (!begun) return NULL;
+    if (!begun) return 0;
     
-    if (resetIsBusy()) return NULL;             // Reset implies default.
+    if (resetIsBusy()) return 0;             // Reset implies default.
     
-    uint8_t ubSystem = NULL;
+    uint8_t ubSystem = 0;
     uint8_t ubMask   = 0;
     uint8_t ubShift  = 0;
     
@@ -1003,7 +1003,7 @@
     {
       return MAX7456_PAL;
     }
-    return NULL;
+    return 0;
     
   }
   // end videoSystem()
@@ -1114,7 +1114,7 @@
     if (resetIsBusy()) return false;            // Reset prevents send.
     
     // Instantiate local variables:
-    uint8_t ubSystem      = NULL;
+    uint8_t ubSystem      = 0;
     int16_t iTempPixelsH  = 0;
     int16_t iTempPixelsV  = 0;
     uint8_t ubTempColumns = 0;
@@ -1129,12 +1129,12 @@
     }
     */
     ubSystem = videoSystem();
-    if (ubSystem == NULL)                       // If no valid input,
+    if (ubSystem == 0)                       // If no valid input,
     {
       ubSystem = defaultSystem;                 // default system is used.
     }
     
-    if (cols == NULL || rows == NULL)
+    if (cols == 0 || rows == 0)
     {
       if (area < 0 || area >= 4) 
       {
