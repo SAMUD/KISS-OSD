@@ -11,7 +11,7 @@ by Samuel Daurat (sdaurat@outlook.de)
 based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
 
-#define OSDVersion "7RC2"
+#define OSDVersion "7.1"
 #define DMemoryVersion 6
 //#define IMPULSERC_VTX
 //#define DEBUG
@@ -58,8 +58,6 @@ For more information, please refer to <http://unlicense.org>
 #define PAL
 //#define NTSC
 
-// Pilot-name
-const char Pilotname[] = "SAMUD";
 
 // MAX7456 Charset
 #define USE_MAX7456_ASCII

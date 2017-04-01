@@ -213,8 +213,8 @@ void DisplayOSD_Main()
 
 	if (KissStatus.reducedModeDisplay == 0 && Settings.DispPilotname1 || KissStatus.reducedModeDisplay == 1 && Settings.DispPilotname2 || KissStatus.reducedModeDisplay == 2 && Settings.DispPilotname3)
 	{
-		OSD.setCursor(10, 0);
-		OSD.print(Pilotname);
+		OSD.setCursor(9, 0);
+		OSD.print(Settings.PilotName);
 	}
 
 

@@ -86,10 +86,26 @@ void MenuRight_Main()
 			//draw cursor position
 			if (cursorline != cursorlineOLD && MenuPage != 7)
 			{
-				OSD.setCursor(22, cursorlineOLD + 1);
-				OSD.print(F(" "));
-				OSD.setCursor(22, cursorline + 1);
-				OSD.print(F(">"));
+				if (cursorline > 6 && MenuPage == 6)
+				{
+					OSD.setCursor(22, 7);
+					OSD.print(F(" "));
+					//remove old cursor
+					OSD.setCursor(10 + cursorlineOLD, 9);
+					OSD.print(F(" "));
+					//write new one
+					OSD.setCursor(10 + cursorline, 9);
+					OSD.write(SYM_CURSOR_UP);
+				}
+				else
+				{
+					OSD.setCursor(17, 9);
+					OSD.print(F(" "));
+					OSD.setCursor(22, cursorlineOLD + 1);
+					OSD.print(F(" "));
+					OSD.setCursor(22, cursorline + 1);
+					OSD.print(F(">"));
+				}
 				cursorlineOLD = cursorline;
 			}
 
@@ -204,7 +220,9 @@ void menuprintsite() {
 		OSD.print(F("SCREEN OFFSET ->RIGHT"));
 		OSD.setCursor(14, 7);
 		OSD.print(F("->DOWN"));
-		cursorlineMax = 6;
+		OSD.setCursor(0, 8);
+		OSD.print(F("NAME"));
+		cursorlineMax = 17;
 		break;
 	case 7:
 		//Info
@@ -223,6 +241,7 @@ void menuprintsite() {
 		OSD.print(F("VIDEOSYSTEM"));
 		cursorlineMax = 0;
 		break;
+
 	}
 }
 
@@ -400,6 +419,8 @@ void menuprintvalue() {
 		OSD.setCursor(23, 7);
 		OSD.print(Settings.OffsetY);
 		OSD.print(F("PX "));
+		OSD.setCursor(17, 8);
+		OSD.print(Settings.PilotName);
 		break;
 	case 7:
 		//Info
@@ -556,6 +577,8 @@ void value(bool addsub)
 			OSD.setTextOffset(Settings.OffsetX, Settings.OffsetY);
 			break;
 		}
+		if (cursorline > 6)
+			changeChar(addsub, cursorline - 7);
 		break;
 	case 7:
 		//Info
@@ -717,4 +740,13 @@ void MenuAll_Exit(uint8_t GetSettings)
 	else
 		EEPROMsave();
 
+}
+
+void changeChar(bool addsub, uint8_t position)
+{
+	
+	if(addsub)
+		Settings.PilotName[position] = Settings.PilotName[position] + 1;
+	else
+		Settings.PilotName[position] = Settings.PilotName[position] - 1;
 }

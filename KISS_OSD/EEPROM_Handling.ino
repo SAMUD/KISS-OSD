@@ -68,6 +68,17 @@ void EEPROMsaveDefaultValues()
 
 	Settings.StandbyCurrent = DStandbyCurrent;
 
+	Settings.PilotName[0] = DPilotName[0];
+	Settings.PilotName[1] = DPilotName[1];
+	Settings.PilotName[2] = DPilotName[2];
+	Settings.PilotName[3] = DPilotName[3];
+	Settings.PilotName[4] = DPilotName[4];
+	Settings.PilotName[5] = DPilotName[5];
+	Settings.PilotName[6] = DPilotName[6];
+	Settings.PilotName[7] = DPilotName[7];
+	Settings.PilotName[8] = Settings.PilotName[9] = Settings.PilotName[10] = Settings.PilotName[11] = DPilotName[8];
+
+
 	Settings.stockSettings = 0;
 
 	EEPROMsave();

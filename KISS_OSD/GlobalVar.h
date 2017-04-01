@@ -49,7 +49,7 @@
 // motors magnepole count						//*
 #define DMAGNETPOLECOUNT 14 // 2 for ERPMs		//*
 // Filter for ESC datas							//*
-#define DESC_FILTER 10							//*
+#define DESC_FILTER 2							//*
 // reduced mode channel config					//*
 #define DRED_MODE_AUX_CHAN 4 // 0-4, 0 = none	//*
 //stock offset									//*
@@ -57,6 +57,7 @@
 #define DOffsetY 0								//*
 //stock current									//*
 #define DStandbyCurrent 1000					//*
+#define DPilotName "SAMUDOSD "					//*
 //*************************************************
 
 #define STARTCOUNT		2
@@ -243,6 +244,7 @@ struct StoreStruct {				//saving all the OSD-Settings
 	int8_t OffsetY;
 	int8_t OffsetX;
 	uint16_t StandbyCurrent;
+	char PilotName[12];
 } static Settings;
 
 

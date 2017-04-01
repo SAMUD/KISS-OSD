@@ -212,6 +212,7 @@
 
 //Misc
 #define SYM_COLON 0X2D
+#define SYM_CURSOR_UP 0x5E
 
 //sport
 #define SYM_MIN 0xB3
