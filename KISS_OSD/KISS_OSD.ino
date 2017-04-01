@@ -12,7 +12,7 @@ based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
 
 #define OSDVersion "7.1"
-#define DMemoryVersion 6
+#define DMemoryVersion 7
 //#define IMPULSERC_VTX
 //#define DEBUG
 /*
