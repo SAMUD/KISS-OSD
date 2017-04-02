@@ -11,8 +11,8 @@ by Samuel Daurat (sdaurat@outlook.de)
 based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
 
-#define OSDVersion "7.1"
-#define DMemoryVersion 7
+#define OSDVersion "7.2"
+#define DMemoryVersion 8
 //#define IMPULSERC_VTX
 //#define DEBUG
 /*
@@ -93,8 +93,11 @@ void setup() {
   SPI.begin();
   SPI.setClockDivider(SPI_CLOCK_DIV2);
 
+  //init memory
+  EEPROMinit();
+
 #if defined(PAL)
-  OSD.begin(28, 15, 0);
+  OSD.begin(28, 14+Settings.Pal, 0);
   OSD.setDefaultSystem(MAX7456_PAL);
 #endif
 #if defined(NTSC)
@@ -111,8 +114,7 @@ void setup() {
   OSD.setCharEncoding(MAX7456_MAXIM);
 #endif
 
-  //init memory
-  EEPROMinit();
+  
 
   OSD.display();							//enable OSD output
   while (!OSD.notInVSync());

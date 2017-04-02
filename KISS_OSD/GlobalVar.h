@@ -58,6 +58,7 @@
 //stock current									//*
 #define DStandbyCurrent 1000					//*
 #define DPilotName "SAMUDOSD "					//*
+#define DPAL 1									//*
 //*************************************************
 
 #define STARTCOUNT		2
@@ -245,6 +246,7 @@ struct StoreStruct {				//saving all the OSD-Settings
 	int8_t OffsetX;
 	uint16_t StandbyCurrent;
 	char PilotName[12];
+	uint8_t Pal;
 } static Settings;
 
 

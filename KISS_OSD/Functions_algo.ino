@@ -189,6 +189,12 @@ void WaitForKissFc()
 	OSD.print(F("ENJOY YOUR FLIGHT"));
 	OSD.setCursor(1, 14);
 	OSD.print(F("NO ANSWER FROM KISS FC "));
+
+	//We need to reboot the serial connection, because sometimes it gets stuck.
+	Serial.end();
+	delay(750);
+	Serial.begin(115200);
+	delay(250);
 }
 
 

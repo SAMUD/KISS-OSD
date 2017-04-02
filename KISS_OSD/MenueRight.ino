@@ -86,20 +86,20 @@ void MenuRight_Main()
 			//draw cursor position
 			if (cursorline != cursorlineOLD && MenuPage != 7)
 			{
-				if (cursorline > 6 && MenuPage == 6)
+				if (cursorline > 7 && MenuPage == 6)
 				{
-					OSD.setCursor(22, 7);
+					OSD.setCursor(22, 8);
 					OSD.print(F(" "));
 					//remove old cursor
-					OSD.setCursor(10 + cursorlineOLD, 9);
+					OSD.setCursor(9 + cursorlineOLD, 10);
 					OSD.print(F(" "));
 					//write new one
-					OSD.setCursor(10 + cursorline, 9);
+					OSD.setCursor(9 + cursorline, 10);
 					OSD.write(SYM_CURSOR_UP);
 				}
 				else
 				{
-					OSD.setCursor(17, 9);
+					OSD.setCursor(17, 10);
 					OSD.print(F(" "));
 					OSD.setCursor(22, cursorlineOLD + 1);
 					OSD.print(F(" "));
@@ -139,7 +139,7 @@ void menuprintsite() {
 		//VoltageSite
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P1/7 VOLTAGE     "));
-		OSD.setCursor(0, 14);
+		OSD.setCursor(0, -1);
 		OSD.print(F(" <-YAW-> : PAGE / EXIT       "));
 		OSD.videoBackground();
 		OSD.setCursor(0, 2);
@@ -158,7 +158,7 @@ void menuprintsite() {
 		//CapacitySite
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P2/7 CAPACITY    "));
-		OSD.setCursor(0, 14);
+		OSD.setCursor(0, -1);
 		OSD.print(F(" <-PITCH-> : MOVE UP/DOWN    "));
 		OSD.videoBackground();
 		OSD.setCursor(0, 2);
@@ -180,24 +180,24 @@ void menuprintsite() {
 	case 3:
 		//Red1
 		OSD.grayBackground();
-		OSD.print(F("SAMUD OSD - P3/7 MODE 1  "));
-		OSD.setCursor(0, 14);
+		OSD.print(F("SAMUD OSD - P3/7 DISP MODE 1 "));
+		OSD.setCursor(0, -1);
 		OSD.print(F(" <-ROLL-> : CHANGE VALUE     "));
 		printRED();
 		break;
 	case 4:
 		//CapacitySite
 		OSD.grayBackground();
-		OSD.print(F("SAMUD OSD - P4/7 MODE 2  "));
-		OSD.setCursor(0, 14);
+		OSD.print(F("SAMUD OSD - P4/7 DISP MODE 2 "));
+		OSD.setCursor(0, -1);
 		OSD.print(F("SEE PAG6 FOR RED-CHANNEL SELE"));
 		printRED();
 		break;
 	case 5:
 		//CapacitySite
 		OSD.grayBackground();
-		OSD.print(F("SAMUD OSD - P5/7 MODE 3  "));
-		OSD.setCursor(0, 14);
+		OSD.print(F("SAMUD OSD - P5/7 DISP MODE 3 "));
+		OSD.setCursor(0, -1);
 		OSD.print(F("                             "));
 		printRED();
 		break;
@@ -205,7 +205,7 @@ void menuprintsite() {
 		//Other Settings
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P6/7 VARIOUS    "));
-		OSD.setCursor(0, 14);
+		OSD.setCursor(0, -1);
 		OSD.print(F("                             "));
 		OSD.videoBackground();
 		OSD.setCursor(0, 2);
@@ -217,18 +217,20 @@ void menuprintsite() {
 		OSD.setCursor(0, 5);
 		OSD.print(F("MODE CHANNEL"));
 		OSD.setCursor(0, 6);
-		OSD.print(F("SCREEN OFFSET ->RIGHT"));
+		OSD.print(F("SCREEN OFFSET VER"));
 		OSD.setCursor(14, 7);
-		OSD.print(F("->DOWN"));
+		OSD.print(F("HOR"));
 		OSD.setCursor(0, 8);
+		OSD.print(F("ALT MODE"));
+		OSD.setCursor(0, 9);
 		OSD.print(F("NAME"));
-		cursorlineMax = 17;
+		cursorlineMax = 18;
 		break;
 	case 7:
 		//Info
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P7/7 INFO       "));
-		OSD.setCursor(0, 14);
+		OSD.setCursor(0, -1);
 		OSD.print(F("                             "));
 		OSD.videoBackground();
 		OSD.setCursor(0, 2);
@@ -419,7 +421,9 @@ void menuprintvalue() {
 		OSD.setCursor(23, 7);
 		OSD.print(Settings.OffsetY);
 		OSD.print(F("PX "));
-		OSD.setCursor(17, 8);
+		OSD.setCursor(23, 8);
+		OSD.print(Settings.Pal);
+		OSD.setCursor(17, 9);
 		OSD.print(Settings.PilotName);
 		break;
 	case 7:
@@ -570,15 +574,17 @@ void value(bool addsub)
 			break;
 		case 4: changeval(addsub, 0, 4, 1, &Settings.RED_MODE_AUX_CHANNEL);
 			break;
-		case 5: changeval(addsub, -10, 10, 1, &Settings.OffsetX);
+		case 5: changeval(addsub, MAX7456_VOS_MIN, MAX7456_VOS_MAX, 1, &Settings.OffsetX);
 			OSD.setTextOffset(Settings.OffsetX, Settings.OffsetY);
 			break;
-		case 6: changeval(addsub, -10, 10, 1, &Settings.OffsetY);
+		case 6: changeval(addsub, MAX7456_HOS_MIN, MAX7456_HOS_MAX, 1, &Settings.OffsetY);
 			OSD.setTextOffset(Settings.OffsetX, Settings.OffsetY);
+			break;
+		case 7: changeval(addsub, 0, 1, 1, &Settings.Pal);
 			break;
 		}
-		if (cursorline > 6)
-			changeChar(addsub, cursorline - 7);
+		if (cursorline > 7)
+			changeChar(addsub, cursorline - 8);
 		break;
 	case 7:
 		//Info

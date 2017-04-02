@@ -119,7 +119,7 @@ void MenuLeft_PrintSite() {
 		//PID
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P1/3 PID        "));
-		OSD.setCursor(0, 14);
+		OSD.setCursor(0, -1);
 		OSD.print(F(" <-YAW-> : PAGE / EXIT      "));
 		OSD.setCursor(9, 2);
 		OSD.print(F("P   "));
@@ -153,7 +153,7 @@ void MenuLeft_PrintSite() {
 		//PID
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P2/3 LEVEL+TPA  "));
-		OSD.setCursor(0, 14);
+		OSD.setCursor(0, -1);
 		OSD.print(F(" <-PITCH-> : MOVE UP/DOWN   "));
 		OSD.setCursor(9, 2);
 		OSD.print(F("P   "));
@@ -189,7 +189,7 @@ void MenuLeft_PrintSite() {
 		//PID
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P3/3 VARIOUS    "));
-		OSD.setCursor(0, 14);
+		OSD.setCursor(0, -1);
 		OSD.print(F("EXIT = SAVING SETTINGS      "));
 		OSD.setCursor(9, 2);
 		OSD.print(F("RED"));
