@@ -210,7 +210,13 @@ void MenuLeft_PrintSite() {
 		OSD.print(F("MAH ALARM"));
 		OSD.setCursor(0, 7);
 		OSD.print(F("LAP TRANSPONDER ID"));
-		CursorlineMaxLeft = 6;
+		OSD.setCursor(0, 9);
+		OSD.print(F("VTX CHANNEL"));
+		OSD.setCursor(1, 10);
+		OSD.print(F("LOW  POWER MW"));
+		OSD.setCursor(1, 11);
+		OSD.print(F("HIGH POWER MW"));
+		CursorlineMaxLeft = 9;
 		break;
 	}
 }
@@ -353,6 +359,15 @@ void MenuLeft_PrintValue() {
 		OSD.setCursor(23, 7);
 		OSD.print(KissSettings.LapTimerID);
 		DisplaySpace();
+		OSD.setCursor(23, 9);
+		OSD.print(KissSettings.VTXChannel);
+		DisplaySpace();
+		OSD.setCursor(23, 10);
+		OSD.print(KissSettings.VTXLowPower);
+		DisplaySpace();
+		OSD.setCursor(23, 11);
+		OSD.print(KissSettings.VTXHighPower);
+		DisplaySpace();
 		break;
 	}
 }
@@ -457,6 +472,12 @@ void MenuLeft_Valie(bool addsub)
 		case 5: changeval(addsub, 10, 65000, 10, &KissSettings.CapacityAlarm);
 			break;
 		case 6: changeval(addsub, 0, 63, 1, &KissSettings.LapTimerID);
+			break;
+		case 7: changeval(addsub, 5645, 5945, 1, &KissSettings.VTXChannel); //TODO: not sure if this will work like this. Perhaps the Lookup table is needed
+			break;
+		case 8: changeval(addsub, 25, 800, 5, &KissSettings.VTXLowPower);
+			break;
+		case 9: changeval(addsub, 25, 800, 5, &KissSettings.VTXHighPower);
 			break;
 		}
 		break;

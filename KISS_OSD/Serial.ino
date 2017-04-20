@@ -380,6 +380,8 @@ bool setSerialData()
 
 	serialBuf[STARTCOUNT + 152] = KissSettings.MotorBuzzer;
 
+	// TODO: add here VTX Power and channel
+
 
 	//calculate Checksum
 	uint32_t checksumcalc = 0;

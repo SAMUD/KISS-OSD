@@ -35,7 +35,7 @@
 #define RED3_DISPLAY_TIMER 1					//*
 #define RED3_DISPLAY_ANGLE 1					//*
 //margin left and right for the last line.		//*
-#define DmarginLastRow  4;						//*
+#define DmarginLastRow  0;						//*
 //Voltage Settings								//*
 #define DLowVoltage1st 350;						//*
 #define DLowVoltage2nd  320;					//*
@@ -149,6 +149,15 @@ struct SerialSettings
 	NotchFilter NotchRoll;	//Notch-Filter on Roll
 	NotchFilter NotchPitch;	//Notch-Filter on Pitch
 	uint8_t MotorBuzzer;	//turn on or off the Motor-Buzzer
+	uint16_t VTXChannel;
+	uint16_t VTXLowPower;
+	uint16_t VTXHighPower;
+	uint16_t VTXPowerLookup[4] = { 25,250,500,800 };
+	uint16_t VTXChannelLookup[49] = { 0,5865,5845,5825,5805,5785,5765,5745,5725,0, //channel A
+									  0,5733,5752,5771,5790,5809,5828,5847,5866,0, //channel B
+									  0,5705,5685,5665,5645,5885,5905,5925,5945,0, //channel E
+									  0,5740,5760,5780,5800,5820,5840,5860,5880,0, //channel IRC/FS
+									  0,5658,5695,5732,5769,5806,5843,5880,5917 }; //RaceBand
 
 
 
