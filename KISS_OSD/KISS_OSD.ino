@@ -98,11 +98,14 @@ void setup() {
 #if defined(PAL)
   OSD.begin(28, 14+Settings.Pal, 0);
   OSD.setDefaultSystem(MAX7456_PAL);
+#define DVideoModeOffset 0
 #endif
 #if defined(NTSC)
   OSD.begin(MAX7456_COLS_N1, 13 + Settings.Pal);
   OSD.setDefaultSystem(MAX7456_NTSC);
+  #define DVideoModeOffset 1
 #endif
+
 
  OSD.setSwitchingTime(0);					//lower value will make text a little bit sharper
 

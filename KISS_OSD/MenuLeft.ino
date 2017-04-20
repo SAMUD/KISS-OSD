@@ -122,7 +122,7 @@ void MenuLeft_PrintSite() {
 		//PID
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P1/3 PID        "));
-		OSD.setCursor(0, -1);
+		OSD.setCursor(0, -1 - DVideoModeOffset);
 		OSD.print(F(" <-YAW-> : PAGE / EXIT      "));
 		OSD.setCursor(9, 2);
 		OSD.print(F("P   "));
@@ -156,35 +156,35 @@ void MenuLeft_PrintSite() {
 		//PID
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P2/3 LEVEL+TPA  "));
-		OSD.setCursor(0, -1);
+		OSD.setCursor(0, -1 - DVideoModeOffset);
 		OSD.print(F(" <-PITCH-> : MOVE UP/DOWN   "));
-		OSD.setCursor(9, 2);
+		OSD.setCursor(9, 2 - DVideoModeOffset);
 		OSD.print(F("P   "));
-		OSD.setCursor(16, 2);
+		OSD.setCursor(16, 2 - DVideoModeOffset);
 		OSD.print(F("I   "));
-		OSD.setCursor(24, 2);
+		OSD.setCursor(24, 2 - DVideoModeOffset);
 		OSD.print(F("D   "));
-		OSD.setCursor(16, 7);
+		OSD.setCursor(16, 7 - DVideoModeOffset);
 		OSD.print(F("PITCH"));
-		OSD.setCursor(24, 7);
+		OSD.setCursor(24, 7 - DVideoModeOffset);
 		OSD.print(F("ROLL"));
 		OSD.videoBackground();
 
-		OSD.setCursor(0, 3);
+		OSD.setCursor(0, 3 - DVideoModeOffset);
 		OSD.print(F("TPA"));
-		OSD.setCursor(0, 4);
+		OSD.setCursor(0, 4 - DVideoModeOffset);
 		OSD.print(F("LEVEL"));
-		OSD.setCursor(1, 5);
+		OSD.setCursor(1, 5 - DVideoModeOffset);
 		OSD.print(F("MAX ANGLE"));
-		OSD.setCursor(0, 8);
+		OSD.setCursor(0, 8 - DVideoModeOffset);
 		OSD.print(F("ACC-TRIM"));
-		OSD.setCursor(0, 9);
+		OSD.setCursor(0, 9 - DVideoModeOffset);
 		OSD.print(F("NOTCH FILTER"));
-		OSD.setCursor(1, 10);
+		OSD.setCursor(1, 10 - DVideoModeOffset);
 		OSD.print(F("CENTER FREQ"));
-		OSD.setCursor(1, 11);
+		OSD.setCursor(1, 11 - DVideoModeOffset);
 		OSD.print(F("CUTOFF FREQ"));
-		OSD.setCursor(0, 12);
+		OSD.setCursor(0, 12 - DVideoModeOffset);
 		OSD.print(F("YAW-FILTER"));
 		CursorlineMaxLeft = 16;
 		break;
@@ -192,7 +192,7 @@ void MenuLeft_PrintSite() {
 		//PID
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P3/3 VARIOUS    "));
-		OSD.setCursor(0, -1);
+		OSD.setCursor(0, -1 - DVideoModeOffset);
 		OSD.print(F("EXIT = SAVING SETTINGS      "));
 		OSD.setCursor(9, 2);
 		OSD.print(F("RED"));
@@ -288,51 +288,51 @@ void MenuLeft_PrintValue() {
 		break;
 	case 2:
 		//PID
-		OSD.setCursor(9, 3);
+		OSD.setCursor(9, 3 - DVideoModeOffset);
 		OSD.print(((float)KissSettings.TPA[0]) / 1000);
 		DisplaySpace();
-		OSD.setCursor(16, 3);
+		OSD.setCursor(16, 3 - DVideoModeOffset);
 		OSD.print(((float)KissSettings.TPA[1]) / 1000);
 		DisplaySpace();
-		OSD.setCursor(24, 3);
+		OSD.setCursor(24, 3 - DVideoModeOffset);
 		OSD.print(((float)KissSettings.TPA[2]) / 1000);
-		OSD.setCursor(9, 4);
+		OSD.setCursor(9, 4 - DVideoModeOffset);
 		OSD.print(((float)KissSettings.PID_A[0]) / 1000);
 		DisplaySpace();
-		OSD.setCursor(16, 4);
+		OSD.setCursor(16, 4 - DVideoModeOffset);
 		OSD.print(((float)KissSettings.PID_A[1]) / 1000);
 		DisplaySpace();
-		OSD.setCursor(24, 4);
+		OSD.setCursor(24, 4 - DVideoModeOffset);
 		OSD.print(((float)KissSettings.PID_A[2]) / 1000);
-		OSD.setCursor(24, 5);
+		OSD.setCursor(24, 5 - DVideoModeOffset);
 		OSD.print(KissSettings.MaxAngle/14.3);
-		OSD.setCursor(26, 5);
+		OSD.setCursor(26, 5 - DVideoModeOffset);
 		OSD.print(" °");
-		OSD.setCursor(16, 8);
+		OSD.setCursor(16, 8 - DVideoModeOffset);
 		OSD.print(((float)KissSettings.ACC_Trim[0]) / 1000);
 		DisplaySpace();
-		OSD.setCursor(24, 8);
+		OSD.setCursor(24, 8 - DVideoModeOffset);
 		OSD.print(((float)KissSettings.ACC_Trim[1]) / 1000);
 		DisplaySpace();
-		OSD.setCursor(16, 9);
+		OSD.setCursor(16, 9 - DVideoModeOffset);
 		showONOFF(KissSettings.NotchPitch.Enabled);
-		OSD.setCursor(24, 9);
+		OSD.setCursor(24, 9 - DVideoModeOffset);
 		showONOFF(KissSettings.NotchRoll.Enabled);
-		OSD.setCursor(16, 10);
+		OSD.setCursor(16, 10 - DVideoModeOffset);
 		OSD.print(KissSettings.NotchPitch.CenterfFreq);
 		OSD.print("HZ");
 		DisplaySpace();
-		OSD.setCursor(24, 10);
+		OSD.setCursor(24, 10 - DVideoModeOffset);
 		OSD.print(KissSettings.NotchRoll.CenterfFreq);
 		OSD.print("HZ");
-		OSD.setCursor(16, 11);
+		OSD.setCursor(16, 11 - DVideoModeOffset);
 		OSD.print(KissSettings.NotchPitch.CutoffFreq);
 		OSD.print("HZ");
 		DisplaySpace();
-		OSD.setCursor(24, 11);
+		OSD.setCursor(24, 11 - DVideoModeOffset);
 		OSD.print(KissSettings.NotchRoll.CutoffFreq);
 		OSD.print("HZ");
-		OSD.setCursor(24, 12);
+		OSD.setCursor(24, 12 - DVideoModeOffset);
 		OSD.print(KissSettings.YawFilter);
 		DisplaySpace();
 		break;
@@ -524,18 +524,18 @@ void MenuLeft_Marker(bool addMarker, uint8_t MarkerLine, uint8_t CurrentPage)
 			switch (MarkerLine)
 			{
 			case 1:
-				OSD.setCursor(8, 3 + i);
+				OSD.setCursor(8, 3 + i - DVideoModeOffset);
 				break;
 			case 2:
-				OSD.setCursor(15, 3 + i);
+				OSD.setCursor(15, 3 + i - DVideoModeOffset);
 				break;
 			case 3:
-				OSD.setCursor(23, 3 + i);
+				OSD.setCursor(23, 3 + i - DVideoModeOffset);
 				break;
 			}
 		}
 		else if (MarkerLine == 7)
-			OSD.setCursor(23, 5);
+			OSD.setCursor(23, 5 - DVideoModeOffset);
 		else if (MarkerLine < 16)
 		{
 			if (MarkerLine > 13)
@@ -548,15 +548,15 @@ void MenuLeft_Marker(bool addMarker, uint8_t MarkerLine, uint8_t CurrentPage)
 			switch (MarkerLine - 7)
 			{
 			case 1:
-				OSD.setCursor(15, 8 + i);
+				OSD.setCursor(15, 8 + i - DVideoModeOffset);
 				break;
 			case 2:
-				OSD.setCursor(23, 8 + i);
+				OSD.setCursor(23, 8 + i - DVideoModeOffset);
 				break;
 			}
 		}
 		else
-			OSD.setCursor(23, 12);
+			OSD.setCursor(23, 12 - DVideoModeOffset);
 		break;
 	case 3:
 		//Various

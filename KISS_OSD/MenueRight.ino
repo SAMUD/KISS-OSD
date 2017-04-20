@@ -139,7 +139,7 @@ void menuprintsite() {
 		//VoltageSite
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P1/7 VOLTAGE     "));
-		OSD.setCursor(0, -1);
+		OSD.setCursor(0, -1 - DVideoModeOffset);
 		OSD.print(F(" <-YAW-> : PAGE / EXIT       "));
 		OSD.videoBackground();
 		OSD.setCursor(0, 2);
@@ -158,7 +158,7 @@ void menuprintsite() {
 		//CapacitySite
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P2/7 CAPACITY    "));
-		OSD.setCursor(0, -1);
+		OSD.setCursor(0, -1 - DVideoModeOffset);
 		OSD.print(F(" <-PITCH-> : MOVE UP/DOWN    "));
 		OSD.videoBackground();
 		OSD.setCursor(0, 2);
@@ -181,7 +181,7 @@ void menuprintsite() {
 		//Red1
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P3/7 DISP MODE 1 "));
-		OSD.setCursor(0, -1);
+		OSD.setCursor(0, -1 - DVideoModeOffset);
 		OSD.print(F(" <-ROLL-> : CHANGE VALUE     "));
 		printRED();
 		break;
@@ -189,7 +189,7 @@ void menuprintsite() {
 		//CapacitySite
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P4/7 DISP MODE 2 "));
-		OSD.setCursor(0, -1);
+		OSD.setCursor(0, -1 - DVideoModeOffset);
 		OSD.print(F("SEE PAG6 FOR RED-CHANNEL SELE"));
 		printRED();
 		break;
@@ -197,7 +197,7 @@ void menuprintsite() {
 		//CapacitySite
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P5/7 DISP MODE 3 "));
-		OSD.setCursor(0, -1);
+		OSD.setCursor(0, -1 - DVideoModeOffset);
 		OSD.print(F("                             "));
 		printRED();
 		break;
@@ -205,7 +205,7 @@ void menuprintsite() {
 		//Other Settings
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P6/7 VARIOUS    "));
-		OSD.setCursor(0, -1);
+		OSD.setCursor(0, -1 - DVideoModeOffset);
 		OSD.print(F("                             "));
 		OSD.videoBackground();
 		OSD.setCursor(0, 2);
@@ -230,7 +230,7 @@ void menuprintsite() {
 		//Info
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P7/7 INFO       "));
-		OSD.setCursor(0, -1);
+		OSD.setCursor(0, -1 - DVideoModeOffset);
 		OSD.print(F("                             "));
 		OSD.videoBackground();
 		OSD.setCursor(0, 2);
