@@ -17,8 +17,6 @@ static uint8_t PauseLeft = 0; //makes a PauseLeft of multiples of 50ms
 void MenuLeft_Main()
 {
 	boolean exitmenu = false;
-	/*if (Menuall_start(GET_SETTINGS) ==false )
-		return;*/
 	Menuall_start(GET_SETTINGS);
 	while (!exitmenu && KissTelemetrie.armed == 0)
 	{
@@ -100,7 +98,12 @@ void MenuLeft_Main()
 		//wdt_reset();
 	}
 
-	MenuAll_Exit(GET_SETTINGS);
+	if(KissTelemetrie.armed ==0)
+		//this is a normal exit. Saving settings
+		MenuAll_Exit(GET_SETTINGS);
+	else
+		//wxiting because copter was armed. No saving allowed
+		MenuAll_Exit(GET_TELEMETRY);
 
 }
 

@@ -260,7 +260,7 @@ bool getSerialData(uint8_t Mode,bool CopyBuffToSett)	//reading serial Data from 
 
 bool setSerialData()
 {
-	//Clear OSd and show a saving message
+	//Clear OSD and show a saving message
 	OSD.clear();
 	while (OSD.clearIsBusy());
 	OSD.home();
