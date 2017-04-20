@@ -67,7 +67,7 @@ void DisplayOSD_Main()
 				OSD.print(F("    LIPO VOLTAGE    "));
 			}
 		}
-		OSD.setCursor(Settings.marginLastRow, -1);
+		OSD.setCursor(Settings.marginLastRow, 11);
 		OSD.write(SYM_MAIN_BATT);
 		ClearTempCharConverted();
 		print_int16(KissTelemetrie.LipoVoltage, TempCharConverted, 2, 1);
@@ -78,7 +78,7 @@ void DisplayOSD_Main()
 
 	if (KissStatus.reducedModeDisplay == 0 && Settings.DispTimer1 || KissStatus.reducedModeDisplay == 1 && Settings.DispTimer2 || KissStatus.reducedModeDisplay == 2 && Settings.DispTimer3)
 	{
-		OSD.setCursor(12, -1);
+		OSD.setCursor(12, 12);
 		ClearTempCharConverted();
 		print_time(KissStatus.time, TempCharConverted);
 		OSD.write(SYM_FLY_M);
@@ -99,7 +99,7 @@ void DisplayOSD_Main()
 		}
 		ClearTempCharConverted();
 		TempCharPosition = print_int16(KissTelemetrie.LipoMAH, TempCharConverted, 0, 1);
-		OSD.setCursor(-(TempCharPosition + 1 + Settings.marginLastRow), -1);
+		OSD.setCursor(-(TempCharPosition + 1 + Settings.marginLastRow), 13);
 		OSD.write(SYM_MAH);
 		OSD.print(TempCharConverted);
 		OSD.noBlink();

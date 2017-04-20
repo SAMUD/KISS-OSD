@@ -54,8 +54,8 @@ For more information, please refer to <http://unlicense.org>
 
 
 //video system
-#define PAL
-//#define NTSC
+//#define PAL
+#define NTSC
 
 
 // MAX7456 Charset
@@ -100,11 +100,11 @@ void setup() {
   OSD.setDefaultSystem(MAX7456_PAL);
 #endif
 #if defined(NTSC)
-  OSD.begin(MAX7456_COLS_N1, MAX7456_ROWS_N0);
+  OSD.begin(MAX7456_COLS_N1, 13 + Settings.Pal);
   OSD.setDefaultSystem(MAX7456_NTSC);
 #endif
 
-  OSD.setSwitchingTime(0);					//lower value will make text a little bit sharper
+ OSD.setSwitchingTime(0);					//lower value will make text a little bit sharper
 
 #if defined(USE_MAX7456_ASCII)
   OSD.setCharEncoding(MAX7456_ASCII);
@@ -112,6 +112,8 @@ void setup() {
 #if defined(USE_MAX7456_MAXIM)
   OSD.setCharEncoding(MAX7456_MAXIM);
 #endif
+
+ 
 
   
 
