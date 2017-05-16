@@ -67,7 +67,7 @@ void DisplayOSD_Main()
 				OSD.print(F("    LIPO VOLTAGE    "));
 			}
 		}
-		OSD.setCursor(Settings.marginLastRow, -1 - DVideoModeOffset);
+		OSD.setCursor(Settings.marginLastRow, -1 - KissStatus.VideoModeOffset);
 		OSD.write(SYM_MAIN_BATT);
 		ClearTempCharConverted();
 		print_int16(KissTelemetrie.LipoVoltage, TempCharConverted, 2, 1);
@@ -78,7 +78,7 @@ void DisplayOSD_Main()
 
 	if (KissStatus.reducedModeDisplay == 0 && Settings.DispTimer1 || KissStatus.reducedModeDisplay == 1 && Settings.DispTimer2 || KissStatus.reducedModeDisplay == 2 && Settings.DispTimer3)
 	{
-		OSD.setCursor(12, -1 - DVideoModeOffset);
+		OSD.setCursor(12, -1 - KissStatus.VideoModeOffset);
 		ClearTempCharConverted();
 		print_time(KissStatus.time, TempCharConverted);
 		OSD.write(SYM_FLY_M);
@@ -99,7 +99,7 @@ void DisplayOSD_Main()
 		}
 		ClearTempCharConverted();
 		TempCharPosition = print_int16(KissTelemetrie.LipoMAH, TempCharConverted, 0, 1);
-		OSD.setCursor(-(TempCharPosition + 1 + Settings.marginLastRow), -1 - DVideoModeOffset);
+		OSD.setCursor(-(TempCharPosition + 1 + Settings.marginLastRow), -1 - KissStatus.VideoModeOffset);
 		OSD.write(SYM_MAH);
 		OSD.print(TempCharConverted);
 		OSD.noBlink();
@@ -124,12 +124,12 @@ void DisplayOSD_Main()
 		//print motor 4
 		ClearTempCharConverted();
 		TempCharPosition = print_int16(KissTelemetrie.motorKERPM[3], TempCharConverted, 1, 1);
-		OSD.setCursor(0, -(1 + ESCmarginBot) - DVideoModeOffset);
+		OSD.setCursor(0, -(1 + ESCmarginBot) - KissStatus.VideoModeOffset);
 		OSD.print(TempCharConverted);
 
 		//print motor 3
 		TempCharPosition = print_int16(KissTelemetrie.motorKERPM[2], TempCharConverted, 1, 1);
-		OSD.setCursor(-TempCharPosition, -(1 + ESCmarginBot) - DVideoModeOffset);
+		OSD.setCursor(-TempCharPosition, -(1 + ESCmarginBot) - KissStatus.VideoModeOffset);
 		OSD.print(TempCharConverted);
 		ClearTempCharConverted();
 
@@ -157,14 +157,14 @@ void DisplayOSD_Main()
 		ClearTempCharConverted();
 		TempCharPosition = print_int16(KissTelemetrie.motorCurrent[3], TempCharConverted, 2, 1);
 		TempCharConverted[TempCharPosition++] = 'A';
-		OSD.setCursor(0, -(1 + CurrentMargin + ESCmarginBot) - DVideoModeOffset);
+		OSD.setCursor(0, -(1 + CurrentMargin + ESCmarginBot) - KissStatus.VideoModeOffset);
 		OSD.print(TempCharConverted);
 
 		//current3
 		ClearTempCharConverted();
 		TempCharPosition = print_int16(KissTelemetrie.motorCurrent[2], TempCharConverted, 2, 1);
 		TempCharConverted[TempCharPosition++] = 'A';
-		OSD.setCursor(-TempCharPosition, -(1 + CurrentMargin + ESCmarginBot) - DVideoModeOffset);
+		OSD.setCursor(-TempCharPosition, -(1 + CurrentMargin + ESCmarginBot) - KissStatus.VideoModeOffset);
 		OSD.print(TempCharConverted);
 
 		TMPmargin++;
@@ -191,7 +191,7 @@ void DisplayOSD_Main()
 		ClearTempCharConverted();
 		TempCharPosition = print_int16(KissTelemetrie.ESCTemps[3], TempCharConverted, 0, 1);
 		TempCharConverted[TempCharPosition++] = SYM_TEMP_C;
-		OSD.setCursor(0, -(1 + TMPmargin + ESCmarginBot) - DVideoModeOffset);
+		OSD.setCursor(0, -(1 + TMPmargin + ESCmarginBot) - KissStatus.VideoModeOffset);
 		TempCharConverted[7] = '  ';
 		OSD.print(TempCharConverted);
 
@@ -199,7 +199,7 @@ void DisplayOSD_Main()
 		ClearTempCharConverted();
 		TempCharPosition = print_int16(KissTelemetrie.ESCTemps[2], TempCharConverted, 0, 1);
 		TempCharConverted[TempCharPosition++] = SYM_TEMP_C;
-		OSD.setCursor(-TempCharPosition, -(1 + TMPmargin + ESCmarginBot) - DVideoModeOffset);
+		OSD.setCursor(-TempCharPosition, -(1 + TMPmargin + ESCmarginBot) - KissStatus.VideoModeOffset);
 		TempCharConverted[7] = '  ';
 		OSD.print(TempCharConverted);
 
@@ -319,4 +319,44 @@ void DisplayOSD_Main()
 void DisplaySpace()
 {
 	OSD.print(F(" "));
+}
+
+void DisplayVTXChannel()
+{
+	/*Channel A from 0 to 7
+	Channel B from 8 to 15
+	Channel E from 16 to 23
+	FatShark  from 24 to 31
+	Race      from 32 to 39*/
+
+	if (KissSettings.VTXChannel < 8)
+	{
+		OSD.print(F("A"));
+		OSD.print(KissSettings.VTXChannel+1);
+	}
+		
+	else if (KissSettings.VTXChannel < 16)
+	{
+		OSD.print(F("B"));
+		OSD.print(KissSettings.VTXChannel - 7);
+	}
+	else if (KissSettings.VTXChannel < 24)
+	{
+		OSD.print(F("E"));
+		OSD.print(KissSettings.VTXChannel - 15);
+	}
+	else if (KissSettings.VTXChannel < 32)
+	{
+		OSD.print(F("FS"));
+		OSD.print(KissSettings.VTXChannel - 23);
+	}
+	else
+	{
+		OSD.print(F("RACE"));
+		OSD.print(KissSettings.VTXChannel - 31);
+	}
+
+	DisplaySpace();
+	DisplaySpace();
+
 }

@@ -78,7 +78,8 @@ void EEPROMsaveDefaultValues()
 	Settings.PilotName[7] = DPilotName[7];
 	Settings.PilotName[8] = Settings.PilotName[9] = Settings.PilotName[10] = Settings.PilotName[11] = DPilotName[8];
 
-	Settings.Pal = DPAL;
+	Settings.LineAddition = DLineAddition;
+	Settings.VideoMode = DVideoSystem;
 
 	Settings.stockSettings = 0;
 

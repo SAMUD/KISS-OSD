@@ -237,6 +237,11 @@ bool getSerialData(uint8_t Mode,bool CopyBuffToSett)	//reading serial Data from 
 
 					KissSettings.MotorBuzzer = serialBuf[163 + STARTCOUNT];
 
+					//Get VTX Settings
+					KissSettings.VTXChannel = serialBuf[120 + STARTCOUNT];
+					KissSettings.VTXLowPower = ((serialBuf[150 + STARTCOUNT] << 8) | serialBuf[151 + STARTCOUNT]);
+					KissSettings.VTXHighPower = ((serialBuf[152 + STARTCOUNT] << 8) | serialBuf[153 + STARTCOUNT]);
+
 				}
 				
 			}
@@ -380,7 +385,12 @@ bool setSerialData()
 
 	serialBuf[STARTCOUNT + 152] = KissSettings.MotorBuzzer;
 
-	// TODO: add here VTX Power and channel
+	//set VTX settings
+	serialBuf[STARTCOUNT + 110] = KissSettings.VTXChannel;
+	serialBuf[STARTCOUNT + 140] = (byte)((KissSettings.VTXLowPower & 0xFF00) >> 8);
+	serialBuf[STARTCOUNT + 141] = (byte)(KissSettings.VTXLowPower & 0x00FF);
+	serialBuf[STARTCOUNT + 142] = (byte)((KissSettings.VTXHighPower & 0xFF00) >> 8);
+	serialBuf[STARTCOUNT + 143] = (byte)(KissSettings.VTXHighPower & 0x00FF);
 
 
 	//calculate Checksum

@@ -139,7 +139,7 @@ void menuprintsite() {
 		//VoltageSite
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P1/7 VOLTAGE     "));
-		OSD.setCursor(0, -1 - DVideoModeOffset);
+		OSD.setCursor(0, -1 - KissStatus.VideoModeOffset);
 		OSD.print(F(" <-YAW-> : PAGE / EXIT       "));
 		OSD.videoBackground();
 		OSD.setCursor(0, 2);
@@ -158,7 +158,7 @@ void menuprintsite() {
 		//CapacitySite
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P2/7 CAPACITY    "));
-		OSD.setCursor(0, -1 - DVideoModeOffset);
+		OSD.setCursor(0, -1 - KissStatus.VideoModeOffset);
 		OSD.print(F(" <-PITCH-> : MOVE UP/DOWN    "));
 		OSD.videoBackground();
 		OSD.setCursor(0, 2);
@@ -181,7 +181,7 @@ void menuprintsite() {
 		//Red1
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P3/7 DISP MODE 1 "));
-		OSD.setCursor(0, -1 - DVideoModeOffset);
+		OSD.setCursor(0, -1 - KissStatus.VideoModeOffset);
 		OSD.print(F(" <-ROLL-> : CHANGE VALUE     "));
 		printRED();
 		break;
@@ -189,7 +189,7 @@ void menuprintsite() {
 		//CapacitySite
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P4/7 DISP MODE 2 "));
-		OSD.setCursor(0, -1 - DVideoModeOffset);
+		OSD.setCursor(0, -1 - KissStatus.VideoModeOffset);
 		OSD.print(F("SEE PAG6 FOR RED-CHANNEL SELE"));
 		printRED();
 		break;
@@ -197,7 +197,7 @@ void menuprintsite() {
 		//CapacitySite
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P5/7 DISP MODE 3 "));
-		OSD.setCursor(0, -1 - DVideoModeOffset);
+		OSD.setCursor(0, -1 - KissStatus.VideoModeOffset);
 		OSD.print(F("                             "));
 		printRED();
 		break;
@@ -205,7 +205,7 @@ void menuprintsite() {
 		//Other Settings
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P6/7 VARIOUS    "));
-		OSD.setCursor(0, -1 - DVideoModeOffset);
+		OSD.setCursor(0, -1 - KissStatus.VideoModeOffset);
 		OSD.print(F("                             "));
 		OSD.videoBackground();
 		OSD.setCursor(0, 2);
@@ -230,7 +230,7 @@ void menuprintsite() {
 		//Info
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P7/7 INFO       "));
-		OSD.setCursor(0, -1 - DVideoModeOffset);
+		OSD.setCursor(0, -1 - KissStatus.VideoModeOffset);
 		OSD.print(F("                             "));
 		OSD.videoBackground();
 		OSD.setCursor(0, 2);
@@ -240,7 +240,9 @@ void menuprintsite() {
 		OSD.setCursor(0, 4);
 		OSD.print(F("MEMORY VERSION"));
 		OSD.setCursor(0, 5);
-		OSD.print(F("VIDEOSYSTEM"));
+		OSD.print(F("CURR VIDEOSYSTEM"));
+		OSD.setCursor(1, 6);
+		OSD.print(F("SAVED"));
 		cursorlineMax = 0;
 		break;
 
@@ -422,7 +424,7 @@ void menuprintvalue() {
 		OSD.print(Settings.OffsetY);
 		OSD.print(F("PX "));
 		OSD.setCursor(23, 8);
-		OSD.print(Settings.Pal);
+		OSD.print(Settings.LineAddition);
 		OSD.setCursor(17, 9);
 		OSD.print(Settings.PilotName);
 		break;
@@ -439,6 +441,13 @@ void menuprintvalue() {
 			OSD.print(F("PAL"));
 		else if (OSD.videoSystem() == 2)
 			OSD.print(F("NTSC"));
+		OSD.setCursor(23, 6);
+		if (Settings.VideoMode == 1)
+			OSD.print(F("PAL"));
+		else if (OSD.videoSystem() == 2)
+			OSD.print(F("NTSC"));
+		else
+			OSD.print(F("ERR"));
 		break;
 	}
 }
@@ -580,7 +589,7 @@ void value(bool addsub)
 		case 6: changeval(addsub, MAX7456_HOS_MIN, MAX7456_HOS_MAX, 1, &Settings.OffsetY);
 			OSD.setTextOffset(Settings.OffsetX, Settings.OffsetY);
 			break;
-		case 7: changeval(addsub, 0, 1, 1, &Settings.Pal);
+		case 7: changeval(addsub, 0, 1, 1, &Settings.LineAddition);
 			break;
 		}
 		if (cursorline > 7)

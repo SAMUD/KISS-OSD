@@ -11,8 +11,8 @@ by Samuel Daurat (sdaurat@outlook.de)
 based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
 
-#define OSDVersion "7.2"
-#define DMemoryVersion 8
+#define OSDVersion "7.2RC1"
+#define DMemoryVersion 10
 //#define DEBUG
 /*
 ***************************************************************************************************************************************************
@@ -54,8 +54,8 @@ For more information, please refer to <http://unlicense.org>
 
 
 //video system
-//#define PAL
-#define NTSC
+#define PAL
+//#define NTSC
 
 
 // MAX7456 Charset
@@ -95,16 +95,19 @@ void setup() {
   //init memory
   EEPROMinit();
 
-#if defined(PAL)
-  OSD.begin(28, 14+Settings.Pal, 0);
-  OSD.setDefaultSystem(MAX7456_PAL);
-#define DVideoModeOffset 0
-#endif
-#if defined(NTSC)
-  OSD.begin(MAX7456_COLS_N1, 13 + Settings.Pal);
-  OSD.setDefaultSystem(MAX7456_NTSC);
-  #define DVideoModeOffset 1
-#endif
+  if (Settings.VideoMode == 1)
+  {
+	  OSD.begin(28, 14 + Settings.LineAddition, 0);
+	  OSD.setDefaultSystem(MAX7456_PAL);
+	  KissStatus.VideoModeOffset = 0;
+  } 
+  else
+  {
+	  OSD.begin(MAX7456_COLS_N1, 13 + Settings.LineAddition);
+	  OSD.setDefaultSystem(MAX7456_NTSC);
+	  KissStatus.VideoModeOffset = 1;
+  }
+  
 
 
  OSD.setSwitchingTime(0);					//lower value will make text a little bit sharper
@@ -131,6 +134,10 @@ void setup() {
   Serial.begin(115200);
 
   
+  if (OSD.videoSystem() == 2)
+	  Settings.VideoMode = 2;	//Setting to NTSC
+  else
+	  Settings.VideoMode = 1; //Setting to PAL
 
   KissConnection = LostConnection;
 }

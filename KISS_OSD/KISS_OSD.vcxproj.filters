@@ -29,5 +29,14 @@
     <ClInclude Include="__vm\.KISS_OSD.vsarduino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Libraries\MAX7456\MAX7456.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\EEPROMEx\EEPROMVar.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\EEPROMEx\EEPROMex.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
