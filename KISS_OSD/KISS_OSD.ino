@@ -11,7 +11,7 @@ by Samuel Daurat (sdaurat@outlook.de)
 based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
 
-#define OSDVersion "7.2RC1"
+#define OSDVersion "7.3"
 #define DMemoryVersion 10
 //#define DEBUG
 /*
