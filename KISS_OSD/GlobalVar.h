@@ -56,7 +56,6 @@
 #define DOffsetX 0								//*
 #define DOffsetY 0								//*
 //stock current									//*
-#define DStandbyCurrent 1000					//*
 #define DPilotName "SAMUDOSD "					//*
 #define DLineAddition 1							//*
 #define DVideoSystem 1
@@ -67,7 +66,7 @@
 #ifdef DEBUG
 	#define TIMEOUT_FOR_SUMMARY_SEC 1
 #else
-	#define TIMEOUT_FOR_SUMMARY_SEC 3
+	#define TIMEOUT_FOR_SUMMARY_SEC 30
 #endif // DEBUG
 
 #ifdef IMPULSERC_VTX
@@ -105,7 +104,6 @@ struct SerialData						//saving Telemetrie-Data
 {
 	uint16_t current = 0;
 	uint16_t LipoMAH = 0;
-	float standbyCurrentTotal = 0;
 	int16_t	 LipoVoltage = 0;
 	
 	uint16_t motorKERPM[4] = { 0,0,0,0 };
@@ -257,7 +255,7 @@ struct StoreStruct {				//saving all the OSD-Settings
 	uint8_t stockSettings;
 	int8_t OffsetY;
 	int8_t OffsetX;
-	uint16_t StandbyCurrent;
+	uint16_t StandbyCurrent;	//TODO: remove this the next time when changing something in the memory
 	char PilotName[12];
 	uint8_t LineAddition;
 	uint8_t VideoMode;

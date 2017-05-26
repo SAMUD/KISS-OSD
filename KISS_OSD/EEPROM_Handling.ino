@@ -66,8 +66,6 @@ void EEPROMsaveDefaultValues()
 	Settings.OffsetX = DOffsetX;
 	Settings.OffsetY = DOffsetY;
 
-	Settings.StandbyCurrent = DStandbyCurrent;
-
 	Settings.PilotName[0] = DPilotName[0];
 	Settings.PilotName[1] = DPilotName[1];
 	Settings.PilotName[2] = DPilotName[2];

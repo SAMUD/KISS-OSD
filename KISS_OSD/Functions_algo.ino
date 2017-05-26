@@ -124,14 +124,8 @@ void CalculateOSD()
 		KissStatus.time = millis() - KissStatus.start_time + KissStatus.total_time;		//this is the value I will use to display
 	KissStatus.armedOld = KissTelemetrie.armed;
 
-	//Settings.StandbyCurrent is @5V so Settings.StandbyCurrent*5V=mW
-	//mW/CurrentVoltage=Current at actual Voltage
-	//KissTelemetrie.standbyCurrentTotal += (((Settings.StandbyCurrent * 5) / KissTelemetrie.LipoVoltage) / 36000000.0) * (2 * (micros() - KissStatus.LastLoopTime));
-	//KissTelemetrie.LipoMAH += KissTelemetrie.standbyCurrentTotal;
-
 	//total current
 	KissTelemetrie.current = (KissTelemetrie.motorCurrent[0] + KissTelemetrie.motorCurrent[1] + KissTelemetrie.motorCurrent[2] + KissTelemetrie.motorCurrent[3])/10;
-	//KissTelemetrie.current += (((Settings.StandbyCurrent * 5) / KissTelemetrie.LipoVoltage) / 100);
 }
 
 void drawAngelIndicator(int8_t Value)

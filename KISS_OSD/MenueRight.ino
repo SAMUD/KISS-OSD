@@ -167,15 +167,11 @@ void menuprintsite() {
 		OSD.print(F("1ST WARN AT % USED"));
 		OSD.setCursor(0, 4);
 		OSD.print(F("2ND WARN AT % USED"));
-		OSD.setCursor(0, 5);
-		OSD.print(F("STB CURRENT @5V"));
-		OSD.setCursor(0, 7);
+		OSD.setCursor(0, 6);
 		OSD.print(F("1ST WARN AT MAH USED"));
-		OSD.setCursor(0, 8);
+		OSD.setCursor(0, 7);
 		OSD.print(F("2ND WARN AT MAH USED"));
-		OSD.setCursor(0, 9);
-		OSD.print(F("STB CURRENT FROM BAT"));
-		cursorlineMax = 4;
+		cursorlineMax = 3;
 		break;
 	case 3:
 		//Red1
@@ -287,22 +283,14 @@ void menuprintvalue() {
 		OSD.setCursor(23, 4);
 		OSD.print(Settings.Capacity2nd);
 		DisplaySpace();
-		OSD.setCursor(23, 5);
-		ClearTempCharConverted();
-		TempCharPosition = print_int16(Settings.StandbyCurrent/10, TempCharConverted, 2, 1);
-		TempCharConverted[TempCharPosition++] = 'A';
-		OSD.print(TempCharConverted);
-		OSD.setCursor(23, 7);
+		OSD.setCursor(23, 6);
 		OSD.print((Settings.Capacity * (float)Settings.Capacity1st)/100);
 		DisplaySpace();
 		//OSD.write(SYM_MAH);
-		OSD.setCursor(23, 8);
+		OSD.setCursor(23, 7);
 		OSD.print((Settings.Capacity * (float)Settings.Capacity2nd) / 100);
 		//OSD.write(SYM_MAH);
 		DisplaySpace();
-		OSD.setCursor(23, 9);
-		OSD.print((Settings.StandbyCurrent * 5) / KissTelemetrie.LipoVoltage);
-		OSD.print("MA ");
 		break;
 	case 3:
 		//RED1
@@ -490,7 +478,6 @@ void value(bool addsub)
 			if (Settings.Capacity2nd < Settings.Capacity1st)
 				Settings.Capacity1st = Settings.Capacity2nd;
 			break;
-		case 4: changeval(addsub, 0, 9999, 10, &Settings.StandbyCurrent);
 		}
 		break;
 	case 3:
