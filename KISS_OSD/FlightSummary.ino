@@ -17,75 +17,97 @@ void FlightSummary()
 
 		//Current
 		OSD.setCursor(0, 2);
-		OSD.print(F("MAX CURRENT:"));
+		OSD.print(F("MAX CURRENT"));
 		ClearTempCharConverted();
 		TempCharPosition = print_int16(KissStats.MaxCurrentTotal, TempCharConverted, 1, 1);
-		TempCharConverted[TempCharPosition++] = 'A';
-		OSD.setCursor(-TempCharPosition, 2);
+		OSD.setCursor(-TempCharPosition-1, 2);
 		OSD.print(TempCharConverted);
+		OSD.setCursor(-1, 2);
+		OSD.write(SYM_AMP);
+
+		//Average Current
+		float TempCurrent = 0;
+		TempCurrent = KissTelemetrie.LipoMAH*36.0;
+		TempCurrent = TempCurrent / (KissStatus.time/1000);
+
+		OSD.setCursor(1, 3);
+		OSD.print(F("AVG"));
+		ClearTempCharConverted();
+		TempCharPosition = print_int16((int16_t)TempCurrent, TempCharConverted, 1, 1);
+		OSD.setCursor(-TempCharPosition-1, 3);
+		OSD.print(TempCharConverted);
+		OSD.setCursor(-1, 3);
+		OSD.write(SYM_AMP);
 
 		//Voltage
-		OSD.setCursor(0, 3);
-		OSD.print(F("MIN VOLTAGE:"));
+		OSD.setCursor(0, 4);
+		OSD.print(F("MIN VOLTAGE"));
 		ClearTempCharConverted();
 		TempCharPosition = print_int16(KissStats.MinVoltage / KissStatus.BatteryCells, TempCharConverted, 2, 1);
-		TempCharConverted[TempCharPosition++] = 'V';
-		OSD.setCursor(-TempCharPosition, 3);
+		OSD.setCursor(-TempCharPosition-1, 4);
 		OSD.print(TempCharConverted);
+		OSD.setCursor(-1, 4);
+		OSD.write(SYM_VOLT);
 
 		//Power
-		OSD.setCursor(0, 4);
-		OSD.print(F("MAX POWER:"));
+		OSD.setCursor(0, 5);
+		OSD.print(F("MAX POWER"));
 		ClearTempCharConverted();
 		TempCharPosition = print_int16(KissStats.MAXWatt, TempCharConverted, 1, 1);
-		TempCharConverted[TempCharPosition++] = 'W';
-		OSD.setCursor(-TempCharPosition, 4);
+		OSD.setCursor(-TempCharPosition-1, 5);
 		OSD.print(TempCharConverted);
+		OSD.setCursor(-1, 5);
+		OSD.write(SYM_WATT);
 
 		//Consumption
-		OSD.setCursor(0, 5);
-		OSD.print(F("CONSUMPTION:"));
+		OSD.setCursor(0, 6);
+		OSD.print(F("CONSUMPTION"));
 		ClearTempCharConverted();
 		TempCharPosition = print_int16(KissTelemetrie.LipoMAH, TempCharConverted, 0, 1);
-		TempCharConverted[TempCharPosition++] = 'M';
-		TempCharConverted[TempCharPosition++] = 'A';
-		TempCharConverted[TempCharPosition++] = 'H';
-		OSD.setCursor(-TempCharPosition, 5);
+		OSD.setCursor(-TempCharPosition-1, 6);
 		OSD.print(TempCharConverted);
+		OSD.setCursor(-1, 6);
+		OSD.write(SYM_MAH);
 
 		//Flight Time
-		OSD.setCursor(0, 6);
-		OSD.print(F("FLIGHT TIME:"));
-		OSD.setCursor(-2, 5);
-		OSD.print(F("00"));
+		OSD.setCursor(0, 7);
+		OSD.print(F("FLIGHT TIME"));
 		ClearTempCharConverted();
-		OSD.setCursor(24, 6);
+		OSD.setCursor(23, 7);
 		print_time(KissStatus.time, TempCharConverted);
 		OSD.print(TempCharConverted);
+		OSD.setCursor(-1, 7);
+		OSD.write(SYM_FLY_M);
 
 		//ESC Data
 		OSD.setCursor(0, 9);
 		OSD.grayBackground();
 		OSD.print(F("ESC DATA - MAX VALUES       "));
 		OSD.videoBackground();
-		ClearTempCharConverted();
-		TempCharPosition = print_int16(KissStats.MAXESCTemp, TempCharConverted, 0, 1);
-		TempCharConverted[TempCharPosition++] = SYM_TEMP_C;
-		OSD.setCursor(0, 10);
-		OSD.print(TempCharConverted);
-		ClearTempCharConverted();
-		TempCharPosition = print_int16(KissStats.MAXmotorCurrent, TempCharConverted, 2, 1);
-		TempCharConverted[TempCharPosition++] = 'A';
-		OSD.setCursor(10, 10);
-		OSD.print(TempCharConverted);
-		ClearTempCharConverted();
-		TempCharPosition = print_int16(KissStats.MAXmotorKERPM, TempCharConverted, 1, 1);
-		TempCharConverted[TempCharPosition++] = 'K';
-		TempCharConverted[TempCharPosition++] = 'R';
-		TempCharConverted[TempCharPosition++] = 'P';
-		TempCharConverted[TempCharPosition++] = 'M';
-		OSD.setCursor(-TempCharPosition, 10);
-		OSD.print(TempCharConverted);
+
+		for (uint8_t increment = 0; increment < 4; increment++)
+		{
+			ClearTempCharConverted();
+			TempCharPosition = print_int16(KissStats.MAXESCTemp[increment], TempCharConverted, 0, 1);
+			TempCharConverted[TempCharPosition++] = SYM_TEMP_C;
+			OSD.setCursor(0, 10+ increment);
+			OSD.print(TempCharConverted);
+
+			ClearTempCharConverted();
+			TempCharPosition = print_int16(KissStats.MAXmotorCurrent[increment], TempCharConverted, 2, 0);
+			TempCharConverted[TempCharPosition++] = SYM_AMP;
+			OSD.setCursor(7, 10+ increment);
+			OSD.print(TempCharConverted);
+
+			ClearTempCharConverted();
+			TempCharPosition = print_int16(KissStats.MAXmotorKERPM[increment], TempCharConverted, 1, 1);
+			TempCharConverted[TempCharPosition++] = 'K';
+			TempCharConverted[TempCharPosition++] = 'R';
+			TempCharConverted[TempCharPosition++] = 'P';
+			TempCharConverted[TempCharPosition++] = 'M';
+			OSD.setCursor(-TempCharPosition, 10+ increment);
+			OSD.print(TempCharConverted);
+		}
 
 		KissStatus.lastMode = 4;
 	}
@@ -97,12 +119,16 @@ void FlightSummaryCalculate()
 	KissStats.MaxCurrentTotal  = FlightSummaryMax(KissStats.MaxCurrentTotal, KissTelemetrie.current);
 	KissStats.MinVoltage = FlightSummaryMin(KissStats.MinVoltage, KissTelemetrie.LipoVoltage);
 	KissStats.MAXWatt = FlightSummaryMax(KissStats.MAXWatt, (KissTelemetrie.current*(KissTelemetrie.LipoVoltage / 10))/10);
-	KissStats.MAXESCTemp = FlightSummaryMaxArr(KissStats.MAXESCTemp, KissTelemetrie.ESCTemps, 4);
-	KissStats.MAXmotorCurrent = FlightSummaryMaxArr(KissStats.MAXmotorCurrent, KissTelemetrie.motorCurrent, 4);
-	KissStats.MAXmotorKERPM = FlightSummaryMaxArr(KissStats.MAXmotorKERPM, KissTelemetrie.motorKERPM, 4);
+
+	for (i = 0; i < 4; i++)
+	{
+		KissStats.MAXESCTemp[i] = FlightSummaryMax(KissStats.MAXESCTemp[i], KissTelemetrie.ESCTemps[i]);
+		KissStats.MAXmotorCurrent[i] = FlightSummaryMax(KissStats.MAXmotorCurrent[i], KissTelemetrie.motorCurrent[i]);
+		KissStats.MAXmotorKERPM[i] = FlightSummaryMax(KissStats.MAXmotorKERPM[i], KissTelemetrie.motorKERPM[i]);
+	}
 }
 
-uint16_t FlightSummaryMaxArr(uint16_t maxV, uint16_t *values, uint8_t length)
+/*uint16_t FlightSummaryMaxArr(uint16_t maxV, uint16_t *values, uint8_t length)
 {
 	for (uint8_t i = 0; i < length; i++)
 	{
@@ -112,7 +138,7 @@ uint16_t FlightSummaryMaxArr(uint16_t maxV, uint16_t *values, uint8_t length)
 		}
 	}
 	return maxV;
-}
+}*/
 
 int16_t FlightSummaryMax(int16_t maxV, int16_t newVal)
 {

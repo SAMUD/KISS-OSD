@@ -126,12 +126,12 @@ void CalculateOSD()
 
 	//Settings.StandbyCurrent is @5V so Settings.StandbyCurrent*5V=mW
 	//mW/CurrentVoltage=Current at actual Voltage
-	KissTelemetrie.standbyCurrentTotal += (((Settings.StandbyCurrent * 5) / KissTelemetrie.LipoVoltage) / 36000000.0) * (2 * (micros() - KissStatus.LastLoopTime));
+	//KissTelemetrie.standbyCurrentTotal += (((Settings.StandbyCurrent * 5) / KissTelemetrie.LipoVoltage) / 36000000.0) * (2 * (micros() - KissStatus.LastLoopTime));
 	//KissTelemetrie.LipoMAH += KissTelemetrie.standbyCurrentTotal;
 
 	//total current
-	KissTelemetrie.current = (uint16_t)(KissTelemetrie.motorCurrent[0] + KissTelemetrie.motorCurrent[1] + KissTelemetrie.motorCurrent[2] + KissTelemetrie.motorCurrent[3]) / 10;
-	KissTelemetrie.current += (((Settings.StandbyCurrent * 5) / KissTelemetrie.LipoVoltage) / 100);
+	KissTelemetrie.current = (KissTelemetrie.motorCurrent[0] + KissTelemetrie.motorCurrent[1] + KissTelemetrie.motorCurrent[2] + KissTelemetrie.motorCurrent[3])/10;
+	//KissTelemetrie.current += (((Settings.StandbyCurrent * 5) / KissTelemetrie.LipoVoltage) / 100);
 }
 
 void drawAngelIndicator(int8_t Value)

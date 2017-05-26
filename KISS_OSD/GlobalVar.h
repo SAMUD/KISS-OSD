@@ -67,7 +67,7 @@
 #ifdef DEBUG
 	#define TIMEOUT_FOR_SUMMARY_SEC 1
 #else
-	#define TIMEOUT_FOR_SUMMARY_SEC 30
+	#define TIMEOUT_FOR_SUMMARY_SEC 3
 #endif // DEBUG
 
 #ifdef IMPULSERC_VTX
@@ -201,10 +201,11 @@ struct Stats
 {
 	uint16_t MaxCurrentTotal = 0;
 	int16_t  MinVoltage = 32767;
-	uint16_t MAXmotorKERPM = 0;
-	uint16_t MAXmotorCurrent = 0;
-	uint16_t MAXESCTemp =  0;
 	uint16_t MAXWatt = 0;
+
+	uint16_t MAXmotorKERPM[4] = { 0,0,0,0 };
+	uint16_t MAXmotorCurrent[4] = { 0,0,0,0 };
+	uint16_t MAXESCTemp[4] = { 0,0,0,0 };
 } static KissStats;
 
 //saving actual status-thing relatet to the current session
