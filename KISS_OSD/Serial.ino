@@ -50,7 +50,13 @@ bool getSerialData(uint8_t Mode,bool CopyBuffToSett)	//reading serial Data from 
 
 		//Check for transmission length
 		if (recBytes == 2)
+		{
 			minBytes = serialBuf[1] + STARTCOUNT + 1; // got the transmission length
+			//small error check
+			if (minBytes < 150 || minBytes>180)
+				minBytes = 63;
+		}
+			
 			
 		
 
@@ -157,7 +163,7 @@ bool getSerialData(uint8_t Mode,bool CopyBuffToSett)	//reading serial Data from 
 				KissTelemetrie.StickChanVals[3] = ((serialBuf[6 + STARTCOUNT] << 8) | serialBuf[7 + STARTCOUNT]);
 				
 			}
-			else if(/*checksum == serialBuf[recBytes - 1] &&*/ Mode==GET_SETTINGS) 
+			else if(Mode==GET_SETTINGS && kissProtocolCRC8(serialBuf, STARTCOUNT, minBytes-1) == serialBuf[recBytes - 1])
 			{
 				#ifdef DEBUG
 				OSD.setCursor(0, 10);
@@ -394,39 +400,73 @@ bool setSerialData()
 
 
 	//calculate Checksum
-	uint32_t checksumcalc = 0;
-	for (i = 2; i<KissSettings.minBytesSettings; i++)
-		checksumcalc += serialBuf[i];
-
-	checksumcalc = (uint32_t)(checksumcalc / (KissSettings.minBytesSettings-3));
-	serialBuf[KissSettings.minBytesSettings - 1] = floor(checksumcalc);
-
-	//Alternative Mode:
-	/*for (i = 0; i<KissSettings.minBytesSettings; i++)
-	{
-		Serial.write(serialBuf[i]);
-		//Serial.flush();
-		//delay(1);
-	}*/
+	//new method
+	serialBuf[KissSettings.minBytesSettings - 1] = kissProtocolCRC8(serialBuf, STARTCOUNT, KissSettings.minBytesSettings - 1);
 
 	i = 0;
 	uint8_t serialBuf2[10] = { 0 };
 
 	Serial.write(SET_SETTINGS);
-	delay(2);
+	//delay(2);
 
-	Serial.write(serialBuf, sizeof(serialBuf));
-	Serial.flush();
-	delay(50);
+	//Alternative Mode:
+	for (i = 0; i<KissSettings.minBytesSettings; i++)
+	{
+	Serial.write(serialBuf[i]);
+	//Serial.flush();
+	//delay(1);
+	}
 
-	while (Serial.available() && i<10)
+	/*Serial.write(serialBuf, sizeof(serialBuf));
+	Serial.flush();*/
+	/*delay(50);
+
+	/*while (Serial.available() && i<10)
 	{
 		serialBuf2[i] = Serial.read();
 		i++;
-	}
+	}*/
 
-	if (serialBuf2[0] == 5 && serialBuf2[1] == 1 && serialBuf2[2] == 06 && serialBuf2[3] == 06)
+	
+
+	/*OSD.setCursor(0, 0);
+	OSD.print(serialBuf2[0]);
+	OSD.setCursor(0, 1);
+	OSD.print(serialBuf2[1]);
+	OSD.setCursor(0, 2);
+	OSD.print(serialBuf2[2]);
+	OSD.setCursor(0, 3);
+	OSD.print(serialBuf2[3]);
+	OSD.setCursor(0, 4);
+	OSD.print(serialBuf[KissSettings.minBytesSettings - 1]);
+
+	while (1)
+	{
+	}*/
+
+	/*if (serialBuf2[0] == 5 && serialBuf2[1] == 1 && serialBuf2[2] == 6)
 		return true;
 	else
-		return false;
+		return false;*/
+
+	return true;
+}
+
+
+//new CRC-Method for the Kiss FC
+uint8_t kissProtocolCRC8(const uint8_t *data, uint8_t startIndex, uint8_t stopIndex)
+{
+	uint8_t crc = 0;
+	for (i = startIndex; i < stopIndex; i++)
+	{
+		crc ^= data[i];
+		for (uint8_t j = 0; j < 8; j++)
+		{
+			if ((crc & 0x80) != 0)
+				crc = (uint8_t)((crc << 1) ^ 0xD5);
+			else
+				crc <<= 1;
+		}
+	}
+	return crc;
 }

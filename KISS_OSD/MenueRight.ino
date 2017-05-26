@@ -717,6 +717,46 @@ bool Menuall_start(uint8_t GetSettings)
 	while (OSD.clearIsBusy());
 }
 
+/*void MenuAll_Exit(uint8_t GetSettings)
+{
+	MenuPage = 1;
+	MenuPageLeft = 1;
+	OldMenuPage = 0;
+	OldMenuPageLeft = 0;
+	KissTelemetrie.StickChanVals[3] = 0;
+	KissStatus.lastMode = 5;
+	OSD.clear();
+	if (GetSettings == GET_SETTINGS)
+	{
+		KissStatus.SavingSettingsRetry = 10;
+		while (setSerialData() == false && KissStatus.SavingSettingsRetry > 0)
+		{
+			KissStatus.SavingSettingsRetry--;
+			delay(750);
+			Serial.end();
+			delay(750);
+			Serial.begin(115200);
+			delay(750);
+		}
+		if(KissStatus.SavingSettingsRetry<1)
+			OSD.print(F("FAILED"));
+		else
+			OSD.print(F("OK"));
+
+		DisplaySpace();
+		OSD.print(KissStatus.SavingSettingsRetry);
+			
+		//We need to reboot the serial connection, because sometimes it gets stuck here.
+		Serial.end();
+		delay(750);	
+		Serial.begin(115200);
+		delay(250);
+	}
+	else
+		EEPROMsave();
+
+}*/
+
 void MenuAll_Exit(uint8_t GetSettings)
 {
 	MenuPage = 1;
@@ -735,7 +775,7 @@ void MenuAll_Exit(uint8_t GetSettings)
 
 		//We need to reboot the serial connection, because sometimes it gets stuck here.
 		Serial.end();
-		delay(750);	
+		delay(750);
 		Serial.begin(115200);
 		delay(250);
 	}

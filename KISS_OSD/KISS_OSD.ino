@@ -11,7 +11,7 @@ by Samuel Daurat (sdaurat@outlook.de)
 based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
 
-#define OSDVersion "7.3RC2"
+#define OSDVersion "7.3RC3"
 #define DMemoryVersion 10
 //#define DEBUG
 /*
@@ -95,7 +95,7 @@ void setup() {
   //init memory
   EEPROMinit();
 
-  if (Settings.VideoMode == 1)
+  /*if (Settings.VideoMode == 1)
   {
 	  OSD.begin(28, 14 + Settings.LineAddition, 0);
 	  OSD.setDefaultSystem(MAX7456_PAL);
@@ -106,7 +106,11 @@ void setup() {
 	  OSD.begin(MAX7456_COLS_N1, 13 + Settings.LineAddition);
 	  OSD.setDefaultSystem(MAX7456_NTSC);
 	  KissStatus.VideoModeOffset = 1;
-  }
+  }*/
+
+  OSD.begin(28, 14 + Settings.LineAddition, 0);
+    OSD.setDefaultSystem(MAX7456_PAL);
+    KissStatus.VideoModeOffset = 0;
   
 
 

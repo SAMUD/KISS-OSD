@@ -190,10 +190,41 @@ void WaitForKissFc()
 	Serial.begin(115200);
 	delay(250);
 }
+/*
+void ReviveOSD()
+{
+	while (OSD.resetIsBusy()) delay(100);
+	OSD.reset();
+	while (OSD.resetIsBusy()) delay(100);
+	setupMAX7456();
+	delay(2000);
+}
 
+void setupMAX7456()
+{
+	OSD.begin(settings.COLS, 13);
+#ifdef FORCE_NTSC
+	OSD.setDefaultSystem(MAX7456_NTSC);
+	settings.ROWS = 13;
+#elif defined(FORCE_PAL)
+	OSD.setDefaultSystem(MAX7456_PAL);
+	settings.ROWS = 15;
+#else
+	delay(1000);
+	checkVideoMode();
+#endif
+	OSD.setTextArea(settings.COLS, settings.ROWS);
+	OSD.setSwitchingTime(5);
+	OSD.display();
+#ifdef IMPULSERC_VTX
+	delay(100);
+	MAX7456Setup();
+#endif
+	delay(100);
+	OSD.setTextOffset(settings.m_xOffset, settings.m_yOffset);
+}
 
-
-
+*/
 
 
 

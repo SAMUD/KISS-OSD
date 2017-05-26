@@ -188,6 +188,8 @@ struct Status
 	uint32_t LastLoopTime;	
 	uint8_t VideoModeOffset = 0;		//changes from 0 or 1 depending on the current Video Mode
 
+	uint8_t SavingSettingsRetry = 10;
+
 } static KissStatus;
 
 static uint16_t i = 0;				//global variable used for different purposes like for-counters | avoiding reallocate every-time
