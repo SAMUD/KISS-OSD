@@ -12,7 +12,7 @@ void FlightSummary()
 
 		OSD.home();
 		OSD.grayBackground();
-		OSD.print(F("SAMUD OSD - FLIGHT STATISTIC "));
+		OSD.print(F("SAMUD OSD - FLIGHT STATS     "));
 		OSD.videoBackground();
 
 		//Current
