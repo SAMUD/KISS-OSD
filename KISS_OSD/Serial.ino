@@ -404,27 +404,24 @@ bool setSerialData()
 	serialBuf[KissSettings.minBytesSettings - 1] = kissProtocolCRC8(serialBuf, STARTCOUNT, KissSettings.minBytesSettings - 1);
 
 	i = 0;
-	uint8_t serialBuf2[10] = { 0 };
+	uint8_t serialBuf2[5] = { 0 };
 
 	Serial.write(SET_SETTINGS);
 	//delay(2);
 
 	//Alternative Mode:
 	for (i = 0; i<KissSettings.minBytesSettings; i++)
-	{
 		Serial.write(serialBuf[i]);
-		//Serial.flush();
-		//delay(1);
-	}
 
 	/*Serial.write(serialBuf, sizeof(serialBuf));
 	Serial.flush();*/
+
 	/*delay(50);
-	/*while (Serial.available() && i<10)
+	while (Serial.available() && i<5)
 	{
-	serialBuf2[i] = Serial.read();
-	i++;
-	}*/
+		serialBuf2[i] = Serial.read();
+		i++;
+	}
 
 
 
@@ -443,9 +440,25 @@ bool setSerialData()
 	}*/
 
 	/*if (serialBuf2[0] == 5 && serialBuf2[1] == 1 && serialBuf2[2] == 6)
-	return true;
+		return true;
 	else
-	return false;*/
+	{
+		//resending the data a second time
+		Serial.write(SET_SETTINGS);
+		for (i = 0; i<KissSettings.minBytesSettings; i++)
+			Serial.write(serialBuf[i]);
+		delay(50);
+		while (Serial.available() && i<5)
+		{
+			serialBuf2[i] = Serial.read();
+			i++;
+		}
+		if (serialBuf2[0] == 5 && serialBuf2[1] == 1 && serialBuf2[2] == 6)
+			return true;
+		else
+			return false;
+
+	}*/
 
 	return true;
 }

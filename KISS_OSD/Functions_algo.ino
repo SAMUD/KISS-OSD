@@ -191,8 +191,6 @@ void WaitForKissFc()
 	while (OSD.clearIsBusy());
 	OSD.setCursor(9, 0);
 	OSD.print(F("SAMUD OSD"));
-	OSD.setCursor(1, 14);
-	OSD.print(F("COMM ERROR - RESTORING"));
 
 	//We need to reboot the serial connection, because sometimes it gets stuck.
 	Serial.end();
