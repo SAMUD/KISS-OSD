@@ -59,6 +59,7 @@
 #define DPilotName "SAMUDOSD "					//*
 #define DLineAddition 1							//*
 #define DVideoSystem 1
+#define DVoltageDisplayingCell 0
 //*************************************************
 
 #define STARTCOUNT		2
@@ -186,9 +187,12 @@ struct Status
 	bool memValid = true;				//MemoryIsValid
 
 	uint32_t LastLoopTime;	
+	unsigned long LastLoopTime2;
 	uint8_t VideoModeOffset = 0;		//changes from 0 or 1 depending on the current Video Mode
 
 	uint8_t SavingSettingsRetry = 10;
+
+	bool VoltageDisplayingCell = false;	//selects if the OSD should display total Voltage or Voltage/Cell
 
 } static KissStatus;
 
@@ -261,6 +265,7 @@ struct StoreStruct {				//saving all the OSD-Settings
 	char PilotName[12];
 	uint8_t LineAddition;
 	uint8_t VideoMode;
+	uint8_t VoltageDisplayingCell;	//either shows per Cell Voltage or total voltage during flight
 } static Settings;
 
 

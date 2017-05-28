@@ -57,23 +57,35 @@ void DisplayOSD_Main()
 
 	if (KissStatus.reducedModeDisplay == 0 && Settings.DispLipoVoltage1 || KissStatus.reducedModeDisplay == 1 && Settings.DispLipoVoltage2 || KissStatus.reducedModeDisplay == 2 && Settings.DispLipoVoltage3)
 	{
+		//if the quad is disarmed it will show the total tension and the per cell in a 2sec intervall
+		//calculation is done in the main calculation fnc
+		ClearTempCharConverted();
 		if (KissStatus.VoltageAlarm > 0)
-		{
 			OSD.blink();
-			if (KissStatus.VoltageAlarm == 2)
-			{
-				OSD.setCursor(4, MarginMiddleY);
-				MarginMiddleY++;
-				OSD.print(F("    LIPO VOLTAGE    "));
-			}
+
+		if (KissStatus.VoltageDisplayingCell == true )
+		{
+			//show the cell Voltage
+			if (KissTelemetrie.LipoVoltage / KissStatus.BatteryCells<410 && KissStatus.time<1000)
+				OSD.blink();
+			print_int16(KissTelemetrie.LipoVoltage / KissStatus.BatteryCells, TempCharConverted, 2, 1);
 		}
+		else
+			//show the normal Voltage
+			print_int16(KissTelemetrie.LipoVoltage, TempCharConverted, 2, 1);
 		OSD.setCursor(Settings.marginLastRow, -1 - KissStatus.VideoModeOffset);
 		OSD.write(SYM_MAIN_BATT);
-		ClearTempCharConverted();
-		print_int16(KissTelemetrie.LipoVoltage, TempCharConverted, 2, 1);
 		OSD.print(TempCharConverted);
-		OSD.noBlink();
 		ESCmarginBot = 1;
+
+		//2nd stage Voltage alarm
+		if (KissStatus.VoltageAlarm == 2)
+		{
+			OSD.setCursor(4, MarginMiddleY);
+			MarginMiddleY++;
+			OSD.print(F("    LIPO VOLTAGE    "));
+		}
+		OSD.noBlink();
 	}
 
 	if (KissStatus.reducedModeDisplay == 0 && Settings.DispTimer1 || KissStatus.reducedModeDisplay == 1 && Settings.DispTimer2 || KissStatus.reducedModeDisplay == 2 && Settings.DispTimer3)

@@ -112,6 +112,20 @@ void CalculateOSD()
 		KissStatus.VoltageAlarm = 2;			//2nd state
 	if ((KissTelemetrie.LipoVoltage / KissStatus.BatteryCells)> (Settings.LowVoltage1st + Settings.hysteresis))
 		KissStatus.VoltageAlarm = 0;			//no Voltage Alarm
+
+	//switch the Voltage displayed
+	if (millis() - KissStatus.LastLoopTime2 > 2000)  //run every 2sec
+	{
+		KissStatus.LastLoopTime2 = millis();			//saving current time
+		KissStatus.VoltageDisplayingCell = !KissStatus.VoltageDisplayingCell;
+	}
+
+	if (Settings.VoltageDisplayingCell == true && KissTelemetrie.armed > 0)
+		KissStatus.VoltageDisplayingCell = true;
+	if (Settings.VoltageDisplayingCell == false && KissTelemetrie.armed > 0)
+		KissStatus.VoltageDisplayingCell = false;
+
+
 	
 	//Calculate Timer
 	// switch disarmed => armed

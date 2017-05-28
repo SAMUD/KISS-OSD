@@ -152,7 +152,9 @@ void menuprintsite() {
 		OSD.print(F("VOLTAGE OFFSET"));
 		OSD.setCursor(0, 6);
 		OSD.print(F("VOLT ALARM HYST/CELL"));
-		cursorlineMax = 5;
+		OSD.setCursor(0, 7);
+		OSD.print(F("V/CELL DURING FLIGHT"));
+		cursorlineMax = 6;
 		break;
 	case 2:
 		//CapacitySite
@@ -270,6 +272,8 @@ void menuprintvalue() {
 		OSD.setCursor(23, 6);
 		OSD.print(Settings.hysteresis);
 		OSD.print("MV ");
+		OSD.setCursor(23, 7);
+		showONOFF(Settings.VoltageDisplayingCell);
 		break;
 	case 2:
 		//CapacitySite
@@ -296,100 +300,70 @@ void menuprintvalue() {
 		//RED1
 		OSD.setCursor(23, 2);
 		showONOFF(Settings.DispRCThrottle1);
-		DisplaySpace();
 		OSD.setCursor(23, 3);
 		showONOFF(Settings.DispCombCurrent1);
-		DisplaySpace();
 		OSD.setCursor(23, 4);
 		showONOFF(Settings.DispLipoVoltage1);
-		DisplaySpace();
 		OSD.setCursor(23, 5);
 		showONOFF(Settings.DispMaConsumption1);
-		DisplaySpace();
 		OSD.setCursor(23, 6);
 		showONOFF(Settings.DispEscKrpm1);
-		DisplaySpace();
 		OSD.setCursor(23, 7);
 		showONOFF(Settings.DispEscCurrent1);
-		DisplaySpace();
 		OSD.setCursor(23, 8);
 		showONOFF(Settings.DispEscTemp1);
-		DisplaySpace();
 		OSD.setCursor(23, 9);
 		showONOFF(Settings.DispPilotname1);
-		DisplaySpace();
 		OSD.setCursor(23, 10);
 		showONOFF(Settings.DispTimer1);
-		DisplaySpace();
 		OSD.setCursor(23, 11);
 		showONOFF(Settings.DispAngle1);
-		DisplaySpace();
 		break;
 	case 4:
 		//RED2
 		OSD.setCursor(23, 2);
 		showONOFF(Settings.DispRCThrottle2);
-		DisplaySpace();
 		OSD.setCursor(23, 3);
 		showONOFF(Settings.DispCombCurrent2);
-		DisplaySpace();
 		OSD.setCursor(23, 4);
 		showONOFF(Settings.DispLipoVoltage2);
-		DisplaySpace();
 		OSD.setCursor(23, 5);
 		showONOFF(Settings.DispMaConsumption2);
-		DisplaySpace();
 		OSD.setCursor(23, 6);
 		showONOFF(Settings.DispEscKrpm2);
-		DisplaySpace();
 		OSD.setCursor(23, 7);
 		showONOFF(Settings.DispEscCurrent2);
-		DisplaySpace();
 		OSD.setCursor(23, 8);
 		showONOFF(Settings.DispEscTemp2);
-		DisplaySpace();
 		OSD.setCursor(23, 9);
 		showONOFF(Settings.DispPilotname2);
-		DisplaySpace();
 		OSD.setCursor(23, 10);
 		showONOFF(Settings.DispTimer2);
-		DisplaySpace();
 		OSD.setCursor(23, 11);
 		showONOFF(Settings.DispAngle2);
-		DisplaySpace();
 		break;
 	case 5:
 		//RED1
 		OSD.setCursor(23, 2);
 		showONOFF(Settings.DispRCThrottle3);
-		DisplaySpace();
 		OSD.setCursor(23, 3);
 		showONOFF(Settings.DispCombCurrent3);
-		DisplaySpace();
 		OSD.setCursor(23, 4);
 		showONOFF(Settings.DispLipoVoltage3);
-		DisplaySpace();
 		OSD.setCursor(23, 5);
 		showONOFF(Settings.DispMaConsumption3);
-		DisplaySpace();
 		OSD.setCursor(23, 6);
 		showONOFF(Settings.DispEscKrpm3);
-		DisplaySpace();
 		OSD.setCursor(23, 7);
 		showONOFF(Settings.DispEscCurrent3);
-		DisplaySpace();
 		OSD.setCursor(23, 8);
 		showONOFF(Settings.DispEscTemp3);
-		DisplaySpace();
 		OSD.setCursor(23, 9);
 		showONOFF(Settings.DispPilotname3);
-		DisplaySpace();
 		OSD.setCursor(23, 10);
 		showONOFF(Settings.DispTimer3);
-		DisplaySpace();
 		OSD.setCursor(23, 11);
 		showONOFF(Settings.DispAngle3);
-		DisplaySpace();
 		break;
 	case 6:
 		//Other Settings
@@ -461,6 +435,8 @@ void value(bool addsub)
 		case 4: changeval(addsub, -100, 100, 1, &Settings.VoltageOffset);
 			break;
 		case 5: changeval(addsub, 0, 100, 1, &Settings.hysteresis);
+			break;
+		case 6: changeval(addsub, 0, 1, 1, &Settings.VoltageDisplayingCell);
 			break;
 		}
 		break;
@@ -640,9 +616,12 @@ void changeval(bool addsub, int32_t min_value, int32_t max_value, uint16_t incre
 void showONOFF(uint8_t val)
 {
 	if (val == 0)
-		OSD.print("OFF");
+		OSD.print(F("OFF"));
 	else
-		OSD.print("ON");
+	{
+		OSD.print(F("ON"));
+		DisplaySpace();
+	}
 }
 
 void printRED()

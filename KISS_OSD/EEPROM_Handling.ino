@@ -79,6 +79,8 @@ void EEPROMsaveDefaultValues()
 	Settings.LineAddition = DLineAddition;
 	Settings.VideoMode = DVideoSystem;
 
+	Settings.VoltageDisplayingCell = DVoltageDisplayingCell;
+
 	Settings.stockSettings = 0;
 
 	EEPROMsave();
