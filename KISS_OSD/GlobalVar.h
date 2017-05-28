@@ -187,7 +187,7 @@ struct Status
 	bool memValid = true;				//MemoryIsValid
 
 	uint32_t LastLoopTime;	
-	unsigned long LastLoopTime2;
+	uint32_t LastLoopTime2;
 	uint8_t VideoModeOffset = 0;		//changes from 0 or 1 depending on the current Video Mode
 
 	uint8_t SavingSettingsRetry = 10;

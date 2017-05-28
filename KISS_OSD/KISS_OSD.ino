@@ -154,9 +154,9 @@ void loop()
 {
 
   //big if with all code
-  if (micros() - KissStatus.LastLoopTime > 100000) //limits the speed of the OSD to 10Hz
+  if (millis() - KissStatus.LastLoopTime > 100) //limits the speed of the OSD to 10Hz
   {
-	  KissStatus.LastLoopTime = micros();			//saving current time
+	  KissStatus.LastLoopTime = millis();			//saving current time
 
     getSerialData(GET_TELEMETRY,true);				//requesting serial data
 	

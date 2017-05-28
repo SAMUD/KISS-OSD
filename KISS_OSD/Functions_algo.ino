@@ -203,6 +203,8 @@ void WaitForKissFc()
 	delay(750);
 	Serial.begin(115200);
 	delay(250);
+
+	KissConnection = ConnectionEtablished;
 }
 /*
 void ReviveOSD()
