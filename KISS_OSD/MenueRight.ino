@@ -23,9 +23,9 @@ void MenuRight_Main()
 	while (!exitmenu && KissTelemetrie.armed==0)
 	{
 
-		if (micros() - KissStatus.LastLoopTime > 100000) //limits the speed of the OSD to 20Hz  millis() - LastLoopTimeMenu > 100
+		if (millis() - KissStatus.LastLoopTime > 100) //limits the speed of the OSD to 20Hz  millis() - LastLoopTimeMenu > 100
 		{
-			KissStatus.LastLoopTime = micros();
+			KissStatus.LastLoopTime = millis();
 			getSerialData(GET_TELEMETRY,true);
 
 			//set cursor position
@@ -721,15 +721,12 @@ bool Menuall_start(uint8_t GetSettings)
 			OSD.print(F("FAILED"));
 		else
 			OSD.print(F("OK"));
-
-		DisplaySpace();
-		OSD.print(KissStatus.SavingSettingsRetry);
 			
 		//We need to reboot the serial connection, because sometimes it gets stuck here.
-		Serial.end();
-		delay(750);	
-		Serial.begin(115200);
-		delay(250);
+		//Serial.end();
+		//delay(750);	
+		//Serial.begin(115200);
+		//delay(250);
 	}
 	else
 		EEPROMsave();

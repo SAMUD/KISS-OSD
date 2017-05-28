@@ -18,7 +18,7 @@ bool getSerialData(uint8_t Mode,bool CopyBuffToSett)	//reading serial Data from 
 	while (exitreceiving == 0)
 	{
 		//Running already to long in this loop
-		if (micros() - KissStatus.LastLoopTime > 750000)
+		if (millis() - KissStatus.LastLoopTime > 750)
 		{
 			KissConnection = LostConnection;
 			exitreceiving = 1;
@@ -412,22 +412,21 @@ bool setSerialData()
 	//Alternative Mode:
 	for (i = 0; i<KissSettings.minBytesSettings; i++)
 	{
-	Serial.write(serialBuf[i]);
-	//Serial.flush();
-	//delay(1);
+		Serial.write(serialBuf[i]);
+		//Serial.flush();
+		//delay(1);
 	}
 
 	/*Serial.write(serialBuf, sizeof(serialBuf));
 	Serial.flush();*/
 	/*delay(50);
-
 	/*while (Serial.available() && i<10)
 	{
-		serialBuf2[i] = Serial.read();
-		i++;
+	serialBuf2[i] = Serial.read();
+	i++;
 	}*/
 
-	
+
 
 	/*OSD.setCursor(0, 0);
 	OSD.print(serialBuf2[0]);
@@ -439,15 +438,14 @@ bool setSerialData()
 	OSD.print(serialBuf2[3]);
 	OSD.setCursor(0, 4);
 	OSD.print(serialBuf[KissSettings.minBytesSettings - 1]);
-
 	while (1)
 	{
 	}*/
 
 	/*if (serialBuf2[0] == 5 && serialBuf2[1] == 1 && serialBuf2[2] == 6)
-		return true;
+	return true;
 	else
-		return false;*/
+	return false;*/
 
 	return true;
 }

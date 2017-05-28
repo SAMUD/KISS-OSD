@@ -143,7 +143,7 @@ void setup() {
   else
 	  Settings.VideoMode = 1; //Setting to PAL
 
-  KissConnection = LostConnection;
+  KissConnection = ConnectionEtablished;
 }
 
 
