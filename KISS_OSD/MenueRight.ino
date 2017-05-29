@@ -394,7 +394,7 @@ void menuprintvalue() {
 		//Info
 		OSD.setCursor(23, 2);
 		OSD.print(freeRam());
-		OSD.setCursor(23, 3);
+		OSD.setCursor(22, 3);
 		OSD.print(OSDVersion);
 		OSD.setCursor(23, 4);
 		OSD.print(DMemoryVersion);

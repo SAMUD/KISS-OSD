@@ -164,10 +164,6 @@ void MenuLeft_PrintSite() {
 		OSD.print(F("I   "));
 		OSD.setCursor(24, 2 - KissStatus.VideoModeOffset);
 		OSD.print(F("D   "));
-		OSD.setCursor(16, 7 - KissStatus.VideoModeOffset);
-		OSD.print(F("PITCH"));
-		OSD.setCursor(24, 7 - KissStatus.VideoModeOffset);
-		OSD.print(F("ROLL"));
 		OSD.videoBackground();
 
 		OSD.setCursor(0, 3 - KissStatus.VideoModeOffset);
@@ -176,17 +172,15 @@ void MenuLeft_PrintSite() {
 		OSD.print(F("LEVEL"));
 		OSD.setCursor(1, 5 - KissStatus.VideoModeOffset);
 		OSD.print(F("MAX ANGLE"));
-		OSD.setCursor(0, 8 - KissStatus.VideoModeOffset);
-		OSD.print(F("ACC-TRIM"));
-		OSD.setCursor(0, 9 - KissStatus.VideoModeOffset);
-		OSD.print(F("NOTCH FILTER"));
-		OSD.setCursor(1, 10 - KissStatus.VideoModeOffset);
-		OSD.print(F("CENTER FREQ"));
-		OSD.setCursor(1, 11 - KissStatus.VideoModeOffset);
-		OSD.print(F("CUTOFF FREQ"));
-		OSD.setCursor(0, 12 - KissStatus.VideoModeOffset);
+		OSD.setCursor(0, 7 - KissStatus.VideoModeOffset);
 		OSD.print(F("YAW-FILTER"));
-		CursorlineMaxLeft = 16;
+		OSD.setCursor(0, 8 - KissStatus.VideoModeOffset);
+		OSD.print(F("LPF PITCH-ROLL"));
+		OSD.setCursor(4, 9 - KissStatus.VideoModeOffset);
+		OSD.print(F("YAW"));
+		OSD.setCursor(4, 10 - KissStatus.VideoModeOffset);
+		OSD.print(F("D"));
+		CursorlineMaxLeft = 11;
 		break;
 	case 3:
 		//PID
@@ -308,33 +302,15 @@ void MenuLeft_PrintValue() {
 		OSD.print(KissSettings.MaxAngle/14.3);
 		OSD.setCursor(26, 5 - KissStatus.VideoModeOffset);
 		OSD.print(" °");
-		OSD.setCursor(16, 8 - KissStatus.VideoModeOffset);
-		OSD.print(((float)KissSettings.ACC_Trim[0]) / 1000);
-		DisplaySpace();
-		OSD.setCursor(24, 8 - KissStatus.VideoModeOffset);
-		OSD.print(((float)KissSettings.ACC_Trim[1]) / 1000);
-		DisplaySpace();
-		OSD.setCursor(16, 9 - KissStatus.VideoModeOffset);
-		showONOFF(KissSettings.NotchPitch.Enabled);
-		OSD.setCursor(24, 9 - KissStatus.VideoModeOffset);
-		showONOFF(KissSettings.NotchRoll.Enabled);
-		OSD.setCursor(16, 10 - KissStatus.VideoModeOffset);
-		OSD.print(KissSettings.NotchPitch.CenterfFreq);
-		OSD.print("HZ");
-		DisplaySpace();
-		OSD.setCursor(24, 10 - KissStatus.VideoModeOffset);
-		OSD.print(KissSettings.NotchRoll.CenterfFreq);
-		OSD.print("HZ");
-		OSD.setCursor(16, 11 - KissStatus.VideoModeOffset);
-		OSD.print(KissSettings.NotchPitch.CutoffFreq);
-		OSD.print("HZ");
-		DisplaySpace();
-		OSD.setCursor(24, 11 - KissStatus.VideoModeOffset);
-		OSD.print(KissSettings.NotchRoll.CutoffFreq);
-		OSD.print("HZ");
-		OSD.setCursor(24, 12 - KissStatus.VideoModeOffset);
+		OSD.setCursor(22, 7 - KissStatus.VideoModeOffset);
 		OSD.print(KissSettings.YawFilter);
 		DisplaySpace();
+		OSD.setCursor(22, 8 - KissStatus.VideoModeOffset);
+		DisplayLPF(KissSettings.PrLPF);
+		OSD.setCursor(22, 9 - KissStatus.VideoModeOffset);
+		DisplayLPF(KissSettings.YawLPF);
+		OSD.setCursor(22, 10 - KissStatus.VideoModeOffset);
+		DisplayLPF(KissSettings.DLPF);
 		break;
 	case 3:
 		//PID
@@ -438,23 +414,13 @@ void MenuLeft_Valie(bool addsub)
 			break;
 		case 7: changeval(addsub, 15, 2574, 14, &KissSettings.MaxAngle);
 			break;
-		case 8: changeval(addsub, -30000,30000, 100, &KissSettings.ACC_Trim[0]);
+		case 8: changeval(addsub, 0, 250, 1, &KissSettings.YawFilter);
 			break;
-		case 9: changeval(addsub, -30000, 30000, 100, &KissSettings.ACC_Trim[1]);
+		case 9: changeval(addsub, 0, 6, 1, &KissSettings.PrLPF);
 			break;
-		case 10: changeval(addsub, 0, 1, 1, &KissSettings.NotchPitch.Enabled);
+		case 10: changeval(addsub, 0, 6, 1, &KissSettings.YawLPF);
 			break;
-		case 11: changeval(addsub, 0, 1, 1, &KissSettings.NotchRoll.Enabled);
-			break;
-		case 12: changeval(addsub, 4, 486, 5, &KissSettings.NotchPitch.CenterfFreq);
-			break;
-		case 13: changeval(addsub, 4, 486, 5, &KissSettings.NotchRoll.CenterfFreq);
-			break;
-		case 14: changeval(addsub, 4, 486, 5, &KissSettings.NotchPitch.CutoffFreq);
-			break;
-		case 15: changeval(addsub, 4, 486, 5, &KissSettings.NotchRoll.CutoffFreq);
-			break;
-		case 16: changeval(addsub, 0, 250, 1, &KissSettings.YawFilter);
+		case 11: changeval(addsub, 0, 6, 1, &KissSettings.DLPF);
 			break;
 		}
 		break;
@@ -537,27 +503,8 @@ void MenuLeft_Marker(bool addMarker, uint8_t MarkerLine, uint8_t CurrentPage)
 		}
 		else if (MarkerLine == 7)
 			OSD.setCursor(23, 5 - KissStatus.VideoModeOffset);
-		else if (MarkerLine < 16)
-		{
-			if (MarkerLine > 13)
-				i = 3;
-			else if (MarkerLine > 11)
-				i = 2;
-			else if (MarkerLine > 9)
-				i = 1;
-			MarkerLine = MarkerLine - (i * 2);
-			switch (MarkerLine - 7)
-			{
-			case 1:
-				OSD.setCursor(15, 8 + i - KissStatus.VideoModeOffset);
-				break;
-			case 2:
-				OSD.setCursor(23, 8 + i - KissStatus.VideoModeOffset);
-				break;
-			}
-		}
 		else
-			OSD.setCursor(23, 12 - KissStatus.VideoModeOffset);
+			OSD.setCursor(21, MarkerLine - KissStatus.VideoModeOffset - 1);
 		break;
 	case 3:
 		//Various

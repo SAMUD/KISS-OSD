@@ -328,6 +328,29 @@ void DisplayOSD_Main()
 	}
 #endif
 
+void DisplayLPF(uint8_t Value)
+{
+	switch (Value)
+	{
+	case 0: OSD.print(F("OFF "));
+		break;
+	case 1: OSD.print(F("HIGH  "));
+		break;
+	case 2: OSD.print(F("MED HI"));
+		break;
+	case 3: OSD.print(F("MEDIUM"));
+		break;
+	case 4: OSD.print(F("MED LO"));
+		break;
+	case 5: OSD.print(F("LOW   "));
+		break;
+	case 6: OSD.print(F("LOWEST"));
+		break;
+
+	}
+}
+
+
 void DisplaySpace()
 {
 	OSD.print(F(" "));

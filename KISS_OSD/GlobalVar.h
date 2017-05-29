@@ -92,12 +92,12 @@
 MAX7456 OSD(OSD_CHIP_SELECT);
 
 
-struct NotchFilter
+/*struct NotchFilter
 {
 	uint8_t Enabled;
 	uint16_t CenterfFreq;
 	uint16_t CutoffFreq;
-};
+};*/
 
 static uint8_t serialBuf[256];	//RAW-values received with Settings 
 //needed for serial stuff
@@ -134,7 +134,7 @@ struct SerialSettings
 	uint16_t PID_I[3];		//holds the I part for all three axis
 	uint16_t PID_D[3];		//holds the D part for all three axis
 	uint16_t PID_A[3];		//PID in Level-Mode 
-	int16_t ACC_Trim[2];	//Accelerometer trimm data, Pitch and Roll
+	//int16_t ACC_Trim[2];	//Accelerometer trimm data, Pitch and Roll
 	int16_t RC_Rate[3];		//holds the RC-Rate
 	int16_t Rate[3];		//Rate
 	int16_t RC_Curve[3];	//RC_Curve
@@ -146,18 +146,15 @@ struct SerialSettings
 	uint16_t LapTimerID;	//Lap timer transponder ID
 	uint16_t TPA[3];		//TPA-values
 	uint8_t YawFilter;		//Yaw-Filter
-	NotchFilter NotchRoll;	//Notch-Filter on Roll
-	NotchFilter NotchPitch;	//Notch-Filter on Pitch
+	//NotchFilter NotchRoll;	//Notch-Filter on Roll
+	//NotchFilter NotchPitch;	//Notch-Filter on Pitch
 	uint8_t MotorBuzzer;	//turn on or off the Motor-Buzzer
 	uint8_t VTXChannel;
 	uint16_t VTXLowPower;
 	uint16_t VTXHighPower;
-	//uint16_t VTXPowerLookup[4] = { 25,250,500,800 };
-	//uint16_t VTXChannelLookup[49] = { 0,5865,5845,5825,5805,5785,5765,5745,5725,0, //channel A
-									  //0,5733,5752,5771,5790,5809,5828,5847,5866,0, //channel B
-									  //0,5705,5685,5665,5645,5885,5905,5925,5945,0, //channel E
-									  //0,5740,5760,5780,5800,5820,5840,5860,5880,0, //channel IRC/FS
-									  //0,5658,5695,5732,5769,5806,5843,5880,5917 }; //RaceBand
+	uint8_t YawLPF;			//all three LFP Filters
+	uint8_t DLPF;
+	uint8_t PrLPF;
 	
 
 

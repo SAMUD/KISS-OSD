@@ -201,8 +201,8 @@ bool getSerialData(uint8_t Mode,bool CopyBuffToSett)	//reading serial Data from 
 					KissSettings.PID_A[1] = ((serialBuf[20 + STARTCOUNT] << 8) | serialBuf[21 + STARTCOUNT]);
 					KissSettings.PID_A[2] = ((serialBuf[22 + STARTCOUNT] << 8) | serialBuf[23 + STARTCOUNT]);
 
-					KissSettings.ACC_Trim[1] = ((serialBuf[24 + STARTCOUNT] << 8) | serialBuf[25 + STARTCOUNT]);
-					KissSettings.ACC_Trim[2] = ((serialBuf[26 + STARTCOUNT] << 8) | serialBuf[27 + STARTCOUNT]);
+					//KissSettings.ACC_Trim[1] = ((serialBuf[24 + STARTCOUNT] << 8) | serialBuf[25 + STARTCOUNT]);
+					//KissSettings.ACC_Trim[2] = ((serialBuf[26 + STARTCOUNT] << 8) | serialBuf[27 + STARTCOUNT]);
 
 					KissSettings.RC_Rate[0] = ((serialBuf[28 + STARTCOUNT] << 8) | serialBuf[29 + STARTCOUNT]);
 					KissSettings.RC_Rate[1] = ((serialBuf[30 + STARTCOUNT] << 8) | serialBuf[31 + STARTCOUNT]);
@@ -231,12 +231,12 @@ bool getSerialData(uint8_t Mode,bool CopyBuffToSett)	//reading serial Data from 
 
 					KissSettings.LapTimerID = ((serialBuf[135 + STARTCOUNT] << 8) | serialBuf[136 + STARTCOUNT]);
 
-					KissSettings.NotchRoll.Enabled = serialBuf[138 + STARTCOUNT];
-					KissSettings.NotchRoll.CenterfFreq = ((serialBuf[139 + STARTCOUNT] << 8) | serialBuf[140 + STARTCOUNT]);
-					KissSettings.NotchRoll.CutoffFreq = ((serialBuf[141 + STARTCOUNT] << 8) | serialBuf[142 + STARTCOUNT]);
-					KissSettings.NotchPitch.Enabled = serialBuf[143 + STARTCOUNT];
-					KissSettings.NotchPitch.CenterfFreq = ((serialBuf[144 + STARTCOUNT] << 8) | serialBuf[145 + STARTCOUNT]);
-					KissSettings.NotchPitch.CutoffFreq = ((serialBuf[146 + STARTCOUNT] << 8) | serialBuf[147 + STARTCOUNT]);
+					//KissSettings.NotchRoll.Enabled = serialBuf[138 + STARTCOUNT];
+					//KissSettings.NotchRoll.CenterfFreq = ((serialBuf[139 + STARTCOUNT] << 8) | serialBuf[140 + STARTCOUNT]);
+					//KissSettings.NotchRoll.CutoffFreq = ((serialBuf[141 + STARTCOUNT] << 8) | serialBuf[142 + STARTCOUNT]);
+					//KissSettings.NotchPitch.Enabled = serialBuf[143 + STARTCOUNT];
+					//KissSettings.NotchPitch.CenterfFreq = ((serialBuf[144 + STARTCOUNT] << 8) | serialBuf[145 + STARTCOUNT]);
+					//KissSettings.NotchPitch.CutoffFreq = ((serialBuf[146 + STARTCOUNT] << 8) | serialBuf[147 + STARTCOUNT]);
 					KissSettings.YawFilter = serialBuf[148 + STARTCOUNT];
 
 					KissSettings.CapacityAlarm = ((serialBuf[157 + STARTCOUNT] << 8) | serialBuf[158 + STARTCOUNT]);
@@ -248,6 +248,10 @@ bool getSerialData(uint8_t Mode,bool CopyBuffToSett)	//reading serial Data from 
 					KissSettings.VTXLowPower = ((serialBuf[150 + STARTCOUNT] << 8) | serialBuf[151 + STARTCOUNT]);
 					KissSettings.VTXHighPower = ((serialBuf[152 + STARTCOUNT] << 8) | serialBuf[153 + STARTCOUNT]);
 
+					//Get LPF Filter
+					KissSettings.YawLPF = serialBuf[165 + STARTCOUNT];
+					KissSettings.DLPF = serialBuf[166 + STARTCOUNT];
+					KissSettings.PrLPF = serialBuf[79 + STARTCOUNT];
 				}
 				
 			}
@@ -316,10 +320,10 @@ bool setSerialData()
 	serialBuf[STARTCOUNT + 21] = (byte)(KissSettings.PID_A[1] & 0x00FF);
 	serialBuf[STARTCOUNT + 22] = (byte)((KissSettings.PID_A[2] & 0xFF00) >> 8);
 	serialBuf[STARTCOUNT + 23] = (byte)(KissSettings.PID_A[2] & 0x00FF);
-	serialBuf[STARTCOUNT + 24] = (byte)((KissSettings.ACC_Trim[0] & 0xFF00) >> 8);
-	serialBuf[STARTCOUNT + 25] = (byte)(KissSettings.ACC_Trim[0] & 0x00FF);
-	serialBuf[STARTCOUNT + 26] = (byte)((KissSettings.ACC_Trim[1] & 0xFF00) >> 8);
-	serialBuf[STARTCOUNT + 27] = (byte)(KissSettings.ACC_Trim[1] & 0x00FF);
+	//serialBuf[STARTCOUNT + 24] = (byte)((KissSettings.ACC_Trim[0] & 0xFF00) >> 8);
+	//serialBuf[STARTCOUNT + 25] = (byte)(KissSettings.ACC_Trim[0] & 0x00FF);
+	//serialBuf[STARTCOUNT + 26] = (byte)((KissSettings.ACC_Trim[1] & 0xFF00) >> 8);
+	//serialBuf[STARTCOUNT + 27] = (byte)(KissSettings.ACC_Trim[1] & 0x00FF);
 	serialBuf[STARTCOUNT + 28] = (byte)((KissSettings.RC_Rate[0] & 0xFF00) >> 8);
 	serialBuf[STARTCOUNT + 29] = (byte)(KissSettings.RC_Rate[0] & 0x00FF);
 	serialBuf[STARTCOUNT + 30] = (byte)((KissSettings.RC_Rate[1] & 0xFF00) >> 8);
@@ -341,6 +345,7 @@ bool setSerialData()
 
 	serialBuf[STARTCOUNT + 77] = (byte)((KissSettings.MaxAngle & 0xFF00) >> 8);
 	serialBuf[STARTCOUNT + 78] = (byte)(KissSettings.MaxAngle & 0x00FF);
+	serialBuf[STARTCOUNT + 79] = KissSettings.PrLPF;
 
 	//now we need to shift other settings forward, because we do not want to send the serial number to the FC
 	for (i = 93; i < 101; i++)
@@ -374,16 +379,16 @@ bool setSerialData()
 	serialBuf[STARTCOUNT + 125] = (byte)((KissSettings.LapTimerID & 0xFF00) >> 8);
 	serialBuf[STARTCOUNT + 126] = (byte)(KissSettings.LapTimerID & 0x00FF);
 
-	serialBuf[STARTCOUNT + 128] = KissSettings.NotchRoll.Enabled;
-	serialBuf[STARTCOUNT + 129] = (byte)((KissSettings.NotchRoll.CenterfFreq & 0xFF00) >> 8);
-	serialBuf[STARTCOUNT + 130] = (byte)(KissSettings.NotchRoll.CenterfFreq & 0x00FF);
-	serialBuf[STARTCOUNT + 131] = (byte)((KissSettings.NotchRoll.CutoffFreq & 0xFF00) >> 8);
-	serialBuf[STARTCOUNT + 132] = (byte)(KissSettings.NotchRoll.CutoffFreq & 0x00FF);
-	serialBuf[STARTCOUNT + 133] = KissSettings.NotchPitch.Enabled;
-	serialBuf[STARTCOUNT + 134] = (byte)((KissSettings.NotchPitch.CenterfFreq & 0xFF00) >> 8);
-	serialBuf[STARTCOUNT + 135] = (byte)(KissSettings.NotchPitch.CenterfFreq & 0x00FF);
-	serialBuf[STARTCOUNT + 136] = (byte)((KissSettings.NotchPitch.CutoffFreq & 0xFF00) >> 8);
-	serialBuf[STARTCOUNT + 137] = (byte)(KissSettings.NotchPitch.CutoffFreq & 0x00FF);
+	//serialBuf[STARTCOUNT + 128] = KissSettings.NotchRoll.Enabled;
+	//serialBuf[STARTCOUNT + 129] = (byte)((KissSettings.NotchRoll.CenterfFreq & 0xFF00) >> 8);
+	//serialBuf[STARTCOUNT + 130] = (byte)(KissSettings.NotchRoll.CenterfFreq & 0x00FF);
+	//serialBuf[STARTCOUNT + 131] = (byte)((KissSettings.NotchRoll.CutoffFreq & 0xFF00) >> 8);
+	//serialBuf[STARTCOUNT + 132] = (byte)(KissSettings.NotchRoll.CutoffFreq & 0x00FF);
+	//serialBuf[STARTCOUNT + 133] = KissSettings.NotchPitch.Enabled;
+	//serialBuf[STARTCOUNT + 134] = (byte)((KissSettings.NotchPitch.CenterfFreq & 0xFF00) >> 8);
+	//serialBuf[STARTCOUNT + 135] = (byte)(KissSettings.NotchPitch.CenterfFreq & 0x00FF);
+	//serialBuf[STARTCOUNT + 136] = (byte)((KissSettings.NotchPitch.CutoffFreq & 0xFF00) >> 8);
+	//serialBuf[STARTCOUNT + 137] = (byte)(KissSettings.NotchPitch.CutoffFreq & 0x00FF);
 	serialBuf[STARTCOUNT + 138] = (byte)(KissSettings.YawFilter);
 
 	serialBuf[STARTCOUNT + 147] = (byte)((KissSettings.CapacityAlarm& 0xFF00) >> 8);
@@ -397,6 +402,10 @@ bool setSerialData()
 	serialBuf[STARTCOUNT + 141] = (byte)(KissSettings.VTXLowPower & 0x00FF);
 	serialBuf[STARTCOUNT + 142] = (byte)((KissSettings.VTXHighPower & 0xFF00) >> 8);
 	serialBuf[STARTCOUNT + 143] = (byte)(KissSettings.VTXHighPower & 0x00FF);
+
+	//LPF Filtering
+	serialBuf[STARTCOUNT + 154] = KissSettings.YawLPF;
+	serialBuf[STARTCOUNT + 155] = KissSettings.DLPF;
 
 
 	//calculate Checksum
