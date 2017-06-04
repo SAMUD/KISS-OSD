@@ -277,7 +277,7 @@ void MenuLeft_PrintValue() {
 		OSD.print(((float)KissSettings.Rate[2]) / 1000);
 		DisplaySpace();
 		OSD.setCursor(24, 10);
-		OSD.print(((float)KissSettings.RC_Curve[2]) / 10);
+		OSD.print(((float)KissSettings.RC_Curve[2]) / 1000);
 		DisplaySpace();
 		break;
 	case 2:
@@ -380,19 +380,19 @@ void MenuLeft_Valie(bool addsub)
 			break;
 		case 11: changeval(addsub, 10, 2000, 10, &KissSettings.Rate[0]);
 			break;
-		case 12: changeval(addsub, 10, 2000, 10, &KissSettings.RC_Curve[0]);
+		case 12: changeval(addsub, 0, 2000, 10, &KissSettings.RC_Curve[0]);
 			break;
 		case 13: changeval(addsub, 10, 2000, 10, &KissSettings.RC_Rate[1]);
 			break;
 		case 14: changeval(addsub, 10, 2000, 10, &KissSettings.Rate[1]);
 			break;
-		case 15: changeval(addsub, 10, 2000, 10, &KissSettings.RC_Curve[1]);
+		case 15: changeval(addsub, 0, 2000, 10, &KissSettings.RC_Curve[1]);
 			break;
 		case 16: changeval(addsub, 100, 65000, 100, &KissSettings.RC_Rate[2]);
 			break;
 		case 17: changeval(addsub, 100, 65000, 100, &KissSettings.Rate[2]);
 			break;
-		case 18: changeval(addsub, 100, 65000, 100, &KissSettings.RC_Curve[2]);
+		case 18: changeval(addsub, 000, 65000, 10, &KissSettings.RC_Curve[2]);
 			break;
 		}
 		break;
