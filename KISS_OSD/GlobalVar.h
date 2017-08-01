@@ -185,7 +185,6 @@ struct Status
 
 	uint32_t LastLoopTime;	
 	uint32_t LastLoopTime2;
-	uint8_t VideoModeOffset = 0;		//changes from 0 or 1 depending on the current Video Mode
 
 	uint8_t SavingSettingsRetry = 10;
 

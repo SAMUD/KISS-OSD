@@ -139,7 +139,7 @@ void menuprintsite() {
 		//VoltageSite
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P1/7 VOLTAGE     "));
-		OSD.setCursor(0, -1 - KissStatus.VideoModeOffset);
+		OSD.setCursor(0, -1);
 		OSD.print(F(" <-YAW-> : PAGE / EXIT       "));
 		OSD.videoBackground();
 		OSD.setCursor(0, 2);
@@ -160,7 +160,7 @@ void menuprintsite() {
 		//CapacitySite
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P2/7 CAPACITY    "));
-		OSD.setCursor(0, -1 - KissStatus.VideoModeOffset);
+		OSD.setCursor(0, -1);
 		OSD.print(F(" <-PITCH-> : MOVE UP/DOWN    "));
 		OSD.videoBackground();
 		OSD.setCursor(0, 2);
@@ -179,7 +179,7 @@ void menuprintsite() {
 		//Red1
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P3/7 DISP MODE 1 "));
-		OSD.setCursor(0, -1 - KissStatus.VideoModeOffset);
+		OSD.setCursor(0, -1 );
 		OSD.print(F(" <-ROLL-> : CHANGE VALUE     "));
 		printRED();
 		break;
@@ -187,7 +187,7 @@ void menuprintsite() {
 		//CapacitySite
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P4/7 DISP MODE 2 "));
-		OSD.setCursor(0, -1 - KissStatus.VideoModeOffset);
+		OSD.setCursor(0, -1);
 		OSD.print(F("SEE PAG6 FOR RED-CHANNEL SELE"));
 		printRED();
 		break;
@@ -195,7 +195,7 @@ void menuprintsite() {
 		//CapacitySite
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P5/7 DISP MODE 3 "));
-		OSD.setCursor(0, -1 - KissStatus.VideoModeOffset);
+		OSD.setCursor(0, -1);
 		OSD.print(F("                             "));
 		printRED();
 		break;
@@ -203,7 +203,7 @@ void menuprintsite() {
 		//Other Settings
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P6/7 VARIOUS    "));
-		OSD.setCursor(0, -1 - KissStatus.VideoModeOffset);
+		OSD.setCursor(0, -1);
 		OSD.print(F("                             "));
 		OSD.videoBackground();
 		OSD.setCursor(0, 2);
@@ -219,7 +219,7 @@ void menuprintsite() {
 		OSD.setCursor(14, 7);
 		OSD.print(F("HOR"));
 		OSD.setCursor(0, 8);
-		OSD.print(F("ALT MODE"));
+		OSD.print(F("DISP LINES"));
 		OSD.setCursor(0, 9);
 		OSD.print(F("NAME"));
 		cursorlineMax = 18;
@@ -228,7 +228,7 @@ void menuprintsite() {
 		//Info
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P7/7 INFO       "));
-		OSD.setCursor(0, -1 - KissStatus.VideoModeOffset);
+		OSD.setCursor(0, -1);
 		OSD.print(F("                             "));
 		OSD.videoBackground();
 		OSD.setCursor(0, 2);
@@ -386,7 +386,10 @@ void menuprintvalue() {
 		OSD.print(Settings.OffsetY);
 		OSD.print(F("PX "));
 		OSD.setCursor(23, 8);
-		OSD.print(Settings.LineAddition);
+		if (Settings.VideoMode == 1)
+			OSD.print(13+Settings.LineAddition);
+		else
+			OSD.print(13 + Settings.LineAddition);
 		OSD.setCursor(17, 9);
 		OSD.print(Settings.PilotName);
 		break;
@@ -552,7 +555,7 @@ void value(bool addsub)
 		case 6: changeval(addsub, MAX7456_HOS_MIN, MAX7456_HOS_MAX, 1, &Settings.OffsetY);
 			OSD.setTextOffset(Settings.OffsetX, Settings.OffsetY);
 			break;
-		case 7: changeval(addsub, 0, 1, 1, &Settings.LineAddition);
+		case 7: changeval(addsub, 0, 2, 1, &Settings.LineAddition);
 			break;
 		}
 		if (cursorline > 7)
@@ -687,9 +690,12 @@ bool Menuall_start(uint8_t GetSettings)
 		#endif // DEBUG	
 	}
 	else
+	{
 		Settings.stockSettings = 1;				//byte saving that I entered the Menu
+	}
+		
 	
-	KissTelemetrie.StickChanVals[3] = 0;		//reset the current Stick to avoid changing Menu page diectly upon entering
+		KissTelemetrie.StickChanVals[3] = 0;	//reset the current Stick to avoid changing Menu page diectly upon entering
 	
 	delay(500);									//delay for showing the message
 	OSD.clear();

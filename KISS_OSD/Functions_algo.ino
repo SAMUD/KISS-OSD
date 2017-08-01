@@ -191,12 +191,14 @@ void WaitForKissFc()
 	while (OSD.clearIsBusy());
 	OSD.setCursor(9, 0);
 	OSD.print(F("SAMUD OSD"));
+	OSD.setCursor(0, -1);
+	OSD.print(F("REBOOT SERIAL"));
 
 	//We need to reboot the serial connection, because sometimes it gets stuck.
 	Serial.end();
-	delay(750);
+	delay(75);
 	Serial.begin(115200);
-	delay(250);
+	delay(25);
 
 	KissConnection = ConnectionEtablished;
 }

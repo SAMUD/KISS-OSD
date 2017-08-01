@@ -122,7 +122,7 @@ void MenuLeft_PrintSite() {
 		//PID
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P1/3 PID        "));
-		OSD.setCursor(0, -1 - KissStatus.VideoModeOffset);
+		OSD.setCursor(0, -1);
 		OSD.print(F(" <-YAW-> : PAGE / EXIT      "));
 		OSD.setCursor(9, 2);
 		OSD.print(F("P   "));
@@ -156,29 +156,29 @@ void MenuLeft_PrintSite() {
 		//PID
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P2/3 LEVEL+TPA  "));
-		OSD.setCursor(0, -1 - KissStatus.VideoModeOffset);
+		OSD.setCursor(0, -1);
 		OSD.print(F(" <-PITCH-> : MOVE UP/DOWN   "));
-		OSD.setCursor(9, 2 - KissStatus.VideoModeOffset);
+		OSD.setCursor(9, 2);
 		OSD.print(F("P   "));
-		OSD.setCursor(16, 2 - KissStatus.VideoModeOffset);
+		OSD.setCursor(16, 2);
 		OSD.print(F("I   "));
-		OSD.setCursor(24, 2 - KissStatus.VideoModeOffset);
+		OSD.setCursor(24, 2);
 		OSD.print(F("D   "));
 		OSD.videoBackground();
 
-		OSD.setCursor(0, 3 - KissStatus.VideoModeOffset);
+		OSD.setCursor(0, 3);
 		OSD.print(F("TPA"));
-		OSD.setCursor(0, 4 - KissStatus.VideoModeOffset);
+		OSD.setCursor(0, 4);
 		OSD.print(F("LEVEL"));
-		OSD.setCursor(1, 5 - KissStatus.VideoModeOffset);
+		OSD.setCursor(1, 5);
 		OSD.print(F("MAX ANGLE"));
-		OSD.setCursor(0, 7 - KissStatus.VideoModeOffset);
+		OSD.setCursor(0, 7);
 		OSD.print(F("YAW-FILTER"));
-		OSD.setCursor(0, 8 - KissStatus.VideoModeOffset);
+		OSD.setCursor(0, 8);
 		OSD.print(F("LPF PITCH-ROLL"));
-		OSD.setCursor(4, 9 - KissStatus.VideoModeOffset);
+		OSD.setCursor(4, 9);
 		OSD.print(F("YAW"));
-		OSD.setCursor(4, 10 - KissStatus.VideoModeOffset);
+		OSD.setCursor(4, 10);
 		OSD.print(F("D"));
 		CursorlineMaxLeft = 11;
 		break;
@@ -186,7 +186,7 @@ void MenuLeft_PrintSite() {
 		//PID
 		OSD.grayBackground();
 		OSD.print(F("SAMUD OSD - P3/3 VARIOUS    "));
-		OSD.setCursor(0, -1 - KissStatus.VideoModeOffset);
+		OSD.setCursor(0, -1);
 		OSD.print(F("EXIT = SAVING SETTINGS      "));
 		OSD.setCursor(9, 2);
 		OSD.print(F("RED"));
@@ -282,34 +282,34 @@ void MenuLeft_PrintValue() {
 		break;
 	case 2:
 		//PID
-		OSD.setCursor(9, 3 - KissStatus.VideoModeOffset);
+		OSD.setCursor(9, 3);
 		OSD.print(((float)KissSettings.TPA[0]) / 1000);
 		DisplaySpace();
-		OSD.setCursor(16, 3 - KissStatus.VideoModeOffset);
+		OSD.setCursor(16, 3 );
 		OSD.print(((float)KissSettings.TPA[1]) / 1000);
 		DisplaySpace();
-		OSD.setCursor(24, 3 - KissStatus.VideoModeOffset);
+		OSD.setCursor(24, 3);
 		OSD.print(((float)KissSettings.TPA[2]) / 1000);
-		OSD.setCursor(9, 4 - KissStatus.VideoModeOffset);
+		OSD.setCursor(9, 4);
 		OSD.print(((float)KissSettings.PID_A[0]) / 1000);
 		DisplaySpace();
-		OSD.setCursor(16, 4 - KissStatus.VideoModeOffset);
+		OSD.setCursor(16, 4);
 		OSD.print(((float)KissSettings.PID_A[1]) / 1000);
 		DisplaySpace();
-		OSD.setCursor(24, 4 - KissStatus.VideoModeOffset);
+		OSD.setCursor(24, 4);
 		OSD.print(((float)KissSettings.PID_A[2]) / 1000);
-		OSD.setCursor(24, 5 - KissStatus.VideoModeOffset);
+		OSD.setCursor(24, 5);
 		OSD.print(KissSettings.MaxAngle/14.3);
-		OSD.setCursor(26, 5 - KissStatus.VideoModeOffset);
+		OSD.setCursor(26, 5);
 		OSD.print(" °");
-		OSD.setCursor(22, 7 - KissStatus.VideoModeOffset);
+		OSD.setCursor(22, 7);
 		OSD.print(KissSettings.YawFilter);
 		DisplaySpace();
-		OSD.setCursor(22, 8 - KissStatus.VideoModeOffset);
+		OSD.setCursor(22, 8);
 		DisplayLPF(KissSettings.PrLPF);
-		OSD.setCursor(22, 9 - KissStatus.VideoModeOffset);
+		OSD.setCursor(22, 9);
 		DisplayLPF(KissSettings.YawLPF);
-		OSD.setCursor(22, 10 - KissStatus.VideoModeOffset);
+		OSD.setCursor(22, 10);
 		DisplayLPF(KissSettings.DLPF);
 		break;
 	case 3:
@@ -491,20 +491,20 @@ void MenuLeft_Marker(bool addMarker, uint8_t MarkerLine, uint8_t CurrentPage)
 			switch (MarkerLine)
 			{
 			case 1:
-				OSD.setCursor(8, 3 + i - KissStatus.VideoModeOffset);
+				OSD.setCursor(8, 3 + i);
 				break;
 			case 2:
-				OSD.setCursor(15, 3 + i - KissStatus.VideoModeOffset);
+				OSD.setCursor(15, 3 + i );
 				break;
 			case 3:
-				OSD.setCursor(23, 3 + i - KissStatus.VideoModeOffset);
+				OSD.setCursor(23, 3 + i );
 				break;
 			}
 		}
 		else if (MarkerLine == 7)
-			OSD.setCursor(23, 5 - KissStatus.VideoModeOffset);
+			OSD.setCursor(23, 5);
 		else
-			OSD.setCursor(21, MarkerLine - KissStatus.VideoModeOffset - 1);
+			OSD.setCursor(21, MarkerLine - 1);
 		break;
 	case 3:
 		//Various

@@ -11,7 +11,7 @@ by Samuel Daurat (sdaurat@outlook.de)
 based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
 
-#define OSDVersion "7.3RC5"
+#define OSDVersion "7.3RC7"
 #define DMemoryVersion 10
 //#define DEBUG
 /*
@@ -95,25 +95,18 @@ void setup() {
   //init memory
   EEPROMinit();
 
-  /*if (Settings.VideoMode == 1)
+  if (Settings.VideoMode == 1)
   {
-	  OSD.begin(28, 14 + Settings.LineAddition, 0);
+	  OSD.begin(28, 13 + Settings.LineAddition, 0);
 	  OSD.setDefaultSystem(MAX7456_PAL);
-	  KissStatus.VideoModeOffset = 0;
   } 
   else
   {
-	  OSD.begin(MAX7456_COLS_N1, 13 + Settings.LineAddition);
+	  OSD.begin(MAX7456_COLS_N1, 12 + Settings.LineAddition);
 	  OSD.setDefaultSystem(MAX7456_NTSC);
-	  KissStatus.VideoModeOffset = 1;
-  }*/
+  }
 
-  OSD.begin(28, 14 + Settings.LineAddition, 0);
-    OSD.setDefaultSystem(MAX7456_PAL);
-    KissStatus.VideoModeOffset = 0;
   
-
-
  OSD.setSwitchingTime(0);					//lower value will make text a little bit sharper
 
 #if defined(USE_MAX7456_ASCII)
@@ -137,11 +130,7 @@ void setup() {
  
   Serial.begin(115200);
 
-  
-  if (OSD.videoSystem() == 2)
-	  Settings.VideoMode = 2;	//Setting to NTSC
-  else
-	  Settings.VideoMode = 1; //Setting to PAL
+
 
   KissConnection = ConnectionEtablished;
 }
@@ -157,6 +146,7 @@ void loop()
   if (millis() - KissStatus.LastLoopTime > 100) //limits the speed of the OSD to 10Hz
   {
 	  KissStatus.LastLoopTime = millis();			//saving current time
+	
 
     getSerialData(GET_TELEMETRY,true);				//requesting serial data
 	
@@ -168,6 +158,7 @@ void loop()
 	case ConnectionEtablished:
 		OSD.clear();
 		KissConnection = Connected;
+		KissStatus.lastMode = 5;
 		break;
 	case Connected:
 		
@@ -191,6 +182,15 @@ void loop()
 	}
 	//Reset wdt
     //wdt_reset();
+	if (OSD.videoSystem() != Settings.VideoMode)
+	{
+		if (OSD.videoSystem() == 2)
+			Settings.VideoMode = 2;	//Setting to NTSC
+		else
+			Settings.VideoMode = 1; //Setting to PAL
+		EEPROMsave();
+	}
+	
   }
 
 }

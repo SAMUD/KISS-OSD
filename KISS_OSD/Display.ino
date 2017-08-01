@@ -73,7 +73,7 @@ void DisplayOSD_Main()
 		else
 			//show the normal Voltage
 			print_int16(KissTelemetrie.LipoVoltage, TempCharConverted, 2, 1);
-		OSD.setCursor(Settings.marginLastRow, -1 - KissStatus.VideoModeOffset);
+		OSD.setCursor(Settings.marginLastRow, -1);
 		OSD.write(SYM_MAIN_BATT);
 		OSD.print(TempCharConverted);
 		ESCmarginBot = 1;
@@ -90,7 +90,7 @@ void DisplayOSD_Main()
 
 	if (KissStatus.reducedModeDisplay == 0 && Settings.DispTimer1 || KissStatus.reducedModeDisplay == 1 && Settings.DispTimer2 || KissStatus.reducedModeDisplay == 2 && Settings.DispTimer3)
 	{
-		OSD.setCursor(12, -1 - KissStatus.VideoModeOffset);
+		OSD.setCursor(12, -1);
 		ClearTempCharConverted();
 		print_time(KissStatus.time, TempCharConverted);
 		OSD.write(SYM_FLY_M);
@@ -111,7 +111,7 @@ void DisplayOSD_Main()
 		}
 		ClearTempCharConverted();
 		TempCharPosition = print_int16(KissTelemetrie.LipoMAH, TempCharConverted, 0, 1);
-		OSD.setCursor(-(TempCharPosition + 1 + Settings.marginLastRow), -1 - KissStatus.VideoModeOffset);
+		OSD.setCursor(-(TempCharPosition + 1 + Settings.marginLastRow), -1);
 		OSD.write(SYM_MAH);
 		OSD.print(TempCharConverted);
 		OSD.noBlink();
@@ -136,12 +136,12 @@ void DisplayOSD_Main()
 		//print motor 4
 		ClearTempCharConverted();
 		TempCharPosition = print_int16(KissTelemetrie.motorKERPM[3], TempCharConverted, 1, 1);
-		OSD.setCursor(0, -(1 + ESCmarginBot) - KissStatus.VideoModeOffset);
+		OSD.setCursor(0, -(1 + ESCmarginBot));
 		OSD.print(TempCharConverted);
 
 		//print motor 3
 		TempCharPosition = print_int16(KissTelemetrie.motorKERPM[2], TempCharConverted, 1, 1);
-		OSD.setCursor(-TempCharPosition, -(1 + ESCmarginBot) - KissStatus.VideoModeOffset);
+		OSD.setCursor(-TempCharPosition, -(1 + ESCmarginBot));
 		OSD.print(TempCharConverted);
 		ClearTempCharConverted();
 
@@ -169,14 +169,14 @@ void DisplayOSD_Main()
 		ClearTempCharConverted();
 		TempCharPosition = print_int16(KissTelemetrie.motorCurrent[3], TempCharConverted, 2, 1);
 		TempCharConverted[TempCharPosition++] = 'A';
-		OSD.setCursor(0, -(1 + CurrentMargin + ESCmarginBot) - KissStatus.VideoModeOffset);
+		OSD.setCursor(0, -(1 + CurrentMargin + ESCmarginBot));
 		OSD.print(TempCharConverted);
 
 		//current3
 		ClearTempCharConverted();
 		TempCharPosition = print_int16(KissTelemetrie.motorCurrent[2], TempCharConverted, 2, 1);
 		TempCharConverted[TempCharPosition++] = 'A';
-		OSD.setCursor(-TempCharPosition, -(1 + CurrentMargin + ESCmarginBot) - KissStatus.VideoModeOffset);
+		OSD.setCursor(-TempCharPosition, -(1 + CurrentMargin + ESCmarginBot));
 		OSD.print(TempCharConverted);
 
 		TMPmargin++;
@@ -203,7 +203,7 @@ void DisplayOSD_Main()
 		ClearTempCharConverted();
 		TempCharPosition = print_int16(KissTelemetrie.ESCTemps[3], TempCharConverted, 0, 1);
 		TempCharConverted[TempCharPosition++] = SYM_TEMP_C;
-		OSD.setCursor(0, -(1 + TMPmargin + ESCmarginBot) - KissStatus.VideoModeOffset);
+		OSD.setCursor(0, -(1 + TMPmargin + ESCmarginBot));
 		TempCharConverted[7] = '  ';
 		OSD.print(TempCharConverted);
 
@@ -211,7 +211,7 @@ void DisplayOSD_Main()
 		ClearTempCharConverted();
 		TempCharPosition = print_int16(KissTelemetrie.ESCTemps[2], TempCharConverted, 0, 1);
 		TempCharConverted[TempCharPosition++] = SYM_TEMP_C;
-		OSD.setCursor(-TempCharPosition, -(1 + TMPmargin + ESCmarginBot) - KissStatus.VideoModeOffset);
+		OSD.setCursor(-TempCharPosition, -(1 + TMPmargin + ESCmarginBot));
 		TempCharConverted[7] = '  ';
 		OSD.print(TempCharConverted);
 
