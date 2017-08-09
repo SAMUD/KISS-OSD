@@ -11,7 +11,7 @@ by Samuel Daurat (sdaurat@outlook.de)
 based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
 
-#define OSDVersion "7.3RC7"
+#define OSDVersion "1.3RC25"
 #define DMemoryVersion 10
 //#define DEBUG
 /*
@@ -52,10 +52,6 @@ For more information, please refer to <http://unlicense.org>
 //Please refer to the github wiki page for explanations on the settings
 //https://github.com/SAMUD/KISS-OSD/wiki
 
-
-//video system
-#define PAL
-//#define NTSC
 
 
 // MAX7456 Charset
@@ -116,10 +112,6 @@ void setup() {
   OSD.setCharEncoding(MAX7456_MAXIM);
 #endif
 
- 
-
-  
-
   OSD.display();							//enable OSD output
   while (!OSD.notInVSync());
   OSD.clear();
@@ -158,7 +150,7 @@ void loop()
 	case ConnectionEtablished:
 		OSD.clear();
 		KissConnection = Connected;
-		KissStatus.lastMode = 5;
+		KissStatus.lastMode = KissStatus.reducedModeDisplay;
 		break;
 	case Connected:
 		

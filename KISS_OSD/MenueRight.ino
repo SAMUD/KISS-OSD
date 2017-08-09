@@ -746,7 +746,7 @@ void MenuAll_Exit(uint8_t GetSettings)
 	OldMenuPage = 0;
 	OldMenuPageLeft = 0;
 	KissTelemetrie.StickChanVals[3] = 0;
-	KissStatus.lastMode = 5;
+	KissStatus.lastMode = KissStatus.reducedModeDisplay;
 	OSD.clear();
 	if (GetSettings == GET_SETTINGS)
 	{

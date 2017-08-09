@@ -155,6 +155,7 @@ struct SerialSettings
 	uint8_t YawLPF;			//all three LFP Filters
 	uint8_t DLPF;
 	uint8_t PrLPF;
+	uint8_t AdaptFilter;	//Adaptive Filter
 	
 
 

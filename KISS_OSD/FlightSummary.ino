@@ -80,7 +80,7 @@ void FlightSummary()
 		OSD.write(SYM_FLY_M);
 
 		//ESC Data
-		OSD.setCursor(0, 9);
+		OSD.setCursor(0, 8);
 		OSD.grayBackground();
 		OSD.print(F("ESC DATA - MAX VALUES       "));
 		OSD.videoBackground();
@@ -90,13 +90,13 @@ void FlightSummary()
 			ClearTempCharConverted();
 			TempCharPosition = print_int16(KissStats.MAXESCTemp[increment], TempCharConverted, 0, 1);
 			TempCharConverted[TempCharPosition++] = SYM_TEMP_C;
-			OSD.setCursor(0, 10+ increment);
+			OSD.setCursor(0, 9+ increment);
 			OSD.print(TempCharConverted);
 
 			ClearTempCharConverted();
 			TempCharPosition = print_int16(KissStats.MAXmotorCurrent[increment], TempCharConverted, 2, 0);
 			TempCharConverted[TempCharPosition++] = SYM_AMP;
-			OSD.setCursor(7, 10+ increment);
+			OSD.setCursor(7, 9+ increment);
 			OSD.print(TempCharConverted);
 
 			ClearTempCharConverted();
@@ -105,7 +105,7 @@ void FlightSummary()
 			TempCharConverted[TempCharPosition++] = 'R';
 			TempCharConverted[TempCharPosition++] = 'P';
 			TempCharConverted[TempCharPosition++] = 'M';
-			OSD.setCursor(-TempCharPosition, 10+ increment);
+			OSD.setCursor(-TempCharPosition, 9+ increment);
 			OSD.print(TempCharConverted);
 		}
 

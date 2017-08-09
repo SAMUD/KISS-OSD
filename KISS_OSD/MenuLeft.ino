@@ -180,7 +180,9 @@ void MenuLeft_PrintSite() {
 		OSD.print(F("YAW"));
 		OSD.setCursor(4, 10);
 		OSD.print(F("D"));
-		CursorlineMaxLeft = 11;
+		OSD.setCursor(0, 11);
+		OSD.print(F("ADAPT FILTER"));
+		CursorlineMaxLeft = 12;
 		break;
 	case 3:
 		//PID
@@ -311,6 +313,8 @@ void MenuLeft_PrintValue() {
 		DisplayLPF(KissSettings.YawLPF);
 		OSD.setCursor(22, 10);
 		DisplayLPF(KissSettings.DLPF);
+		OSD.setCursor(22, 11);
+		showONOFF(KissSettings.AdaptFilter);
 		break;
 	case 3:
 		//PID
@@ -421,6 +425,8 @@ void MenuLeft_Valie(bool addsub)
 		case 10: changeval(addsub, 0, 6, 1, &KissSettings.YawLPF);
 			break;
 		case 11: changeval(addsub, 0, 6, 1, &KissSettings.DLPF);
+			break;
+		case 12: changeval(addsub, 0, 1, 1, &KissSettings.AdaptFilter);
 			break;
 		}
 		break;

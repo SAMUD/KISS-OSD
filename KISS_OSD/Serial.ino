@@ -252,6 +252,7 @@ bool getSerialData(uint8_t Mode,bool CopyBuffToSett)	//reading serial Data from 
 					KissSettings.YawLPF = serialBuf[165 + STARTCOUNT];
 					KissSettings.DLPF = serialBuf[166 + STARTCOUNT];
 					KissSettings.PrLPF = serialBuf[79 + STARTCOUNT];
+					KissSettings.AdaptFilter = serialBuf[169 + STARTCOUNT];
 				}
 				
 			}
@@ -406,6 +407,9 @@ bool setSerialData()
 	//LPF Filtering
 	serialBuf[STARTCOUNT + 154] = KissSettings.YawLPF;
 	serialBuf[STARTCOUNT + 155] = KissSettings.DLPF;
+
+	//Adapt Filter
+	serialBuf[STARTCOUNT + 158] = KissSettings.AdaptFilter;
 
 
 	//calculate Checksum
