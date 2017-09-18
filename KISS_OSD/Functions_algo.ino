@@ -97,6 +97,7 @@ void print_time(unsigned long time, char *time_str)
 //Calculate the OSD data
 void CalculateOSD()
 {
+	
 	//calculate Battery-Cells
 	if (KissStatus.BatteryCells == 0 && KissTelemetrie.LipoVoltage>400 && KissTelemetrie.LipoVoltage<3000)											
 	{
@@ -124,8 +125,6 @@ void CalculateOSD()
 		KissStatus.VoltageDisplayingCell = true;
 	if (Settings.VoltageDisplayingCell == false && KissTelemetrie.armed > 0)
 		KissStatus.VoltageDisplayingCell = false;
-
-
 	
 	//Calculate Timer
 	// switch disarmed => armed
@@ -136,10 +135,30 @@ void CalculateOSD()
 		KissStatus.total_time = KissStatus.total_time + (millis() - KissStatus.start_time);
 	else if (KissTelemetrie.armed > 0)
 		KissStatus.time = millis() - KissStatus.start_time + KissStatus.total_time;		//this is the value I will use to display
+	else if (KissStatus.armedOld == 0 && KissTelemetrie.armed == 0)
+		KissStatus.time = KissStatus.total_time;
 	KissStatus.armedOld = KissTelemetrie.armed;
 
 	//total current
 	KissTelemetrie.current = (KissTelemetrie.motorCurrent[0] + KissTelemetrie.motorCurrent[1] + KissTelemetrie.motorCurrent[2] + KissTelemetrie.motorCurrent[3])/10;
+
+	
+}
+
+void SaveBatStatus()
+{
+	KissStatus.iterations = KissStatus.iterations + 1;
+	if (KissStatus.iterations > 50)
+	{
+		KissStatus.iterations = 0;
+		Settings.SavedCurrBat.BatteryMAH = KissTelemetrie.LipoMAH + KissStatus.addMAH;
+		Settings.SavedCurrBat.total_time = KissStatus.total_time;
+		Settings.SavedCurrBat.SavedStats = KissStats;
+
+		EEPROMsave();
+	}
+
+	
 }
 
 void drawAngelIndicator(int8_t Value)

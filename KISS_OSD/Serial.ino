@@ -125,6 +125,7 @@ bool getSerialData(uint8_t Mode,bool CopyBuffToSett)	//reading serial Data from 
 
 				//capacity
 				KissTelemetrie.LipoMAH = ((serialBuf[148 + STARTCOUNT] << 8) | serialBuf[149 + STARTCOUNT]);
+				KissTelemetrie.LipoMAH = KissTelemetrie.LipoMAH + KissStatus.addMAH; //add saved mah from last battery
 				//read Motor Current and other ESC datas
 				
 				//RPM

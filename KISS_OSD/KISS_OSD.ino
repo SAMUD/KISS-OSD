@@ -12,7 +12,7 @@ based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
 
 #define OSDVersion "1.3RC26"
-#define DMemoryVersion 11
+#define DMemoryVersion 12
 //#define DEBUG
 /*
 ***************************************************************************************************************************************************
@@ -168,8 +168,18 @@ void loop()
 
 		if (KissTelemetrie.armed==0 && KissStatus.time > (TIMEOUT_FOR_SUMMARY_SEC * 1000))	//if disarmed and flighttime>45sec --> show flight summary
 			FlightSummary();
+		else if (KissTelemetrie.armed == 0 && Settings.SavedCurrBat.BatteryMAH < Settings.Capacity1st && KissStatus.time == 0 && KissTelemetrie.LipoMAH == 0 && Settings.SavedCurrBat.BatteryMAH>0)
+		{
+			//able to recover an old battery
+			DisplayRecover();
+		}
 		else
+		{
+			SaveBatStatus();
 			DisplayOSD_Main();								//Display the datas
+		}
+			
+			
 		break;
 	}
 	//Reset wdt

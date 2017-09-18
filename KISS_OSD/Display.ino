@@ -406,3 +406,43 @@ void DisplayVTXChannel()
 	DisplaySpace();
 
 }
+
+void DisplayRecover()
+{
+	OSD.setCursor(0, 2);
+	OSD.grayBackground();
+	OSD.print(F("RESTORE BATTERY WITH"));
+	DisplaySpace();
+	ClearTempCharConverted();
+	TempCharPosition = print_int16(Settings.SavedCurrBat.BatteryMAH, TempCharConverted, 0, 1);
+	OSD.write(SYM_MAH);
+	OSD.print(TempCharConverted);
+	DisplaySpace();
+	DisplaySpace();
+	DisplaySpace();
+	DisplaySpace();
+	OSD.videoBackground();
+	
+
+	OSD.setCursor(0, 4);
+	OSD.print(F("YES: PITCH+"));
+	OSD.setCursor(0, 5);
+	OSD.print(F("NO:  PITCH- OR START FLYING"));
+
+	if (KissTelemetrie.StickChanVals[2] > 800)
+	{
+		//YES
+		KissStatus.addMAH = Settings.SavedCurrBat.BatteryMAH;
+		KissStatus.total_time = Settings.SavedCurrBat.total_time;
+
+		KissStats = Settings.SavedCurrBat.SavedStats;
+	}
+	else if (KissTelemetrie.StickChanVals[2] < -800)
+	{
+		//NO
+		KissStatus.total_time = 1;
+	}
+	KissStatus.lastMode = 10;	//clear the Display when showing normal stuff
+
+
+}

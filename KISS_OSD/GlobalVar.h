@@ -172,6 +172,9 @@ struct Status
 	uint8_t BatteryCells = 0;			//stores the number of cells recognized in the first run
 	uint8_t VoltageAlarm = 0;			//0=no alarm | 1=1st alarm | 2=2nd alarm
 
+	uint8_t iterations = 0;				//each x iterations we will save the current status to be able to recover a lost battery
+	uint16_t addMAH = 0;				//if we recovered from a disconnected battery we will use this as a Offset for the MAH
+
 	uint8_t  reducedModeDisplay = 0;	//Actual Display-mode
 	uint8_t lastMode = 0;				//last Display-mode
 
@@ -207,9 +210,17 @@ struct Stats
 	uint16_t MAXmotorKERPM[4] = { 0,0,0,0 };
 	uint16_t MAXmotorCurrent[4] = { 0,0,0,0 };
 	uint16_t MAXESCTemp[4] = { 0,0,0,0 };
-} static KissStats;
+};
+static Stats KissStats;
 
 //saving actual status-thing relatet to the current session
+
+struct Save {
+	uint16_t BatteryMAH;
+	unsigned long total_time;
+	Stats SavedStats;
+};
+
 struct StoreStruct {				//saving all the OSD-Settings
 
 	uint16_t LowVoltage1st; //
@@ -264,6 +275,8 @@ struct StoreStruct {				//saving all the OSD-Settings
 	uint8_t VideoMode;
 	uint8_t VoltageDisplayingCell;	//either shows per Cell Voltage or total voltage during flight
 	uint8_t ChannelSelectDisp;		//select which aux-channel to show as external channel. 0:Throttle 1-4: Aux 1-4
+	Save SavedCurrBat;
+	
 } static Settings;
 
 
