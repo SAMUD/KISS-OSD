@@ -11,8 +11,8 @@ by Samuel Daurat (sdaurat@outlook.de)
 based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
 
-#define OSDVersion "1.3RC25"
-#define DMemoryVersion 10
+#define OSDVersion "1.3RC26"
+#define DMemoryVersion 11
 //#define DEBUG
 /*
 ***************************************************************************************************************************************************

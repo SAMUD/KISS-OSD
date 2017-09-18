@@ -30,7 +30,7 @@ void EEPROMsaveDefaultValues()
 	Settings.MemoryVersion = DMemoryVersion;
 	Settings.RED_MODE_AUX_CHANNEL = DRED_MODE_AUX_CHAN;
 
-	Settings.DispRCThrottle3 = RED3_DISPLAY_RC_THROTTLE;
+	Settings.DispChannel3 = RED3_DISPLAY_RC_THROTTLE;
 	Settings.DispCombCurrent3 = RED3_DISPLAY_COMB_CURRENT;
 	Settings.DispLipoVoltage3 = RED3_DISPLAY_LIPO_VOLTAGE;
 	Settings.DispMaConsumption3 = RED3_DISPLAY_MA_CONSUMPTION;
@@ -41,7 +41,7 @@ void EEPROMsaveDefaultValues()
 	Settings.DispTimer3 = RED3_DISPLAY_PILOTNAME;
 	Settings.DispAngle3 = RED3_DISPLAY_PILOTNAME;
 
-	Settings.DispRCThrottle2 = RED2_DISPLAY_RC_THROTTLE;
+	Settings.DispChannel2 = RED2_DISPLAY_RC_THROTTLE;
 	Settings.DispCombCurrent2 = RED2_DISPLAY_COMB_CURRENT;
 	Settings.DispLipoVoltage2 = RED2_DISPLAY_LIPO_VOLTAGE;
 	Settings.DispMaConsumption2 = RED2_DISPLAY_MA_CONSUMPTION;
@@ -52,7 +52,7 @@ void EEPROMsaveDefaultValues()
 	Settings.DispTimer2 = RED2_DISPLAY_PILOTNAME;
 	Settings.DispAngle2 = RED2_DISPLAY_PILOTNAME;
 
-	Settings.DispRCThrottle1 = RED_DISPLAY_RC_THROTTLE;
+	Settings.DispChannel1 = RED_DISPLAY_RC_THROTTLE;
 	Settings.DispCombCurrent1 = RED_DISPLAY_COMB_CURRENT;
 	Settings.DispLipoVoltage1 = RED_DISPLAY_LIPO_VOLTAGE;
 	Settings.DispMaConsumption1 = RED_DISPLAY_MA_CONSUMPTION;

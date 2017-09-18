@@ -86,20 +86,20 @@ void MenuRight_Main()
 			//draw cursor position
 			if (cursorline != cursorlineOLD && MenuPage != 7)
 			{
-				if (cursorline > 7 && MenuPage == 6)
+				if (cursorline > 8 && MenuPage == 6)
 				{
 					OSD.setCursor(22, 8);
 					OSD.print(F(" "));
 					//remove old cursor
-					OSD.setCursor(9 + cursorlineOLD, 10);
+					OSD.setCursor(8 + cursorlineOLD, 11);
 					OSD.print(F(" "));
 					//write new one
-					OSD.setCursor(9 + cursorline, 10);
+					OSD.setCursor(8 + cursorline, 11);
 					OSD.write(SYM_CURSOR_UP);
 				}
 				else
 				{
-					OSD.setCursor(17, 10);
+					OSD.setCursor(17, 11);
 					OSD.print(F(" "));
 					OSD.setCursor(22, cursorlineOLD + 1);
 					OSD.print(F(" "));
@@ -215,14 +215,16 @@ void menuprintsite() {
 		OSD.setCursor(0, 5);
 		OSD.print(F("MODE CHANNEL"));
 		OSD.setCursor(0, 6);
+		OSD.print(F("SELECT THR / AUX 1-4"));
+		OSD.setCursor(0, 7);
 		OSD.print(F("SCREEN OFFSET VER"));
-		OSD.setCursor(14, 7);
+		OSD.setCursor(14, 8);
 		OSD.print(F("HOR"));
-		OSD.setCursor(0, 8);
-		OSD.print(F("DISP LINES"));
 		OSD.setCursor(0, 9);
+		OSD.print(F("DISP LINES"));
+		OSD.setCursor(0, 10);
 		OSD.print(F("NAME"));
-		cursorlineMax = 18;
+		cursorlineMax = 19;
 		break;
 	case 7:
 		//Info
@@ -299,7 +301,7 @@ void menuprintvalue() {
 	case 3:
 		//RED1
 		OSD.setCursor(23, 2);
-		showONOFF(Settings.DispRCThrottle1);
+		showONOFF(Settings.DispChannel1);
 		OSD.setCursor(23, 3);
 		showONOFF(Settings.DispCombCurrent1);
 		OSD.setCursor(23, 4);
@@ -322,7 +324,7 @@ void menuprintvalue() {
 	case 4:
 		//RED2
 		OSD.setCursor(23, 2);
-		showONOFF(Settings.DispRCThrottle2);
+		showONOFF(Settings.DispChannel2);
 		OSD.setCursor(23, 3);
 		showONOFF(Settings.DispCombCurrent2);
 		OSD.setCursor(23, 4);
@@ -345,7 +347,7 @@ void menuprintvalue() {
 	case 5:
 		//RED1
 		OSD.setCursor(23, 2);
-		showONOFF(Settings.DispRCThrottle3);
+		showONOFF(Settings.DispChannel3);
 		OSD.setCursor(23, 3);
 		showONOFF(Settings.DispCombCurrent3);
 		OSD.setCursor(23, 4);
@@ -380,17 +382,20 @@ void menuprintvalue() {
 		OSD.print(Settings.RED_MODE_AUX_CHANNEL);
 		DisplaySpace();
 		OSD.setCursor(23, 6);
+		OSD.print(Settings.ChannelSelectDisp);
+		DisplaySpace();
+		OSD.setCursor(23, 7);
 		OSD.print(Settings.OffsetX);
 		OSD.print(F("PX "));
-		OSD.setCursor(23, 7);
+		OSD.setCursor(23, 8);
 		OSD.print(Settings.OffsetY);
 		OSD.print(F("PX "));
-		OSD.setCursor(23, 8);
+		OSD.setCursor(23, 9);
 		if (Settings.VideoMode == 1)
 			OSD.print(13+Settings.LineAddition);
 		else
 			OSD.print(13 + Settings.LineAddition);
-		OSD.setCursor(17, 9);
+		OSD.setCursor(17, 10);
 		OSD.print(Settings.PilotName);
 		break;
 	case 7:
@@ -463,7 +468,7 @@ void value(bool addsub)
 		//RED1
 		switch (cursorline)
 		{
-		case 1: changeval(addsub, 0, 1, 1, &Settings.DispRCThrottle1);
+		case 1: changeval(addsub, 0, 1, 1, &Settings.DispChannel1);
 			break;
 		case 2: changeval(addsub, 0, 1, 1, &Settings.DispCombCurrent1);
 			break;
@@ -489,7 +494,7 @@ void value(bool addsub)
 		//RED2
 		switch (cursorline)
 		{
-		case 1: changeval(addsub, 0, 1, 1, &Settings.DispRCThrottle2);
+		case 1: changeval(addsub, 0, 1, 1, &Settings.DispChannel2);
 			break;
 		case 2: changeval(addsub, 0, 1, 1, &Settings.DispCombCurrent2);
 			break;
@@ -515,7 +520,7 @@ void value(bool addsub)
 		//RED3
 		switch (cursorline)
 		{
-		case 1: changeval(addsub, 0, 1, 1, &Settings.DispRCThrottle3);
+		case 1: changeval(addsub, 0, 1, 1, &Settings.DispChannel3);
 			break;
 		case 2: changeval(addsub, 0, 1, 1, &Settings.DispCombCurrent3);
 			break;
@@ -549,17 +554,19 @@ void value(bool addsub)
 			break;
 		case 4: changeval(addsub, 0, 4, 1, &Settings.RED_MODE_AUX_CHANNEL);
 			break;
-		case 5: changeval(addsub, MAX7456_VOS_MIN, MAX7456_VOS_MAX, 1, &Settings.OffsetX);
+		case 5: changeval(addsub, 0, 4, 1, &Settings.ChannelSelectDisp);
+			break;
+		case 6: changeval(addsub, MAX7456_VOS_MIN, MAX7456_VOS_MAX, 1, &Settings.OffsetX);
 			OSD.setTextOffset(Settings.OffsetX, Settings.OffsetY);
 			break;
-		case 6: changeval(addsub, MAX7456_HOS_MIN, MAX7456_HOS_MAX, 1, &Settings.OffsetY);
+		case 7: changeval(addsub, MAX7456_HOS_MIN, MAX7456_HOS_MAX, 1, &Settings.OffsetY);
 			OSD.setTextOffset(Settings.OffsetX, Settings.OffsetY);
 			break;
-		case 7: changeval(addsub, 0, 2, 1, &Settings.LineAddition);
+		case 8: changeval(addsub, 0, 2, 1, &Settings.LineAddition);
 			break;
 		}
-		if (cursorline > 7)
-			changeChar(addsub, cursorline - 8);
+		if (cursorline > 8)
+			changeChar(addsub, cursorline - 9);
 		break;
 	case 7:
 		//Info
@@ -631,7 +638,7 @@ void printRED()
 {
 	OSD.videoBackground();
 	OSD.setCursor(0, 2);
-	OSD.print(F("RC THROTTLE"));
+	OSD.print(F("THR / AUX 1-4"));
 	OSD.setCursor(0, 3);
 	OSD.print(F("TOTAL CURRENT"));
 	OSD.setCursor(0, 4);

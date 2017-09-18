@@ -225,7 +225,7 @@ struct StoreStruct {				//saving all the OSD-Settings
 	uint8_t Capacity1st;
 	uint8_t Capacity2nd;
 	uint8_t MemoryVersion;
-	uint8_t DispRCThrottle1;
+	uint8_t DispChannel1;
 	uint8_t DispCombCurrent1;
 	uint8_t DispLipoVoltage1;
 	uint8_t DispMaConsumption1;
@@ -235,7 +235,7 @@ struct StoreStruct {				//saving all the OSD-Settings
 	uint8_t DispPilotname1;
 	uint8_t DispTimer1;
 	uint8_t DispAngle1;
-	uint8_t DispRCThrottle2;
+	uint8_t DispChannel2;
 	uint8_t DispCombCurrent2;
 	uint8_t DispLipoVoltage2;
 	uint8_t DispMaConsumption2;
@@ -245,7 +245,7 @@ struct StoreStruct {				//saving all the OSD-Settings
 	uint8_t DispPilotname2;
 	uint8_t DispTimer2;
 	uint8_t DispAngle2;
-	uint8_t DispRCThrottle3;
+	uint8_t DispChannel3;
 	uint8_t DispCombCurrent3;
 	uint8_t DispLipoVoltage3;
 	uint8_t DispMaConsumption3;
@@ -263,6 +263,7 @@ struct StoreStruct {				//saving all the OSD-Settings
 	uint8_t LineAddition;
 	uint8_t VideoMode;
 	uint8_t VoltageDisplayingCell;	//either shows per Cell Voltage or total voltage during flight
+	uint8_t ChannelSelectDisp;		//select which aux-channel to show as external channel. 0:Throttle 1-4: Aux 1-4
 } static Settings;
 
 

@@ -33,12 +33,23 @@ void DisplayOSD_Main()
 	//*start displaying the OSD-data*
 	//*******************************
 
-	if (KissStatus.reducedModeDisplay == 0 && Settings.DispRCThrottle1 || KissStatus.reducedModeDisplay == 1 && Settings.DispRCThrottle2 || KissStatus.reducedModeDisplay == 2 && Settings.DispRCThrottle3)
+	if (KissStatus.reducedModeDisplay == 0 && Settings.DispChannel1 || KissStatus.reducedModeDisplay == 1 && Settings.DispChannel2 || KissStatus.reducedModeDisplay == 2 && Settings.DispChannel3)
 	{
 		OSD.home();
-		OSD.write(SYM_THR);
 		ClearTempCharConverted();
-		TempCharPosition = print_int16(KissTelemetrie.StickChanVals[0] / 10, TempCharConverted, 0, 1);
+		if (Settings.ChannelSelectDisp == 0)		//selector to show either Throttle or Aux 1-4
+		{
+			//we want to show Throttle
+			OSD.write(SYM_THR);
+			TempCharPosition = print_int16(KissTelemetrie.StickChanVals[0] / 10, TempCharConverted, 0, 1);
+		}
+		else
+		{
+			//we want to show Aux1-4
+			OSD.write(SYM_RSSI);	//at the moment we only support RSSI with a value from 0 to 100%. db will be added later
+			TempCharPosition = print_int16( ((KissTelemetrie.AuxChanVals[Settings.ChannelSelectDisp-1]/10)+100)/2, TempCharConverted, 0, 1);
+
+		}
 		TempCharConverted[TempCharPosition++] = SYM_PERC;
 		OSD.print(TempCharConverted);
 		ESCmarginTop = 1;
