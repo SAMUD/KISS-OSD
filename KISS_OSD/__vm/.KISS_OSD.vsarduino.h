@@ -81,6 +81,7 @@ typedef void *__builtin_va_list;
 #include "EEPROM_Handling.ino"
 #include "FlightSummary.ino"
 #include "Functions_algo.ino"
+#include "MAX7456.ino"
 #include "MenuLeft.ino"
 #include "MenueRight.ino"
 #include "Serial.ino"

@@ -88,6 +88,9 @@
     <None Include="KISS_OSD.ino">
       <FileType>CppCode</FileType>
     </None>
+    <None Include="MAX7456.ino">
+      <FileType>CppCode</FileType>
+    </None>
     <None Include="MenueRight.ino">
       <FileType>CppCode</FileType>
     </None>

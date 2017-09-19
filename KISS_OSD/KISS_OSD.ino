@@ -14,6 +14,7 @@ based on the code by Felix Niessen (felix.niessen@googlemail.com)
 #define OSDVersion "1.3RC26"
 #define DMemoryVersion 12
 //#define DEBUG
+#define STEELE_PDB
 /*
 ***************************************************************************************************************************************************
 Donations help A LOT during development, buying me a COFFE you will keep me awake at night so I can add more stuff:  https://paypal.me/SamuelDaurat
@@ -77,8 +78,7 @@ For more information, please refer to <http://unlicense.org>
 //SETUP function
 void setup() {
 
-	//SerialPort<0, 64, 0> NewSerial;
-	
+
 	
 	//turn on watchdog timer
   //wdt_enable(WDTO_8S);
@@ -90,6 +90,11 @@ void setup() {
 
   //init memory
   EEPROMinit();
+
+#if (defined(IMPULSERC_VTX) || defined(STEELE_PDB))
+	MAX7456Setup();
+	delay(100);
+#endif
 
   if (Settings.VideoMode == 1)
   {

@@ -24,6 +24,7 @@
     <None Include="FlightSummary.ino" />
     <None Include="Display.ino" />
     <None Include="MenuLeft.ino" />
+    <None Include="MAX7456.ino" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="__vm\.KISS_OSD.vsarduino.h">

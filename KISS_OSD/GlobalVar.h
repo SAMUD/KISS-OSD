@@ -74,7 +74,7 @@
 	# define MAX7456RESET  9         // RESET
 #endif
 
-#ifdef IMPULSERC_VTX
+#if (defined IMPULSERC_VTX || defined STEELE_PDB)
 	#define OSD_CHIP_SELECT 10
 #else
 	#define OSD_CHIP_SELECT 6
