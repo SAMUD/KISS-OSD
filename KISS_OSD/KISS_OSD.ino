@@ -14,7 +14,7 @@ based on the code by Felix Niessen (felix.niessen@googlemail.com)
 #define OSDVersion "1.3RC26"
 #define DMemoryVersion 12
 //#define DEBUG
-#define STEELE_PDB
+//#define STEELE_PDB
 /*
 ***************************************************************************************************************************************************
 Donations help A LOT during development, buying me a COFFE you will keep me awake at night so I can add more stuff:  https://paypal.me/SamuelDaurat
@@ -159,6 +159,7 @@ void loop()
 		break;
 	case Connected:
 		
+		KissStatus.SerialErrorReason = 0;
 		//open menu right if yaw right and disarmed
 		if (!KissTelemetrie.armed && KissTelemetrie.StickChanVals[3] > 800)
 			MenuRight_Main();

@@ -340,7 +340,7 @@ PreProcessor.HeaderCount=1
 PreProcessor.PrototypeCount=52
 vm.last.preproc.file.0.file=KISS_OSD.ino
 vm.last.preproc.file.0.offset=1
-vm.last.preproc.file.0.length=6008
+vm.last.preproc.file.0.length=6010
 vm.last.preproc.file.0.linecount=206
 vm.last.preproc.file.0.linestart=0
 vm.last.preproc.file.0.lineend=206
@@ -435,7 +435,7 @@ vm.build_use_temp=1
 runtime.vm.ide.platforms.path=C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\txoxxh31.5by\Micro Platforms
 build.variant.path=C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\eightanaloginputs
 archive_file=core.a
-extra.time.local=25469194
+extra.time.local=28738208
 tools.ctags.path={runtime.tools.ctags.path}
 tools.ctags.cmd.path={path}/ctags
 tools.ctags.pattern="{cmd.path}" -u --language-force=c++ -f - --c++-kinds=svpf --fields=KSTtzns --line-directives "{source_file}"

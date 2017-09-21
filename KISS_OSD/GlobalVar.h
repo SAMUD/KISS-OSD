@@ -190,6 +190,8 @@ struct Status
 	uint32_t LastLoopTime;	
 	uint32_t LastLoopTime2;
 
+	uint8_t SerialErrorReason = 0;
+
 	uint8_t SavingSettingsRetry = 10;
 
 	bool VoltageDisplayingCell = false;	//selects if the OSD should display total Voltage or Voltage/Cell

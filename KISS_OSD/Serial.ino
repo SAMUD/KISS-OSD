@@ -18,10 +18,11 @@ bool getSerialData(uint8_t Mode,bool CopyBuffToSett)	//reading serial Data from 
 	while (exitreceiving == 0)
 	{
 		//Running already to long in this loop
-		if (millis() - KissStatus.LastLoopTime > 750)
+		if (millis() - KissStatus.LastLoopTime > 250)
 		{
 			KissConnection = LostConnection;
 			exitreceiving = 1;
+			KissStatus.SerialErrorReason = 2;
 			#ifdef DEBUG
 			Debug_Fnc("TO LONG WAIT");
 			OSD.setCursor(0, 10);
@@ -43,6 +44,7 @@ bool getSerialData(uint8_t Mode,bool CopyBuffToSett)	//reading serial Data from 
 		{
 			exitreceiving = 1;
 			KissConnection = LostConnection;
+			KissStatus.SerialErrorReason = 1;
 			#ifdef DEBUG
 			Debug_Fnc("START BYTE ERR");
 			#endif // DEBUG
@@ -292,6 +294,7 @@ bool setSerialData()
 		if (i > 10)								//Unable to re-aquire data
 		{
 			KissConnection = LostConnection;
+			KissStatus.SerialErrorReason = 5;
 			return false;		
 		}	
 	}

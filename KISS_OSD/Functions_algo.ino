@@ -213,6 +213,20 @@ void WaitForKissFc()
 	OSD.setCursor(0, -1);
 	OSD.print(F("REBOOT SERIAL"));
 
+	OSD.setCursor(0, 1);
+	if (KissStatus.SerialErrorReason==0)
+		OSD.print(F("NONE"));
+	else if (KissStatus.SerialErrorReason == 1)
+		OSD.print(F("START BYTE ERROR"));
+	else if (KissStatus.SerialErrorReason == 2)
+		OSD.print(F("TO LONG WAIT"));
+	else if (KissStatus.SerialErrorReason == 3)
+		OSD.print(F("UNKNOWN"));
+	else if (KissStatus.SerialErrorReason == 4)
+		OSD.print(F("GET SETTING 4"));
+	else if (KissStatus.SerialErrorReason == 5)
+		OSD.print(F("GET SETTING 5"));
+
 	//We need to reboot the serial connection, because sometimes it gets stuck.
 	Serial.end();
 	delay(75);

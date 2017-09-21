@@ -688,6 +688,7 @@ bool Menuall_start(uint8_t GetSettings)
 			if (i > 10)								//Unable to re-aquire data
 			{
 				KissConnection = LostConnection;
+				KissStatus.SerialErrorReason = 4;
 				return false;
 			}
 		}
