@@ -190,6 +190,8 @@ struct Status
 	uint32_t LastLoopTime;	
 	uint32_t LastLoopTime2;
 
+	uint16_t OLDLipoMAH;
+
 	uint8_t SerialErrorReason = 0;
 
 	uint8_t SavingSettingsRetry = 10;

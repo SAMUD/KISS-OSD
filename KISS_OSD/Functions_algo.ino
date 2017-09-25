@@ -142,6 +142,16 @@ void CalculateOSD()
 	//total current
 	KissTelemetrie.current = (KissTelemetrie.motorCurrent[0] + KissTelemetrie.motorCurrent[1] + KissTelemetrie.motorCurrent[2] + KissTelemetrie.motorCurrent[3])/10;
 
+	if (KissTelemetrie.LipoMAH < KissStatus.OLDLipoMAH)
+	{
+		//Something went wrong. MAH can't decrease during flight
+		KissTelemetrie.LipoMAH = KissStatus.OLDLipoMAH;
+	}
+	else
+	{
+		//All is good. MAH are increasing or the same
+		KissStatus.OLDLipoMAH = KissTelemetrie.LipoMAH;
+	}
 	
 }
 
