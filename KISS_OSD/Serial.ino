@@ -17,7 +17,7 @@ bool getSerialData(uint8_t Mode,bool CopyBuffToSett)	//reading serial Data from 
 	//aquire serial data and write it to normal variables
 	while (exitreceiving == 0)
 	{
-		//Running already to long in this loop
+		/*//Running already to long in this loop
 		if (millis() - KissStatus.LastLoopTime > 250)
 		{
 			KissConnection = LostConnection;
@@ -32,7 +32,7 @@ bool getSerialData(uint8_t Mode,bool CopyBuffToSett)	//reading serial Data from 
 			OSD.setCursor(0, 12);
 			OSD.print((uint8_t)serialBuf[1]);
 			#endif
-		}
+		}*/
 
 		//Copy all received data into buffer
 		while (Serial.available())
