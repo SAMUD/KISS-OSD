@@ -239,9 +239,9 @@ void WaitForKissFc()
 
 	//We need to reboot the serial connection, because sometimes it gets stuck.
 	Serial.end();
-	delay(7);
+	delay(10);
 	Serial.begin(115200);
-	delay(7);
+	delay(10);
 
 	KissConnection = ConnectionEtablished;
 }

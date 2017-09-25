@@ -13,7 +13,7 @@ based on the code by Felix Niessen (felix.niessen@googlemail.com)
 
 #define OSDVersion "1.3RC26"
 #define DMemoryVersion 12
-#define DEBUG
+//#define DEBUG
 #define STEELE_PDB
 /*
 ***************************************************************************************************************************************************
@@ -178,7 +178,12 @@ void loop()
 			FlightSummary();
 			SaveBatStatus();
 		}
-		else if (KissTelemetrie.armed == 0 && Settings.SavedCurrBat.BatteryMAH < Settings.Capacity1st && KissStatus.time == 0 && KissTelemetrie.LipoMAH == 0 && Settings.SavedCurrBat.BatteryMAH>0)
+		else if (KissTelemetrie.armed == 0 &&
+				 Settings.SavedCurrBat.BatteryMAH < ((Settings.Capacity * (float)Settings.Capacity1st) / 100) &&
+			     KissStatus.time == 0 &&
+			     KissTelemetrie.LipoMAH < 10 &&
+			     Settings.SavedCurrBat.BatteryMAH>0 &&
+			     Settings.Capacity>0)
 			//able to recover an old battery
 			DisplayRecover();
 		else
