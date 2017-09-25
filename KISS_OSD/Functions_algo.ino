@@ -102,7 +102,7 @@ void CalculateOSD()
 	if (KissStatus.BatteryCells == 0 && KissTelemetrie.LipoVoltage>400 && KissTelemetrie.LipoVoltage<3000)											
 	{
 		KissStatus.BatteryCells = 1;
-		while (KissTelemetrie.LipoVoltage > KissStatus.BatteryCells * 440)
+		while (KissTelemetrie.LipoVoltage > KissStatus.BatteryCells * 425)
 			KissStatus.BatteryCells++;
 	}
 
