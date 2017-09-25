@@ -13,8 +13,8 @@ based on the code by Felix Niessen (felix.niessen@googlemail.com)
 
 #define OSDVersion "1.3RC26"
 #define DMemoryVersion 12
-//#define DEBUG
-//#define STEELE_PDB
+#define DEBUG
+#define STEELE_PDB
 /*
 ***************************************************************************************************************************************************
 Donations help A LOT during development, buying me a COFFE you will keep me awake at night so I can add more stuff:  https://paypal.me/SamuelDaurat
@@ -190,7 +190,7 @@ void loop()
 	}
 	//Reset wdt
     //wdt_reset();
-	if (OSD.videoSystem() != Settings.VideoMode)
+	if (OSD.videoSystem() != Settings.VideoMode && Settings.stockSettings)
 	{
 		if (OSD.videoSystem() == 2)
 			Settings.VideoMode = 2;	//Setting to NTSC

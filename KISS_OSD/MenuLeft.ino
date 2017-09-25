@@ -98,7 +98,7 @@ void MenuLeft_Main()
 		//wdt_reset();
 	}
 
-	if(KissTelemetrie.armed ==0)
+	if (KissTelemetrie.armed == 0)
 		//this is a normal exit. Saving settings
 		MenuAll_Exit(GET_SETTINGS);
 	else

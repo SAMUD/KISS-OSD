@@ -82,7 +82,7 @@
 
 
 
-#define GET_TELEMETRY	0x20		//different bytes sent to the FC to initiate an action	
+#define GET_TELEMETRY	0x13		//different bytes sent to the FC to initiate an action	
 #define GET_INFO		0x21
 #define	ESC_INFO		0x22
 #define	GET_SETTINGS	0x30

@@ -675,7 +675,7 @@ bool Menuall_start(uint8_t GetSettings)
 	OSD.print(F("OR ON FACEBOOK"));
 	OSD.videoBackground();
 
-	delay(500);
+	//delay(500);
 
 	if (GetSettings == GET_SETTINGS)
 	{
@@ -756,6 +756,7 @@ void MenuAll_Exit(uint8_t GetSettings)
 	KissTelemetrie.StickChanVals[3] = 0;
 	KissStatus.lastMode = KissStatus.reducedModeDisplay;
 	OSD.clear();
+	delay(25);
 	if (GetSettings == GET_SETTINGS)
 	{
 		if (setSerialData())

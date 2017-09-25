@@ -5,20 +5,32 @@ bool getSerialData(uint8_t Mode,bool CopyBuffToSett)	//reading serial Data from 
 	static uint32_t tmpVoltage = 0;
 	static uint8_t voltDev = 0;
 	static uint32_t windedupfilterdatas[8];
-	uint8_t minBytes = 63;
+	uint8_t minBytes = 100;
 	uint8_t recBytes = 0;
 	uint8_t exitreceiving = 0;
 
 	serialBuf[0] = 0;
 	serialBuf[1] = 0;
 
+	#ifdef DEBUG
+	OSD.setCursor(0, 10);
+	OSD.print(recBytes);
+	OSD.setCursor(0, 11);
+	OSD.print(minBytes);
+	OSD.setCursor(0, 12);
+	OSD.print((uint8_t)serialBuf[1]);
+	#endif
+
 	Serial.write(Mode);	//request data from FC
 	
 	//aquire serial data and write it to normal variables
 	while (exitreceiving == 0)
 	{
-		/*//Running already to long in this loop
-		if (millis() - KissStatus.LastLoopTime > 250)
+		
+
+		
+		//Running already to long in this loop
+		if (millis() - KissStatus.LastLoopTime > 200)
 		{
 			KissConnection = LostConnection;
 			exitreceiving = 1;
@@ -32,7 +44,7 @@ bool getSerialData(uint8_t Mode,bool CopyBuffToSett)	//reading serial Data from 
 			OSD.setCursor(0, 12);
 			OSD.print((uint8_t)serialBuf[1]);
 			#endif
-		}*/
+		}
 
 		//Copy all received data into buffer
 		while (Serial.available())
@@ -56,11 +68,12 @@ bool getSerialData(uint8_t Mode,bool CopyBuffToSett)	//reading serial Data from 
 			minBytes = serialBuf[1] + STARTCOUNT + 1; // got the transmission length
 			//small error check
 			if (minBytes < 150 || minBytes>180)
-				minBytes = 63;
+			{
+				minBytes = 100;
+				recBytes = 0;
+			}
 		}
 			
-			
-		
 
 		//All data is here
 		if (recBytes == minBytes)
@@ -72,7 +85,7 @@ bool getSerialData(uint8_t Mode,bool CopyBuffToSett)	//reading serial Data from 
 			
 			checksum = (uint32_t)checksum / (minBytes - 3);
 
-			if (checksum == serialBuf[recBytes - 1] &&  Mode == GET_TELEMETRY)
+			if (kissProtocolCRC8(serialBuf, STARTCOUNT, minBytes-1) == serialBuf[recBytes - 1] &&  Mode == GET_TELEMETRY)
 			{
 				#ifdef DEBUG
 				OSD.setCursor(0, 10);
@@ -267,7 +280,7 @@ bool getSerialData(uint8_t Mode,bool CopyBuffToSett)	//reading serial Data from 
 			}
 				
 			else if (Mode == GET_TELEMETRY)
-				Debug_Fnc("TELM ERR");
+				Debug_Fnc("CRC8");
 			#endif // DEBUG
 
 			if (KissConnection == LostConnection)
