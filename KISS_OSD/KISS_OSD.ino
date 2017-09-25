@@ -106,6 +106,7 @@ void setup() {
 	  OSD.begin(MAX7456_COLS_N1, 12 + Settings.LineAddition);
 	  OSD.setDefaultSystem(MAX7456_NTSC);
   }
+		
 
   
  OSD.setSwitchingTime(0);					//lower value will make text a little bit sharper
@@ -172,13 +173,14 @@ void loop()
 		CalculateOSD();
 		FlightSummaryCalculate();
 
-		if (KissTelemetrie.armed==0 && KissStatus.time > (TIMEOUT_FOR_SUMMARY_SEC * 1000))	//if disarmed and flighttime>45sec --> show flight summary
-			FlightSummary();
-		else if (KissTelemetrie.armed == 0 && Settings.SavedCurrBat.BatteryMAH < Settings.Capacity1st && KissStatus.time == 0 && KissTelemetrie.LipoMAH == 0 && Settings.SavedCurrBat.BatteryMAH>0)
+		if (KissTelemetrie.armed == 0 && KissStatus.time > (TIMEOUT_FOR_SUMMARY_SEC * 1000))	//if disarmed and flighttime>45sec --> show flight summary
 		{
+			FlightSummary();
+			SaveBatStatus();
+		}
+		else if (KissTelemetrie.armed == 0 && Settings.SavedCurrBat.BatteryMAH < Settings.Capacity1st && KissStatus.time == 0 && KissTelemetrie.LipoMAH == 0 && Settings.SavedCurrBat.BatteryMAH>0)
 			//able to recover an old battery
 			DisplayRecover();
-		}
 		else
 		{
 			SaveBatStatus();
@@ -190,7 +192,7 @@ void loop()
 	}
 	//Reset wdt
     //wdt_reset();
-	if (OSD.videoSystem() != Settings.VideoMode && Settings.stockSettings)
+	if (OSD.videoSystem() != Settings.VideoMode && Settings.stockSettings==0)
 	{
 		if (OSD.videoSystem() == 2)
 			Settings.VideoMode = 2;	//Setting to NTSC

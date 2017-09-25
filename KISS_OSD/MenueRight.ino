@@ -88,7 +88,7 @@ void MenuRight_Main()
 			{
 				if (cursorline > 8 && MenuPage == 6)
 				{
-					OSD.setCursor(22, 8);
+					OSD.setCursor(22, 9);
 					OSD.print(F(" "));
 					//remove old cursor
 					OSD.setCursor(8 + cursorlineOLD, 11);

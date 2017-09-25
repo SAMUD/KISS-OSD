@@ -99,7 +99,7 @@ void CalculateOSD()
 {
 	
 	//calculate Battery-Cells
-	if (KissStatus.BatteryCells == 0 && KissTelemetrie.LipoVoltage>400 && KissTelemetrie.LipoVoltage<3000)											
+	if (KissStatus.BatteryCells == 0 && KissTelemetrie.LipoVoltage>400 && KissTelemetrie.LipoVoltage<3000 && KissStatus.iterations>45)											
 	{
 		KissStatus.BatteryCells = 1;
 		while (KissTelemetrie.LipoVoltage > KissStatus.BatteryCells * 425)
@@ -161,7 +161,7 @@ void SaveBatStatus()
 	if (KissStatus.iterations > 50)
 	{
 		KissStatus.iterations = 0;
-		Settings.SavedCurrBat.BatteryMAH = KissTelemetrie.LipoMAH + KissStatus.addMAH;
+		Settings.SavedCurrBat.BatteryMAH = KissTelemetrie.LipoMAH;
 		Settings.SavedCurrBat.total_time = KissStatus.total_time;
 		Settings.SavedCurrBat.SavedStats = KissStats;
 
@@ -239,9 +239,9 @@ void WaitForKissFc()
 
 	//We need to reboot the serial connection, because sometimes it gets stuck.
 	Serial.end();
-	delay(75);
+	delay(7);
 	Serial.begin(115200);
-	delay(25);
+	delay(7);
 
 	KissConnection = ConnectionEtablished;
 }
