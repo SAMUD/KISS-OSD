@@ -54,7 +54,7 @@ void FlightSummary()
 		OSD.setCursor(0, 4);
 		OSD.print(F("POWER   MAX"));
 		ClearTempCharConverted();
-		TempCharPosition = print_int16(KissStats.MAXWatt, TempCharConverted, 1, 1);
+		TempCharPosition = print_int16(KissStats.MAXWatt, TempCharConverted, 0, 1);
 		OSD.setCursor(-TempCharPosition - 1, 4);
 		OSD.print(TempCharConverted);
 		OSD.setCursor(-1, 4);
@@ -121,7 +121,7 @@ void FlightSummaryCalculate()
 	//save the maimum value at each iteration
 	KissStats.MaxCurrentTotal = FlightSummaryMax(KissStats.MaxCurrentTotal, KissTelemetrie.current);
 	KissStats.MinVoltage = FlightSummaryMin(KissStats.MinVoltage, KissTelemetrie.LipoVoltage);
-	KissStats.MAXWatt = FlightSummaryMax(KissStats.MAXWatt, (KissTelemetrie.current*(KissTelemetrie.LipoVoltage / 10)) / 10);
+	KissStats.MAXWatt = FlightSummaryMax(KissStats.MAXWatt, ( (KissTelemetrie.current/100)*(KissTelemetrie.LipoVoltage/1000) )  );
 
 	for (i = 0; i < 4; i++)
 	{
