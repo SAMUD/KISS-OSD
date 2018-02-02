@@ -62,10 +62,10 @@ typedef void *__builtin_va_list;
 
 
 
-#include <arduino.h>
+#include <Arduino.h>
 #include <pins_arduino.h> 
-//#undef F
-//#define F(string_literal) ((const PROGMEM char *)(string_literal))
+#undef F
+#define F(string_literal) ((const PROGMEM char *)(string_literal))
 #undef PSTR
 #define PSTR(string_literal) ((const PROGMEM char *)(string_literal))
 
