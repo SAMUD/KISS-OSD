@@ -121,7 +121,7 @@ void FlightSummaryCalculate()
 	//save the maimum value at each iteration
 	KissStats.MaxCurrentTotal = FlightSummaryMax(KissStats.MaxCurrentTotal, KissTelemetrie.current);
 	KissStats.MinVoltage = FlightSummaryMin(KissStats.MinVoltage, KissTelemetrie.LipoVoltage);
-	KissStats.MAXWatt = FlightSummaryMax(KissStats.MAXWatt, ( (KissTelemetrie.current/100)*(KissTelemetrie.LipoVoltage/1000) )  );
+	KissStats.MAXWatt = FlightSummaryMax(KissStats.MAXWatt, ( (KissTelemetrie.current/10)*(uint16_t(KissTelemetrie.LipoVoltage)/100) )  );
 
 	for (i = 0; i < 4; i++)
 	{

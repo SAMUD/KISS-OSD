@@ -59,8 +59,10 @@ void DisplayOSD_Main()
 	if (KissStatus.reducedModeDisplay == 0 && Settings.DispCombCurrent1 || KissStatus.reducedModeDisplay == 1 && Settings.DispCombCurrent2 || KissStatus.reducedModeDisplay == 2 && Settings.DispCombCurrent3)
 	{
 		ClearTempCharConverted();
-		TempCharPosition = print_int16(KissTelemetrie.current, TempCharConverted, 1, 0);
-		TempCharConverted[TempCharPosition++] = 'A';
+		
+		//TempCharPosition = print_int16(KissTelemetrie.current, TempCharConverted, 1, 0);
+		TempCharPosition = print_int16(((KissTelemetrie.current / 10)*(uint16_t(KissTelemetrie.LipoVoltage) / 100)), TempCharConverted, 0, 0);
+		TempCharConverted[TempCharPosition++] = 'W';
 		TempCharConverted[TempCharPosition++] = 'T';
 		OSD.setCursor(-TempCharPosition, 0);
 		OSD.print(TempCharConverted);
