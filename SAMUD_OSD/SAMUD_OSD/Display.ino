@@ -58,15 +58,37 @@ void DisplayOSD_Main()
 
 	if (KissStatus.reducedModeDisplay == 0 && Settings.DispCombCurrent1 || KissStatus.reducedModeDisplay == 1 && Settings.DispCombCurrent2 || KissStatus.reducedModeDisplay == 2 && Settings.DispCombCurrent3)
 	{
-		ClearTempCharConverted();
 		
-		//TempCharPosition = print_int16(KissTelemetrie.current, TempCharConverted, 1, 0);
-		TempCharPosition = print_int16(((KissTelemetrie.current / 10)*(uint16_t(KissTelemetrie.LipoVoltage) / 100)), TempCharConverted, 0, 0);
-		TempCharConverted[TempCharPosition++] = 'W';
-		TempCharConverted[TempCharPosition++] = 'T';
-		OSD.setCursor(-TempCharPosition, 0);
+		ESCmarginTop = 0;
+		if (Settings.UseWattDisplay == 0)
+		{
+			TempCharPosition = print_int16(KissTelemetrie.current, TempCharConverted, 1, 0);
+			TempCharConverted[TempCharPosition++] = 'A';
+			TempCharConverted[TempCharPosition++] = 'T';
+		}
+		else if (Settings.UseWattDisplay == 1)
+		{
+			TempCharPosition = print_int16(((KissTelemetrie.current / 10)*(uint16_t(KissTelemetrie.LipoVoltage) / 100)), TempCharConverted, 0, 0);
+			TempCharConverted[TempCharPosition++] = 'W';
+		}
+		else
+		{
+			TempCharPosition = print_int16(KissTelemetrie.current, TempCharConverted, 1, 0);
+			TempCharConverted[TempCharPosition++] = 'A';
+			TempCharConverted[TempCharPosition++] = 'T';
+			OSD.setCursor(-TempCharPosition, 0);
+			OSD.print(TempCharConverted);
+			ESCmarginTop = 1;
+			ClearTempCharConverted();
+
+			TempCharPosition = print_int16(((KissTelemetrie.current / 10)*(uint16_t(KissTelemetrie.LipoVoltage) / 100)), TempCharConverted, 0, 0);
+			TempCharConverted[TempCharPosition++] = 'W';
+
+		}
+
+		OSD.setCursor(-TempCharPosition, ESCmarginTop);
 		OSD.print(TempCharConverted);
-		ESCmarginTop = 1;
+		ESCmarginTop++;
 	}
 
 	if (KissStatus.reducedModeDisplay == 0 && Settings.DispLipoVoltage1 || KissStatus.reducedModeDisplay == 1 && Settings.DispLipoVoltage2 || KissStatus.reducedModeDisplay == 2 && Settings.DispLipoVoltage3)

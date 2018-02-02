@@ -63,6 +63,7 @@ void EEPROMsaveDefaultValues()
 	Settings.DispPilotname1 = RED_DISPLAY_PILOTNAME;
 	Settings.DispTimer1 = RED_DISPLAY_PILOTNAME;
 	Settings.DispAngle1 = RED_DISPLAY_PILOTNAME;
+	Settings.UseWattDisplay = DUseWatt;
 
 	Settings.OffsetX = DOffsetX;
 	Settings.OffsetY = DOffsetY;

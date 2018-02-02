@@ -34,6 +34,7 @@
 #define RED3_DISPLAY_PILOTNAME 1				//*
 #define RED3_DISPLAY_TIMER 1					//*
 #define RED3_DISPLAY_ANGLE 1					//*
+#define DUseWatt 0
 //margin left and right for the last line.		//*
 #define DmarginLastRow  0;						//*
 //Voltage Settings								//*
@@ -271,6 +272,7 @@ struct StoreStruct {				//saving all the OSD-Settings
 	uint8_t VoltageDisplayingCell;	//either shows per Cell Voltage or total voltage during flight
 	uint8_t ChannelSelectDisp;		//select which aux-channel to show as external channel. 0:Throttle 1-4: Aux 1-4
 	Save SavedCurrBat;
+	uint8_t UseWattDisplay;
 	
 } static Settings;
 

@@ -98,20 +98,20 @@ void MenuRight_Main()
 			//draw cursor position
 			if (cursorline != cursorlineOLD && MenuPage != 7)
 			{
-				if (cursorline > 8 && MenuPage == 6)
+				if (cursorline > 9 && MenuPage == 6)
 				{
-					OSD.setCursor(22, 9);
+					OSD.setCursor(22, 10);
 					OSD.print(F(" "));
 					//remove old cursor
-					OSD.setCursor(8 + cursorlineOLD, 11);
+					OSD.setCursor(8 + cursorlineOLD, 12);
 					OSD.print(F(" "));
 					//write new one
-					OSD.setCursor(8 + cursorline, 11);
+					OSD.setCursor(8 + cursorline, 12);
 					OSD.write(SYM_CURSOR_UP);
 				}
 				else
 				{
-					OSD.setCursor(17, 11);
+					OSD.setCursor(17, 12);
 					OSD.print(F(" "));
 					OSD.setCursor(22, cursorlineOLD + 1);
 					OSD.print(F(" "));
@@ -229,14 +229,16 @@ void menuprintsite() {
 		OSD.setCursor(0, 6);
 		OSD.print(F("SELECT THR / AUX 1-4"));
 		OSD.setCursor(0, 7);
+		OSD.print(F("REPLACE AMP WITH WATT"));
+		OSD.setCursor(0, 8);
 		OSD.print(F("SCREEN OFFSET VER"));
-		OSD.setCursor(14, 8);
+		OSD.setCursor(14, 9);
 		OSD.print(F("HOR"));
-		OSD.setCursor(0, 9);
-		OSD.print(F("DISP LINES"));
 		OSD.setCursor(0, 10);
+		OSD.print(F("DISP LINES"));
+		OSD.setCursor(0, 11);
 		OSD.print(F("NAME"));
-		cursorlineMax = 19;
+		cursorlineMax = 20;
 		break;
 	case 7:
 		//Info
@@ -397,17 +399,19 @@ void menuprintvalue() {
 		OSD.print(Settings.ChannelSelectDisp);
 		DisplaySpace();
 		OSD.setCursor(23, 7);
+		showWattAmp(Settings.UseWattDisplay);
+		OSD.setCursor(23, 8);
 		OSD.print(Settings.OffsetX);
 		OSD.print(F("PX "));
-		OSD.setCursor(23, 8);
+		OSD.setCursor(23, 9);
 		OSD.print(Settings.OffsetY);
 		OSD.print(F("PX "));
-		OSD.setCursor(23, 9);
+		OSD.setCursor(23, 10);
 		if (Settings.VideoMode == 1)
 			OSD.print(13 + Settings.LineAddition);
 		else
 			OSD.print(13 + Settings.LineAddition);
-		OSD.setCursor(17, 10);
+		OSD.setCursor(17, 11);
 		OSD.print(Settings.PilotName);
 		break;
 	case 7:
@@ -568,17 +572,19 @@ void value(bool addsub)
 			break;
 		case 5: changeval(addsub, 0, 4, 1, &Settings.ChannelSelectDisp);
 			break;
-		case 6: changeval(addsub, MAX7456_VOS_MIN, MAX7456_VOS_MAX, 1, &Settings.OffsetX);
+		case 6: changeval(addsub, 0, 2, 1, &Settings.UseWattDisplay);
+			break;
+		case 7: changeval(addsub, MAX7456_VOS_MIN, MAX7456_VOS_MAX, 1, &Settings.OffsetX);
 			OSD.setTextOffset(Settings.OffsetX, Settings.OffsetY);
 			break;
-		case 7: changeval(addsub, MAX7456_HOS_MIN, MAX7456_HOS_MAX, 1, &Settings.OffsetY);
+		case 8: changeval(addsub, MAX7456_HOS_MIN, MAX7456_HOS_MAX, 1, &Settings.OffsetY);
 			OSD.setTextOffset(Settings.OffsetX, Settings.OffsetY);
 			break;
-		case 8: changeval(addsub, 0, 2, 1, &Settings.LineAddition);
+		case 9: changeval(addsub, 0, 2, 1, &Settings.LineAddition);
 			break;
 		}
-		if (cursorline > 8)
-			changeChar(addsub, cursorline - 9);
+		if (cursorline > 9)
+			changeChar(addsub, cursorline - 10);
 		break;
 	case 7:
 		//Info
@@ -644,6 +650,17 @@ void showONOFF(uint8_t val)
 		OSD.print(F("ON"));
 		DisplaySpace();
 	}
+}
+
+void showWattAmp(uint8_t val)
+{
+	if (val == 0)
+		OSD.print(F("AMP"));
+	else if (val ==1)
+		OSD.print(F("WATT"));
+	else
+		OSD.print(F("BOTH"));
+	DisplaySpace();
 }
 
 void printRED()
