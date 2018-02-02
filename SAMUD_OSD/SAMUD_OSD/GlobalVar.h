@@ -203,7 +203,7 @@ struct Stats
 	int16_t  MinVoltage = 32767;
 	uint16_t MAXWatt = 0;
 
-	uint16_t MAXmotorKERPM[4] = { 0,0,0,0 };
+	int16_t MAXmotorKERPM[4] = { 0,0,0,0 };
 	uint16_t MAXmotorCurrent[4] = { 0,0,0,0 };
 	uint16_t MAXESCTemp[4] = { 0,0,0,0 };
 };

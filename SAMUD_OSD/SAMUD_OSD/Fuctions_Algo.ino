@@ -159,7 +159,7 @@ void CalculateOSD()
 void SaveBatStatus()
 {
 	KissStatus.iterations = KissStatus.iterations + 1;
-	if (KissStatus.iterations > 40)
+	if (KissStatus.iterations > 20)
 	{
 		KissStatus.iterations = 0;
 		Settings.SavedCurrBat.BatteryMAH = KissTelemetrie.LipoMAH;

@@ -11,10 +11,10 @@ by Samuel Daurat (sdaurat@outlook.de)
 based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
 
-#define OSDVersion "1.3RC28"
-#define DMemoryVersion 12
+#define OSDVersion "1.3RC31"
+#define DMemoryVersion 13
 //#define DEBUG
-//#define STEELE_PDB
+#define STEELE_PDB
 /*
 ***************************************************************************************************************************************************
 Donations help A LOT during development, buying me a COFFE you will keep me awake at night so I can add more stuff:  https://paypal.me/SamuelDaurat
