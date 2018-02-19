@@ -568,9 +568,9 @@ void value(bool addsub)
 			break;
 		case 3: changeval(addsub, 0, 100, 1, &Settings.ESC_FILTER);
 			break;
-		case 4: changeval(addsub, 0, 4, 1, &Settings.RED_MODE_AUX_CHANNEL);
+		case 4: changeval(addsub, 0, 8, 1, &Settings.RED_MODE_AUX_CHANNEL);
 			break;
-		case 5: changeval(addsub, 0, 4, 1, &Settings.ChannelSelectDisp);
+		case 5: changeval(addsub, 0, 8, 1, &Settings.ChannelSelectDisp);
 			break;
 		case 6: changeval(addsub, 0, 2, 1, &Settings.UseWattDisplay);
 			break;

@@ -11,7 +11,7 @@ by Samuel Daurat (sdaurat@outlook.de)
 based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
 
-#define OSDVersion "1.3RC31"
+#define OSDVersion "1.3RC34"
 #define DMemoryVersion 12
 //#define DEBUG
 //#define STEELE_PDB

@@ -105,7 +105,7 @@ struct SerialData						//saving Telemetrie-Data
 	uint16_t motorCurrent[4] = { 0,0,0,0 };
 	uint16_t ESCTemps[4] = { 0,0,0,0 };
 
-	int16_t  AuxChanVals[4] = { 0,0,0,0 };
+	int16_t  AuxChanVals[8] = { 0,0,0,0,0,0,0,0 };
 	int16_t  StickChanVals[4] = { 0,0,0,0 };
 
 	int16_t angley = 0;
