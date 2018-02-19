@@ -169,10 +169,9 @@ bool getSerialData(uint8_t Mode, bool CopyBuffToSett)	//reading serial Data from
 				KissTelemetrie.AuxChanVals[1] = ((serialBuf[10 + STARTCOUNT] << 8) | serialBuf[11 + STARTCOUNT]);
 				KissTelemetrie.AuxChanVals[2] = ((serialBuf[12 + STARTCOUNT] << 8) | serialBuf[13 + STARTCOUNT]);
 				KissTelemetrie.AuxChanVals[3] = ((serialBuf[14 + STARTCOUNT] << 8) | serialBuf[15 + STARTCOUNT]);
-				KissTelemetrie.AuxChanVals[4] = 0;
-				KissTelemetrie.AuxChanVals[5] = 0;
-				KissTelemetrie.AuxChanVals[6] = 0;
-				KissTelemetrie.AuxChanVals[7] = 0;
+				KissTelemetrie.AuxChanVals[4] = ((serialBuf[154 + STARTCOUNT] << 8) | serialBuf[155 + STARTCOUNT]);
+				KissTelemetrie.AuxChanVals[5] = ((serialBuf[156 + STARTCOUNT] << 8) | serialBuf[157 + STARTCOUNT]);
+				KissTelemetrie.AuxChanVals[6] = ((serialBuf[158 + STARTCOUNT] << 8) | serialBuf[159 + STARTCOUNT]);
 
 				//StickChanVals
 				KissTelemetrie.StickChanVals[0] = ((serialBuf[0 + STARTCOUNT] << 8) | serialBuf[1 + STARTCOUNT]);
