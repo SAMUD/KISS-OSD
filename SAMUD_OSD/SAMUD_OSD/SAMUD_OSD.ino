@@ -184,7 +184,7 @@ void loop()
 			if (KissTelemetrie.armed == 0 && KissStatus.time > (TIMEOUT_FOR_SUMMARY_SEC * 1000) && KissStatus.BatteryCells>0)	//if disarmed and flighttime>45sec --> show flight summary
 			{
 				FlightSummary();
-				SaveBatStatus();
+				//SaveBatStatus();
 			}
 			else if (KissTelemetrie.armed == 0 &&
 				Settings.SavedCurrBat.BatteryMAH < ((Settings.Capacity * (float)Settings.Capacity1st) / 100) &&
@@ -196,7 +196,7 @@ void loop()
 				DisplayRecover();
 			else
 			{
-				SaveBatStatus();
+				//SaveBatStatus();
 				DisplayOSD_Main();								//Display the datas
 			}
 
