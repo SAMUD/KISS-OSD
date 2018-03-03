@@ -11,10 +11,10 @@ by Samuel Daurat (sdaurat@outlook.de)
 based on the code by Felix Niessen (felix.niessen@googlemail.com)
 */
 
-#define OSDVersion "1.3RC34"
+#define OSDVersion "1.3RC35"
 #define DMemoryVersion 12
 //#define DEBUG
-//#define STEELE_PDB
+#define STEELE_PDB
 /*
 ***************************************************************************************************************************************************
 Donations help A LOT during development, buying me a COFFE you will keep me awake at night so I can add more stuff:  https://paypal.me/SamuelDaurat
@@ -184,7 +184,7 @@ void loop()
 			if (KissTelemetrie.armed == 0 && KissStatus.time > (TIMEOUT_FOR_SUMMARY_SEC * 1000) && KissStatus.BatteryCells>0)	//if disarmed and flighttime>45sec --> show flight summary
 			{
 				FlightSummary();
-				//SaveBatStatus();
+				SaveBatStatus();
 			}
 			else if (KissTelemetrie.armed == 0 &&
 				Settings.SavedCurrBat.BatteryMAH < ((Settings.Capacity * (float)Settings.Capacity1st) / 100) &&
@@ -196,7 +196,7 @@ void loop()
 				DisplayRecover();
 			else
 			{
-				//SaveBatStatus();
+				SaveBatStatus();
 				DisplayOSD_Main();								//Display the datas
 			}
 

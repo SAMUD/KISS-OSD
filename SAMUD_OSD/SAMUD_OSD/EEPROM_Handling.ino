@@ -94,5 +94,12 @@ void EEPROMsave()
 #ifdef DEBUG
 	Debug_Fnc("EEPROM SAVE");
 #endif
+#ifdef DEBUG
+	ClearTempCharConverted();
+	print_int16(EEPROM.updateBlock(KissStatus.configAdress, Settings), TempCharConverted, 0, 1);
+	Debug_Fnc(TempCharConverted);
+#else
 	EEPROM.updateBlock(KissStatus.configAdress, Settings);
+#endif
+
 }

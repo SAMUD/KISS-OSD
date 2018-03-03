@@ -165,6 +165,9 @@ void SaveBatStatus()
 		Settings.SavedCurrBat.BatteryMAH = KissTelemetrie.LipoMAH;
 		Settings.SavedCurrBat.total_time = KissStatus.total_time;
 		Settings.SavedCurrBat.SavedStats = KissStats;
+#ifdef DEBUG
+		Debug_Fnc("STAT SAVE");
+#endif
 
 		EEPROMsave();
 	}
