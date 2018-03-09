@@ -58,13 +58,13 @@ void EEPROMClassEx::setMemPool(int base, int memSize) {
 	if (memSize >= _nextAvailableaddress ) 
 		_memSize = memSize;
 
-	#ifdef _EEPROMEX_DEBUG    
-	if (_nextAvailableaddress != _base) 
-		Serial.println("Cannot change base, addresses have been issued");
+	//#ifdef _EEPROMEX_DEBUG    
+	//if (_nextAvailableaddress != _base) 
+	//	Serial.println("Cannot change base, addresses have been issued");
 
-	if (memSize < _nextAvailableaddress )  
-		Serial.println("Cannot change ceiling, below issued addresses");
-	#endif	
+	//if (memSize < _nextAvailableaddress )  
+	//	Serial.println("Cannot change ceiling, below issued addresses");
+	//#endif	
 	
 }
 
@@ -86,7 +86,7 @@ int EEPROMClassEx::getAddress(int noOfBytes){
 
 #ifdef _EEPROMEX_DEBUG    
 	if (_nextAvailableaddress > _memSize) {
-		Serial.println("Attempt to write outside of EEPROM memory");
+		//Serial.println("Attempt to write outside of EEPROM memory");
 		return -availableaddress;
 	} else {
 		return availableaddress;
@@ -321,12 +321,12 @@ bool EEPROMClassEx::isWriteOk(int address)
 #ifdef _EEPROMEX_DEBUG    
 	_writeCounts++;
 	if (_allowedWrites == 0 || _writeCounts > _allowedWrites ) {
-		Serial.println("Exceeded maximum number of writes");
+		//Serial.println("Exceeded maximum number of writes");
 		return false;
 	}
 	
 	if (address > _memSize) {
-		Serial.println("Attempt to write outside of EEPROM memory");
+		//Serial.println("Attempt to write outside of EEPROM memory");
 		return false;
 	} else {
 		return true;
@@ -342,7 +342,7 @@ bool EEPROMClassEx::isReadOk(int address)
 {
 #ifdef _EEPROMEX_DEBUG    
 	if (address > _memSize) {
-		Serial.println("Attempt to write outside of EEPROM memory");
+		//Serial.println("Attempt to write outside of EEPROM memory");
 		return false;
 	} else {
 		return true;
