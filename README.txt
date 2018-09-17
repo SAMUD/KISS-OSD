@@ -1,3 +1,7 @@
+*****************************************
+Project has ben stopped
+*****************************************
+
 The installation procedure has changed:
 Look here for more details: https://github.com/SAMUD/KISS-OSD/wiki/Installing-Kiss-OSD-%7C--new-method
 
